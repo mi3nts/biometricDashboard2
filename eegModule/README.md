@@ -1,1 +1,1 @@
-# biometricDashboard2
+# EEG Module
