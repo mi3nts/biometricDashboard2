@@ -5,8 +5,11 @@ from PyQt5.QtCore import *
 
 from pyqtgraph import PlotWidget, plot
 import pyqtgraph as pg
+import numpy as np
 import pyqtgraph.ptime as ptime
 import random
+import time
+import datetime
 
 # Subclass QMainWindow to customise your application's main window
 class MainWindow(QMainWindow):
@@ -52,6 +55,7 @@ class HR_Module(QGroupBox, QWidget):
         super(QGroupBox, self).__init__()
 
         self.setTitle("Heart Rate Module")
+        self.setStyleSheet("HR_Module{font-size:25px;}")
 
         hrWindow = QWidget()
 
@@ -107,11 +111,12 @@ class ECG_Module(QGroupBox):
 
         # set title
         self.setTitle("ECG Module")
+        self.setStyleSheet("ECG_Module{font-size:25px;}")
 
         # create layout for ECG Module
         self.layout = QHBoxLayout()
 
-        self.layout.addWidget(SpO2_GraphObject())  # add ECG Graph Object as Widget
+        self.layout.addWidget(ECG_GraphObject())  # add ECG Graph Object as Widget
 
         # set layout for module
         self.setLayout(self.layout)
@@ -122,13 +127,14 @@ class SpO2_Module(QGroupBox, QWidget):
         super(QGroupBox, self).__init__()
 
         self.setTitle("Sp02 Module")
+        self.setStyleSheet("SpO2_Module{font-size:25px;}")
         self.layout = QVBoxLayout()
 
         spWindow = QWidget()
 
         self.loading_lbl = QtGui.QLabel(spWindow)
         self.loading_lbl.setAlignment(Qt.AlignBaseline)
-        loading_movie = QtGui.QMovie("./images/bub2.gif")
+        loading_movie = QtGui.QMovie("./images/bub4.gif")
         self.loading_lbl.setMovie(loading_movie)
         loading_movie.start()
 
@@ -154,7 +160,7 @@ class SpO2_Module(QGroupBox, QWidget):
         self.setLayout(self.layout)
 
     def update_label(self):
-        self.rand_text = str(random.randint(90, 96))
+        self.rand_text = str(random.randint(84, 100))
         self.labelB.setText(self.rand_text)
         self.labelB.setFont(QtGui.QFont("Times", 50, QtGui.QFont.Bold))
         # self.labelB.move(130, 130)
@@ -163,7 +169,7 @@ class SpO2_Module(QGroupBox, QWidget):
     def resizeEvent(self, event):
         rect = self.geometry()
         size = QtCore.QSize(
-            min(rect.width(), rect.height()), min(rect.width(), rect.height())
+            min(rect.width(), rect.height()), min(rect.width(), rect.height()),
         )
         movie = self.loading_lbl.movie()
         movie.setScaledSize(size)
@@ -177,6 +183,7 @@ class PPG_Module(QGroupBox):
 
         # set title
         self.setTitle("PPG Module")
+        self.setStyleSheet("PPG_Module{font-size:25px;}")
 
         # create layout for EEG Module
         self.layout = QHBoxLayout()
@@ -193,33 +200,168 @@ class SpO2_GraphObject(QGroupBox):
         # have EEGmodule inherit attributes of QGroupBox
         super(QGroupBox, self).__init__(*args, **kwargs)
 
-        sampleGraph = pg.PlotWidget()
+        self.sampleGraph = pg.PlotWidget()
+        self.sampleGraph.setTitle(
+            '<span style="color:red;font-size:25px">PPG Graph</span>'
+        )
+        # Axis Labels
+        self.sampleGraph.setLabel(
+            "left", '<span style="color:red;font-size:25px">Voltage</span>'
+        )
+        self.sampleGraph.setLabel(
+            "bottom", '<span style="color:red;font-size:25px">Time (Sec)</span>'
+        )
 
-        # Data
-        time = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
-        SO = [30, 32, 34, 32, 33, 31, 29, 32, 35, 45]
+        self.sampleGraph.setRange(yRange=(-500, 500))
+
+        self.sampleGraph.showGrid(x=True, y=True, alpha=0.3)
 
         # setting Line Colour, Width, Style
-        pen = pg.mkPen(color="b", width=5, style=QtCore.Qt.DotLine)
+        self.pen = pg.mkPen(color="b", width=5, style=QtCore.Qt.DotLine)
 
-        # Graph Title
-        sampleGraph.setTitle('<span style="color:red;font-size:25px">SpO2 Graph</span>')
-        # Axis Labels
-        sampleGraph.setLabel("left", "Oxygen Saturation (°C)", color="red", size=30)
-        sampleGraph.setLabel("bottom", "Time (Sec)", color="red", size=30)
+        # Data
+
+        self.yData = []
+        self.xData = []
 
         # plot data: x, y values
-        sampleGraph.plot(
-            time, SO, pen=pen, symbol="+", symbolSize=15, symbolBrush=("w")
+        self.sampleGraph.plot(
+            pen=self.pen, symbol="+", symbolSize=15, symbolBrush=("w"),
         )
+
+        self.graphLable = QLabel()
+
+        # Graph Title
+
+        self.timer = QTimer()
+        self.timer.timeout.connect(self.update_oxySat)
+        self.timer.start(1000)
 
         # create layout for EEG Module
         self.layout = QHBoxLayout()
 
-        self.layout.addWidget(sampleGraph)
+        # self.layout.addWidget(self.graphLable)
+        self.layout.addWidget(self.sampleGraph)
 
         # set layout for module
         self.setLayout(self.layout)
+
+    def getOxySat(self):
+        return np.random.uniform(-400, 400)
+
+    def timestamp(self):
+        return int(time.mktime(datetime.datetime.now().timetuple()))
+
+    def update_oxySat(self):
+        oxySatData = 0
+
+        if len(self.xData) < 10:  # first ten seconds
+            self.xData.append(self.timestamp())
+            oxySatData = self.getOxySat()
+            self.yData.append(oxySatData)
+        else:  # after ten seconds
+            self.yData.pop(0)
+            oxySatData = self.getOxySat()
+            self.yData.append(oxySatData)
+            self.sampleGraph.setRange(
+                xRange=(self.xData[0], self.xData[9])
+            )  # change the visible x range of the graph
+
+        if oxySatData <= 0:
+            self.sampleGraph.plot(self.xData, self.yData, pen="r", clear=True)
+        elif oxySatData > 0 and oxySatData <= 100:
+            self.sampleGraph.plot(self.xData, self.yData, pen="y", clear=True)
+        else:
+            self.sampleGraph.plot(self.xData, self.yData, pen="g", clear=True)
+
+
+class ECG_GraphObject(QGroupBox):
+    # initialize attributes of SpO2 Graph class
+    def __init__(self, *args, **kwargs):
+        # have EEGmodule inherit attributes of QGroupBox
+        super(QGroupBox, self).__init__(*args, **kwargs)
+
+        self.sampleGraph = pg.PlotWidget()
+        self.sampleGraph.setTitle(
+            '<span style="color:red;font-size:25px">ECG Graph</span>'
+        )
+        # Axis Labels
+        self.sampleGraph.setLabel("left", "Voltage (V)", color="red", size=30)
+        self.sampleGraph.setLabel("bottom", "Time (Sec)", color="red", size=30)
+
+        self.sampleGraph.setRange(yRange=(-500, 500))
+
+        self.sampleGraph.showGrid(x=True, y=True, alpha=0.3)
+
+        # setting Line Colour, Width, Style
+        self.pen = pg.mkPen(color="b", width=5, style=QtCore.Qt.DotLine)
+
+        # Data
+
+        self.yData = []
+        self.xData = []
+
+        # plot data: x, y values
+        self.sampleGraph.plot(
+            pen=self.pen, symbol="+", symbolSize=15, symbolBrush=("w"),
+        )
+
+        self.graphLable = QLabel()
+
+        # Graph Title
+
+        self.timer = QTimer()
+        self.timer.timeout.connect(self.update_oxySat)
+        self.timer.start(1000)
+
+        # create layout for EEG Module
+        self.layout = QHBoxLayout()
+
+        # self.layout.addWidget(self.graphLable)
+        self.layout.addWidget(self.sampleGraph)
+
+        # set layout for module
+        self.setLayout(self.layout)
+
+    def getOxySat(self):
+        return np.random.uniform(-400, 400)
+
+    def timestamp(self):
+        return int(time.mktime(datetime.datetime.now().timetuple()))
+
+    def update_oxySat(self):
+        oxySatData = 0
+
+        if len(self.xData) < 10:  # first ten seconds
+            self.xData.append(self.timestamp())
+            oxySatData = self.getOxySat()
+            self.yData.append(oxySatData)
+        else:  # after ten seconds
+            self.yData.pop(0)
+            oxySatData = self.getOxySat()
+            self.yData.append(oxySatData)
+            self.sampleGraph.setRange(
+                xRange=(self.xData[0], self.xData[9])
+            )  # change the visible x range of the graph
+
+        if oxySatData <= 0:
+            self.sampleGraph.plot(self.xData, self.yData, pen="r", clear=True)
+        elif oxySatData > 0 and oxySatData <= 100:
+            self.sampleGraph.plot(self.xData, self.yData, pen="y", clear=True)
+        else:
+            self.sampleGraph.plot(self.xData, self.yData, pen="g", clear=True)
+
+
+class TimeAxisItem(pg.AxisItem):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.setLabel(text="Time", units=None)
+        self.enableAutoSIPrefix(False)
+
+    def tickStrings(self, values, scale, spacing):
+        return [
+            datetime.datetime.fromtimestamp(value).strftime("%H:%M") for value in values
+        ]
 
 
 # function to change application style to dark mode
