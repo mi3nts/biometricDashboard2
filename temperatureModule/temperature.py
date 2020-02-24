@@ -234,31 +234,42 @@ class GSR():
 
         # Get initial data
         self.seconds = [0] # seconds data array, x value
-        self.gsrData = [self.getGsrSignal()] # temperature data array, y value
+        self.gsrData = [1.0] # temperature data array, y value
 
         self.graphWidget.plot(self.seconds, self.gsrData, clear=True) # plot initial value
         self.graphWidget.setRange(yRange=(0, 1.5)) # change the visible x range of the graph
-        self.graphWidget.setDownsampling(mode='peak') # down sampling
+        #self.graphWidget.setDownsampling(mode='peak') # down sampling
 
         #Timer Setup, every second update the data
+        self.count = 0 # counter value for downsampling
+        self.sum = 0
         self.timer = pg.QtCore.QTimer()
-        self.timer.timeout.connect(self.update)
-        self.timer.start(100)
+        self.timer.timeout.connect(self.getGsrSignal) # get GSR signal every 20 ms
+        self.timer.start(20) 
     
-    def getGsrSignal(self):
-        return np.random.uniform(0.3, 1.3)
+    def getGsrSignal(self): # downsample to output every 100ms
+        if self.count > 5:
+            self.count = 0
+            avg = self.sum / 5
+            self.sum = 0
+            self.update(avg)
 
-    def update(self):
+        else:
+            self.count += 1
+            self.sum += np.random.uniform(0.3, 1.3)
+        
+
+    def update(self, data):
         if len(self.gsrData) < 100: # first ten seconds
-            gsrSignal = self.getGsrSignal()
-            self.gsrData.append(gsrSignal)
+            #gsrSignal = self.getGsrSignal()
+            self.gsrData.append(data)
             self.seconds.append(self.seconds[len(self.seconds) - 1] + 0.1)
             self.graphWidget.plot(self.seconds, self.gsrData, pen=(255,165,0), clear=True) # update plot
         
         else: # after ten seconds
             self.gsrData.pop(0)
-            gsrSignal = self.getGsrSignal()
-            self.gsrData.append(gsrSignal) #updating GSR signal
+            #gsrSignal = self.getGsrSignal()
+            self.gsrData.append(data) #updating GSR signal
 
             self.graphWidget.plot(self.seconds, self.gsrData, pen=(255,165,0), clear=True) # update plot
     
