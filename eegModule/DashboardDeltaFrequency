@@ -1,0 +1,260 @@
+from PyQt5.QtWidgets import *
+from PyQt5.QtGui import *
+from PyQt5.QtCore import *
+from PyQt5.QtMultimedia import *
+
+from EEGArray import EEGArray
+from GetCmapValues import getCmapByFreqVal
+from pylsl import StreamInlet, resolve_stream
+from pyqtgraph import PlotWidget, plot
+
+import pyqtgraph as pg
+import pyqtgraph.ptime as ptime
+import matplotlib.cm as cm
+
+import random as r
+import numpy as np
+import scipy.signal as sps
+import socketserver
+import sys
+import time
+
+
+# Subclass QMainWindow to customise your application's main window
+class MainWindow(QMainWindow):
+
+    def __init__(self, *args, **kwargs):
+        super(MainWindow, self).__init__(*args, **kwargs)
+
+        # set title of application window
+        self.setWindowTitle("Biometric Dashboard")
+		
+        # # resize main window
+        self.resize(1600, 1200)
+
+        # create a window widget for main window
+        widget = QWidget()
+
+        # define a layout for window
+        layout = QGridLayout()
+
+        # add all modules to MainWindow where EEG module takes up 1 row and 2
+        # columns and sits in the top left grid box. The respiration module sits
+        # in the bottom left grid box. The temperature module sits in the bottom
+        # right grid box.
+        #layout.addWidget(EEGmodule(), 0, 0, 1, 2)
+        layout.addWidget(pg.GraphicsLayoutWidget(), 1, 0)
+        layout.addWidget(DeltaFrequencyPG(), 1, 1)
+
+        # add layout to window Widget
+        widget.setLayout(layout)
+
+        # Set the central widget of the Window. Widget will expand
+        # to take up all the space in the window by default.
+        self.setCentralWidget(widget)
+
+        # change window style to dark mode
+        darkMode()
+
+# create class to contain EEG module
+
+class EEGmodule(QGroupBox):
+
+    # initialize attributes of EEGmodule class
+    def __init__(self, *args, **kwargs):
+        # have EEGmodule inherit attributes of QGroupBox
+        super(QGroupBox, self).__init__(*args, **kwargs)
+
+        # set title of EEGmodule
+        self.setTitle("EEG Module")
+
+        # create layout for EEG Module
+        self.layout = QHBoxLayout()
+        # add a simple label widget to layout
+        self.layout.addWidget(EEGGraph())
+        #self.layout.addWidget(EEGmontage())
+        self.layout.addWidget(EEGGraph())
+        self.layout.addWidget(EEGGraph())
+
+        # set layout for module
+        self.setLayout(self.layout)
+
+		
+# create class to contain a widget created using pyqtgraph
+class EEGGraph(QGroupBox):
+
+    # initialize attributes of EEGmodule class
+	def __init__(self, *args, **kwargs):
+        # have EEGmodule inherit attributes of QGroupBox
+		super(QGroupBox, self).__init__(*args, **kwargs)
+		
+		
+		#making a view to show scatter plot item in
+		self.view = pg.PlotWidget()
+		self.layout = QHBoxLayout()
+		#setting up so that a plotITEM can be added
+		pg.setConfigOption('leftButtonPan', False)
+		#creating the plot
+		self.scatter1 = pg.ScatterPlotItem(pxMode=False)
+		self.view.addItem(self.scatter1)
+		#self.view.setBackground('w')
+		#get the node positions
+		x,y,nodeList = EEGArray()
+		#create spots
+		self.spots = []
+		for i in range(len(x)):
+			self.spots.append({'pos' : (x[i], y[i]), 'size': .35,  'pen':{'width':-1},'brush':pg.mkBrush(self.setNodeColor())})
+		self.scatter1.addPoints(self.spots)
+		#self.widget1.addItem(self.scatter1)
+		####self.view.setBackground('w')
+		#hide axis
+		self.view.getPlotItem().hideAxis('bottom')
+		self.view.getPlotItem().hideAxis('left')
+		
+		#setting up timer
+		self.timer = QTimer(self)
+		self.timer.setInterval(100)
+		self.timer.timeout.connect(self.update_nodes)
+		self.timer.start()
+		
+        # create layout for EEG Module
+		self.layout.addWidget(self.view)
+		#self.layout.resize(400,200)
+
+        # set layout for module
+		self.setLayout(self.layout)
+		
+	def update_nodes(self):
+		for i in range(len(self.spots)):
+			self.spots[i]['brush'] = pg.mkBrush(r.randint(0,254),0,r.randint(0,254), 255)
+		self.scatter1.setData(self.spots)
+			
+	def setNodeColor(self):
+		return QColor(r.randint(0,254),r.randint(0,254),r.randint(0,254))
+		
+		
+		
+class DeltaFrequencyPG(QGroupBox):
+	def __init__(self, *args, **kwargs):
+        # have EEGmodule inherit attributes of QGroupBox
+		super(QGroupBox, self).__init__(*args, **kwargs)
+		
+		
+		# first resolve an EEG stream on the lab network
+		print("looking for an EEG stream...")
+		self.streams = resolve_stream('type', 'EEG')
+		
+		#setup plotwidget
+		self.view = pg.PlotWidget()
+		self.layout = QHBoxLayout()
+		#create scatter plot
+		self.scatter1 = pg.ScatterPlotItem(pxMode=False)
+		self.view.addItem(self.scatter1)
+		
+		#set cmap
+		self.cmap = cm.get_cmap("jet")
+
+		# define number of electrodes
+		self.n = 64
+		x, y, list = EEGArray()
+		#initialize spots
+		self.spots = []
+		for i in range(len(x)):
+			self.spots.append({'pos' : (x[i], y[i]), 'size': .35,  'pen':{'width':-1},'brush':pg.mkBrush(QColor(0,0,255))})
+		# initialize newdata
+		self.scatter1.setData(self.spots)
+		newdata = np.zeros(self.n)
+		
+		# initialize 64 by 64 data array
+		self.data = np.zeros((self.n, self.n))
+
+		# a few global variables to maintain the maximum we have seen so far, as well as counters to see
+		# how many times the counters are being updated
+		self.globalMax = -(sys.maxsize)-1
+		# # Set up formatting for the movie files (uncomment this to record)
+		# Writer = animation.writers['ffmpeg']
+		# writer = Writer(fps=7, metadata=dict(artist='Me'), bitrate=-1)
+
+		self.timer = QTimer(self)
+		self.timer.setInterval(50)
+		self.timer.timeout.connect(self.plotNodes)
+		self.timer.start()
+		
+		# create layout for EEG Module
+		self.layout.addWidget(self.view)
+		#self.layout.resize(400,200)
+
+        # set layout for module
+		self.setLayout(self.layout)
+		
+		# define function to plot nodes
+	def plotNodes(self):
+		self.data
+		self.globalMax
+
+		#print("first loop")
+		
+		inlet = StreamInlet(self.streams[0])
+		#print("first loop")
+		# get a new sample
+		sample = inlet.pull_sample()
+		newdata = np.asarray(sample[0][:self.n])
+
+		temp, self.globalMax, self.data = getCmapByFreqVal(self.data, newdata, -1, self.globalMax)
+		#print("first loop")
+		colors = self.cmap(temp)
+		print(colors)
+		#hide axis
+		self.view.getPlotItem().hideAxis('bottom')
+		self.view.getPlotItem().hideAxis('left')
+		#print("first loop")
+		# ax1.scatter(x, y, s = 100, c = altColors, cmap = plt.cm.jet_r)
+		# ax1.scatter(x, y, s=100, c=colors, cmap=plt.cm.jet_r)
+		# elapsed_time = time.time() - start_time
+		for i in range(len(self.spots)):
+			self.spots[i]['brush'] = pg.mkBrush(colors[i][0]*255,colors[i][1]*255,colors[i][2]*255,colors[i][3]*255)
+		self.scatter1.setData(self.spots)
+
+		
+
+		#put timer here
+		
+	
+	# ani.save('visual.mp4', fps=7)
+	# # save animation (uncomment to record)
+	# ani.save('EEG_visiualization_LSL.mp4', writer=writer)
+
+	
+# function to change application style to dark mode
+def darkMode():
+    dark_palette = QPalette()
+    dark_palette.setColor(QPalette.Window, QColor(53, 53, 53))
+    dark_palette.setColor(QPalette.WindowText, Qt.white)
+    dark_palette.setColor(QPalette.Base, QColor(25, 25, 25))
+    dark_palette.setColor(QPalette.AlternateBase, QColor(53, 53, 53))
+    dark_palette.setColor(QPalette.ToolTipBase, Qt.white)
+    dark_palette.setColor(QPalette.ToolTipText, Qt.black)
+    dark_palette.setColor(QPalette.Text, Qt.white)
+    dark_palette.setColor(QPalette.Button, QColor(53, 53, 53))
+    dark_palette.setColor(QPalette.ButtonText, Qt.white)
+    dark_palette.setColor(QPalette.BrightText, Qt.red)
+    dark_palette.setColor(QPalette.Link, QColor(42, 130, 218))
+    dark_palette.setColor(QPalette.Highlight, QColor(42, 130, 218))
+    dark_palette.setColor(QPalette.HighlightedText, Qt.black)
+    QApplication.setPalette(dark_palette)
+
+# run application
+if __name__ == '__main__':
+    import sys
+
+    # You need one (and only one) QApplication instance per application.
+    # Pass in sys.argv to allow command line arguments for your app.
+    # If you know you won't use command line arguments QApplication([]) works too.
+    app = QApplication(sys.argv)
+    # create a window from the MainWindow class defined above
+    window = MainWindow()
+    # show the window
+    window.show()
+    # Start the event loop.
+    sys.exit(app.exec_())
+	
