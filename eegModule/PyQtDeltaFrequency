@@ -1,0 +1,98 @@
+import pyqtgraph as pg
+import pyqtgraph.ptime as ptime
+import matplotlib.cm as cm
+from EEGArray import EEGArray
+from GetCmapValues import getCmapByFreqVal
+from pylsl import StreamInlet, resolve_stream
+from pyqtgraph import PlotWidget, plot
+import random as r
+import numpy as np
+import scipy.signal as sps
+import socketserver
+import sys
+import time
+from PyQt5.QtWidgets import *
+from PyQt5.QtGui import *
+from PyQt5.QtCore import *
+from PyQt5.QtMultimedia import *
+
+class DeltaFrequencyPG(QGroupBox):
+	def __init__(self, *args, **kwargs):
+        # have EEGmodule inherit attributes of QGroupBox
+		super(QGroupBox, self).__init__(*args, **kwargs)
+		
+		
+		# first resolve an EEG stream on the lab network
+		print("looking for an EEG stream...")
+		self.streams = resolve_stream('type', 'EEG')
+		
+		#setup plotwidget
+		self.view = pg.PlotWidget()
+		self.layout = QHBoxLayout()
+		#create scatter plot
+		self.scatter1 = pg.ScatterPlotItem(pxMode=False)
+		self.view.addItem(self.scatter1)
+		
+		#set cmap
+		self.cmap = cm.get_cmap("jet")
+
+		# define number of electrodes
+		self.n = 64
+		x, y, list = EEGArray()
+		#initialize spots
+		self.spots = []
+		for i in range(len(x)):
+			self.spots.append({'pos' : (x[i], y[i]), 'size': .35,  'pen':{'width':-1},'brush':pg.mkBrush(QColor(0,0,255))})
+		# initialize newdata
+		self.scatter1.setData(self.spots)
+		newdata = np.zeros(self.n)
+		
+		# initialize 64 by 64 data array
+		self.data = np.zeros((self.n, self.n))
+
+		# a few global variables to maintain the maximum we have seen so far, as well as counters to see
+		# how many times the counters are being updated
+		self.globalMax = -(sys.maxsize)-1
+		# # Set up formatting for the movie files (uncomment this to record)
+		# Writer = animation.writers['ffmpeg']
+		# writer = Writer(fps=7, metadata=dict(artist='Me'), bitrate=-1)
+
+		self.timer = QTimer(self)
+		self.timer.setInterval(50)
+		self.timer.timeout.connect(self.plotNodes)
+		self.timer.start()
+		
+		# create layout for EEG Module
+		self.layout.addWidget(self.view)
+		#self.layout.resize(400,200)
+
+        # set layout for module
+		self.setLayout(self.layout)
+		
+		# define function to plot nodes
+	def plotNodes(self):
+		self.data
+		self.globalMax
+
+		#print("first loop")
+		
+		inlet = StreamInlet(self.streams[0])
+		#print("first loop")
+		# get a new sample
+		sample = inlet.pull_sample()
+		newdata = np.asarray(sample[0][:self.n])
+
+		temp, self.globalMax, self.data = getCmapByFreqVal(self.data, newdata, -1, self.globalMax)
+		#print("first loop")
+		colors = self.cmap(temp)
+		print(colors)
+		#hide axis
+		self.view.getPlotItem().hideAxis('bottom')
+		self.view.getPlotItem().hideAxis('left')
+		#print("first loop")
+		# ax1.scatter(x, y, s = 100, c = altColors, cmap = plt.cm.jet_r)
+		# ax1.scatter(x, y, s=100, c=colors, cmap=plt.cm.jet_r)
+		# elapsed_time = time.time() - start_time
+		for i in range(len(self.spots)):
+			self.spots[i]['brush'] = pg.mkBrush(colors[i][0]*255,colors[i][1]*255,colors[i][2]*255,colors[i][3]*255)
+		self.scatter1.setData(self.spots)
