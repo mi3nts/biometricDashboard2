@@ -37,8 +37,8 @@ class MainWindow(QMainWindow):
         # in the bottom left grid box. The temperature module sits in the bottom
         # right grid box.
         layout.addWidget(EEGmodule(), 0, 0, 1, 2)
-        #layout.addWidget(respirationModule(), 1, 0)
-        #layout.addWidget(temperatureModule(), 1, 1)
+        layout.addWidget(pg.GraphicsLayoutWidget(), 1, 0)
+        layout.addWidget(pg.GraphicsLayoutWidget(), 1, 1)
 
         # add layout to window Widget
         widget.setLayout(layout)
@@ -64,9 +64,9 @@ class EEGmodule(QGroupBox):
         # create layout for EEG Module
         self.layout = QHBoxLayout()
         # add a simple label widget to layout
-        self.layout.addWidget(QLabel("EEG Module goes here"))
+        self.layout.addWidget(PyQtGraphObject())
         #self.layout.addWidget(EEGmontage())
-        self.layout.addWidget(QLabel(""))
+        self.layout.addWidget(PyQtGraphObject())
         self.layout.addWidget(PyQtGraphObject())
 
         # set layout for module
@@ -83,25 +83,30 @@ class PyQtGraphObject(QGroupBox):
 		
 		
 		#making a view to show scatter plot item in
-		self.view = pg.GraphicsLayoutWidget()
+		self.view = pg.PlotWidget()
 		self.layout = QHBoxLayout()
 		#setting up so that a plotITEM can be added
-		self.widget1 = self.view.addPlot()
+		pg.setConfigOption('leftButtonPan', False)
 		#creating the plot
 		self.scatter1 = pg.ScatterPlotItem(pxMode=False)
-		
+		self.view.addItem(self.scatter1)
+		#self.view.setBackground('w')
 		#get the node positions
 		x,y,nodeList = EEGArray()
 		#create spots
 		self.spots = []
 		for i in range(len(x)):
-			self.spots.append({'pos' : (x[i], y[i]), 'size': .1,  'brush':pg.mkBrush(self.setNodeColor())})
+			self.spots.append({'pos' : (x[i], y[i]), 'size': .35,  'pen':{'width':-1},'brush':pg.mkBrush(self.setNodeColor())})
 		self.scatter1.addPoints(self.spots)
-		self.widget1.addItem(self.scatter1)
+		#self.widget1.addItem(self.scatter1)
+
+		#hide axis
+		self.view.getPlotItem().hideAxis('bottom')
+		self.view.getPlotItem().hideAxis('left')
 		
 		#setting up timer
 		self.timer = QTimer(self)
-		self.timer.setInterval(50)
+		self.timer.setInterval(20)
 		self.timer.timeout.connect(self.update_nodes)
 		self.timer.start()
 		
@@ -114,19 +119,37 @@ class PyQtGraphObject(QGroupBox):
 		
 	def update_nodes(self):
 		for i in range(len(self.spots)):
-			self.spots[i]['brush'] = pg.mkBrush(r.randint(0,254),r.randint(0,254),r.randint(0,254))
+			self.spots[i]['brush'] = pg.mkBrush(r.randint(0,254),0,r.randint(0,254), 255)
 			self.scatter1.setData(self.spots)
 			
 	def setNodeColor(self):
 		return QColor(r.randint(0,254),r.randint(0,254),r.randint(0,254))
 		
+		
+class imageview(QGroupBox):
+
+    # initialize attributes of EEGmodule class
+	def __init__(self, *args, **kwargs):
+        # have EEGmodule inherit attributes of QGroupBox
+		super(QGroupBox, self).__init__(*args, **kwargs)
+		
+		
+		#making a view to show scatter plot item in
+		self.view = pg.ImageView(view=PyQtGraphObject)
+		self.layout = QHBoxLayout()
+		#setting up so that a plotITEM can be added
+		
+		
+        # create layout for EEG Module
+		self.layout.addWidget(self.view)
+		#self.layout.resize(400,200)
+
+        # set layout for module
+		self.setLayout(self.layout)
 
 # create a class to contain image of eeg montage
 
-			
-
-
-	
+		
 	
 # function to change application style to dark mode
 def darkMode():
@@ -160,3 +183,8 @@ if __name__ == '__main__':
     window.show()
     # Start the event loop.
     sys.exit(app.exec_())
+	
+	
+	
+	
+	##Look at old files comment out matplot lib
