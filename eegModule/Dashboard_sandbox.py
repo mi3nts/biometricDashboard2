@@ -14,6 +14,10 @@ import numpy as np
 
 
 
+###This is old
+###Do NOT USE FOR ANY PURPOSE
+
+
 # Subclass QMainWindow to customise your application's main window
 class MainWindow(QMainWindow):
 
