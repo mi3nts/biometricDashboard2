@@ -4,18 +4,23 @@ from PyQt5.QtCore import *
 from PyQt5.QtMultimedia import *
 
 from EEGArray import EEGArray
-
+from GetCmapValues import getCmapByFreqVal
+from pylsl import StreamInlet, resolve_stream
 from pyqtgraph import PlotWidget, plot
+from PyQtDeltaFrequency import DeltaFrequencyPG
+# from PyQtAlphaFrequency import AlphaFrequencyPG
+# from PyQtThetaFrequency import ThetaFrequencyPG
+from EEGScatter import EEGGraph
+
 import pyqtgraph as pg
 import pyqtgraph.ptime as ptime
+import matplotlib.cm as cm
 
 import random as r
 import numpy as np
-
-
-
-###This is old
-###Do NOT USE FOR ANY PURPOSE
+import scipy.signal as sps
+import socketserver
+import sys
 
 
 # Subclass QMainWindow to customise your application's main window
@@ -42,7 +47,7 @@ class MainWindow(QMainWindow):
         # right grid box.
         layout.addWidget(EEGmodule(), 0, 0, 1, 2)
         layout.addWidget(pg.GraphicsLayoutWidget(), 1, 0)
-        layout.addWidget(pg.GraphicsLayoutWidget(), 1, 1)
+        #layout.addWidget(DeltaFrequencyPG(), 1, 1)
 
         # add layout to window Widget
         widget.setLayout(layout)
@@ -55,105 +60,102 @@ class MainWindow(QMainWindow):
         darkMode()
 
 # create class to contain EEG module
+
 class EEGmodule(QGroupBox):
-
-    # initialize attributes of EEGmodule class
-    def __init__(self, *args, **kwargs):
-        # have EEGmodule inherit attributes of QGroupBox
-        super(QGroupBox, self).__init__(*args, **kwargs)
-
-        # set title of EEGmodule
-        self.setTitle("EEG Module")
-
-        # create layout for EEG Module
-        self.layout = QHBoxLayout()
-        # add a simple label widget to layout
-        self.layout.addWidget(PyQtGraphObject())
-        #self.layout.addWidget(EEGmontage())
-        self.layout.addWidget(PyQtGraphObject())
-        self.layout.addWidget(PyQtGraphObject())
-
-        # set layout for module
-        self.setLayout(self.layout)
-
-# create class to contain a widget created using pyqtgraph
-
-class PyQtGraphObject(QGroupBox):
-
     # initialize attributes of EEGmodule class
 	def __init__(self, *args, **kwargs):
-        # have EEGmodule inherit attributes of QGroupBox
+		# have EEGmodule inherit attributes of QGroupBox
 		super(QGroupBox, self).__init__(*args, **kwargs)
-		
-		
-		#making a view to show scatter plot item in
-		self.view = pg.PlotWidget()
+
+		# set title of EEGmodule
+		self.setTitle("EEG Module")
+
+		# self.alpha = AlphaFrequencyPG()
+		# self.theta = ThetaFrequencyPG()
+		# self.delta = DeltaFrequencyPG()
+		self.test = 5
+		# create layout for EEG Module
 		self.layout = QHBoxLayout()
-		#setting up so that a plotITEM can be added
-		pg.setConfigOption('leftButtonPan', False)
-		#creating the plot
-		self.scatter1 = pg.ScatterPlotItem(pxMode=False)
-		self.view.addItem(self.scatter1)
-		#self.view.setBackground('w')
+		
+		#Creating graphs 
+		self.alpha=EEGGraph()
+		self.alpha.setGraphTitle("Alpha Band")
+		self.alphaBand = -3
+		
+		self.theta=EEGGraph()
+		self.theta.setGraphTitle("Theta Band")
+		self.thetaBand = -2
+		
+		self.delta=EEGGraph()
+		self.delta.setGraphTitle("Delta Band")
+		self.deltaBand = -1
+		
+		# add a simple label widget to layout
+		self.layout.addWidget(self.delta)
+		self.layout.addWidget(self.theta)
+		self.layout.addWidget(self.alpha)
+	
+		# set layout for module
+		self.setLayout(self.layout)
+		
+		
 		#get the node positions
 		x,y,nodeList = EEGArray()
-		#create spots
-		self.spots = []
-		for i in range(len(x)):
-			self.spots.append({'pos' : (x[i], y[i]), 'size': .35,  'pen':{'width':-1},'brush':pg.mkBrush(self.setNodeColor())})
-		self.scatter1.addPoints(self.spots)
-		#self.widget1.addItem(self.scatter1)
-
-		#hide axis
-		self.view.getPlotItem().hideAxis('bottom')
-		self.view.getPlotItem().hideAxis('left')
+		#set cmap
+		self.cmap = cm.get_cmap("jet")		
+		# define number of electrodes
+		self.n = 64		
+		#initialize newdata
+		self.newdata = np.zeros(self.n)		
+		#initialize 64 by 64 data array
+		self.data = np.zeros((self.n, self.n))
+		#get global max for normalization
+		self.globalMax = -(sys.maxsize)-1
 		
-		#setting up timer
+		#Open StreamInlet
+		print("looking for an EEG stream...")
+		self.streams = resolve_stream()
+		
+		self.inlet = StreamInlet(self.streams[0])
+		
+		#create timer
 		self.timer = QTimer(self)
-		self.timer.setInterval(20)
-		self.timer.timeout.connect(self.update_nodes)
+		self.timer.setInterval(100)
+		self.timer.timeout.connect(self.PullData)
 		self.timer.start()
 		
-        # create layout for EEG Module
-		self.layout.addWidget(self.view)
-		#self.layout.resize(400,200)
+		
+		
+	def PullData(self):
+		
+		
+		#pull data
+		sample = self.inlet.pull_sample()
+		self.newdata = np.asarray(sample[0][:self.n])
+		
+		
+		for i in range(4):
+			if i == 1:
+				temp, self.globalMax, self.data = getCmapByFreqVal(self.data, self.newdata, self.deltaBand, self.globalMax)
+				#set colors
+				acolors = self.cmap(temp)
+				self.delta.update_nodes(colors=acolors)
+				print(acolors)
+			if i == 2:
+				temp, self.globalMax, self.data = getCmapByFreqVal(self.data, self.newdata, self.thetaBand, self.globalMax)
+				#set colors
+				bcolors = self.cmap(temp)
+				self.theta.update_nodes(colors=bcolors)
+			if i == 3:
+				temp, self.globalMax, self.data = getCmapByFreqVal(self.data, self.newdata, self.alphaBand, self.globalMax)
+				#set colors
+				ccolors = self.cmap(temp)
+				self.alpha.update_nodes(colors=ccolors)				
+				
+				
+		
+# create class to contain a widget created using pyqtgraph
 
-        # set layout for module
-		self.setLayout(self.layout)
-		
-	def update_nodes(self):
-		for i in range(len(self.spots)):
-			self.spots[i]['brush'] = pg.mkBrush(r.randint(0,254),0,r.randint(0,254), 255)
-			self.scatter1.setData(self.spots)
-			
-	def setNodeColor(self):
-		return QColor(r.randint(0,254),r.randint(0,254),r.randint(0,254))
-		
-		
-class imageview(QGroupBox):
-
-    # initialize attributes of EEGmodule class
-	def __init__(self, *args, **kwargs):
-        # have EEGmodule inherit attributes of QGroupBox
-		super(QGroupBox, self).__init__(*args, **kwargs)
-		
-		
-		#making a view to show scatter plot item in
-		self.view = pg.ImageView(view=PyQtGraphObject)
-		self.layout = QHBoxLayout()
-		#setting up so that a plotITEM can be added
-		
-		
-        # create layout for EEG Module
-		self.layout.addWidget(self.view)
-		#self.layout.resize(400,200)
-
-        # set layout for module
-		self.setLayout(self.layout)
-
-# create a class to contain image of eeg montage
-
-		
 	
 # function to change application style to dark mode
 def darkMode():
@@ -188,7 +190,3 @@ if __name__ == '__main__':
     # Start the event loop.
     sys.exit(app.exec_())
 	
-	
-	
-	
-	##Look at old files comment out matplot lib
