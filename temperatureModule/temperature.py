@@ -21,37 +21,40 @@ class TemperatureModule():
 
         streams = resolve_stream() # pylsl Data Stream Initialization
         inlet = StreamInlet(streams[0])
-        
-        # Body temperature label (Thermometer)
+
+        # Thermometer Box
         leftGroupBox = QGroupBox('Body Temperature') #label
         layout1 = QVBoxLayout()
         thermometer = Thermometer(layout1)
         layout1.addWidget(thermometer)
         leftGroupBox.setLayout(layout1)
+
+
+        # Instantiate BodyTemperature Class
+        bt = BodyTemperature(thermometer, streams, inlet) 
+        # Instantiate GSR Class
+        gsr = GSR(streams, inlet)
+        # Instantiate Accelerometer Class
+        acc = Accelerometer()
         
         # Body temperature plot
         rightGroupBox = QGroupBox('Body Temperature Plot')
         layout2 = QVBoxLayout() # create a box
-        tempGraph = BodyTemperature(thermometer, streams, inlet) # instantiate BodyTemperature Class
-        layout2.addWidget(tempGraph.label)
-        layout2.addWidget(tempGraph.graphWidget) # add graphwidget into a box
+      
+        layout2.addWidget(bt.label)
+        layout2.addWidget(bt.graphWidget) # add graphwidget into a box
         rightGroupBox.setLayout(layout2)
 
         # Body Temperature / GSR Numbering Label
         gsrLabel = QGroupBox('Body Temperature / GSR') 
         numLabelBox = QVBoxLayout()
-        bodyTempNum = QtGui.QLabel()
-        gsrNum = QtGui.QLabel()
-        bodyTempNum.setText('Body Temperature Numbering Display')
-        gsrNum.setText('GSR Numbering Display')
-        numLabelBox.addWidget(bodyTempNum)
-        numLabelBox.addWidget(gsrNum)
+        numLabelBox.addWidget(bt.tempNumLabel)
+        numLabelBox.addWidget(gsr.gsrNumLabel)
         gsrLabel.setLayout(numLabelBox)
        
 
         # GSR graph
         gsrGraph = QGroupBox('GSR')
-        gsr = GSR(streams, inlet)
         layout3 = QVBoxLayout()
         layout3.addWidget(gsr.graphWidget)
         gsrGraph.setLayout(layout3) 
@@ -68,6 +71,7 @@ class TemperatureModule():
         accPlotLayout = QVBoxLayout()
         accPlot.setLayout(accPlotLayout)
 
+        # Grid Layout
         mainLayout = QGridLayout()
         mainLayout.addWidget(leftGroupBox, 0, 0)
         mainLayout.addWidget(rightGroupBox, 0, 1)
@@ -75,8 +79,11 @@ class TemperatureModule():
         mainLayout.addWidget(gsrLabel, 1, 0)
         mainLayout.addWidget(gsrGraph, 1, 1)
 
-        darkMode() # Apply Dark Mode
+        # Accelerometer
+        mainLayout.addWidget(acc3d, 2, 0)
+        mainLayout.addWidget(accPlot, 2, 1)
 
+        darkMode() # Apply Dark Mode
     
         window.setLayout(mainLayout) # set layout inside a window
         window.show() # show window
@@ -101,5 +108,6 @@ def darkMode():
     QApplication.setPalette(dark_palette)
 
 
+# Main Function
 if __name__ == '__main__':
     TemperatureModule()

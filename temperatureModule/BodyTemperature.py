@@ -28,6 +28,8 @@ class BodyTemperature():
         self.graphWidget.setRange(yRange=(34.0, 41.0)) # change the visible x range of the graph
 
         self.label = QtGui.QLabel()
+
+        self.tempNumLabel = QtGui.QLabel() # Body Temperature Number Display
         
         #Timer Setup, every second update the data
         self.streams = streams
@@ -45,7 +47,7 @@ class BodyTemperature():
         
 
     def update(self, temp):
-        if len(self.seconds) < 10: # First ten seconds
+        if len(self.seconds) < 100: # First ten seconds
             if len(self.seconds) == 0: # Initialization
                 self.seconds.append(-80)
             else:
@@ -55,7 +57,7 @@ class BodyTemperature():
         else: # after ten seconds
             self.temperature.pop(0) # Pop one data to shift plot
             self.temperature.append(temp) #updating the temperature
-            self.graphWidget.setRange(xRange=(self.seconds[0], self.seconds[9])) #change the visible x range of the graph
+            self.graphWidget.setRange(xRange=(self.seconds[0], self.seconds[99])) #change the visible x range of the graph
 
         if temp >= 38.0:
             self.graphWidget.plot(self.seconds, self.temperature, pen='r', clear=True) # if temperature is high, set line color red
@@ -72,6 +74,10 @@ class BodyTemperature():
             self.label.setText('<span style="font-size: 20px;"Body Temperature is too low</span>')
             self.label.setStyleSheet('color: blue')
         
-        self.thermometer.value = temp
+        # Update Thermometer Value
+        self.thermometer.value = temp 
         self.thermometer.repaint()
+
+        tempLabel = str(temp) # Type casting from float to string
+        self.tempNumLabel.setText(tempLabel) # Update the temperature numbering label
 

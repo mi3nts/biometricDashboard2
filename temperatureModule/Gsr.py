@@ -17,10 +17,12 @@ class GSR():
         self.gsrData = [] # temperature data array, y value
 
         self.graphWidget.plot(self.seconds, self.gsrData, clear=True) # plot initial value
-        self.graphWidget.setRange(yRange=(0, 1.5))                    # change the visible x range of the graph
+        self.graphWidget.setRange(yRange=(44400, 56000))                    # change the visible x range of the graph
     
         self.count = 0  # Counter for downsampling
         self.sum = 0    # Sum for downsampling
+
+        self.gsrNumLabel = QtGui.QLabel() # Body Temperature Number Display
 
         self.streams = streams
         self.inlet = inlet
@@ -31,10 +33,10 @@ class GSR():
     
     def getGsrSignal(self): # downsample to output every 100ms
         sample, timestamp = self.inlet.pull_sample()
-        data = sample[73] * 0.00001
+        data = sample[73] 
         print('GSR: ', data)
 
-        if self.count > 5:     # After 100ms
+        if self.count >= 5:     # After 100ms
             self.count = 0     # Reset counter
             avg = self.sum / 5 # Get the average to downsample
             self.sum = 0       # Reset Sum 
@@ -45,7 +47,7 @@ class GSR():
         
 
     def update(self, data):
-        if len(self.gsrData) < 100: # first ten seconds
+        if len(self.gsrData) < 1000: # first ten seconds
             if len(self.seconds) == 0: # Initialization
                 self.seconds.append(0)
             else:
@@ -55,8 +57,10 @@ class GSR():
         
         else: # after ten seconds
             self.gsrData.pop(0)
-            #gsrSignal = self.getGsrSignal()
             self.gsrData.append(data) #updating GSR signal
 
             self.graphWidget.plot(self.seconds, self.gsrData, pen=(255,165,0), clear=True) # update plot
-    
+
+
+        gsrLabel = str(data) # Type casting from float to string
+        self.gsrNumLabel.setText(gsrLabel) # Update the temperature numbering label
