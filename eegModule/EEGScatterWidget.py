@@ -7,7 +7,6 @@ from EEGArray import EEGArray
 from GetCmapValues import getCmapByFreqVal
 from pylsl import StreamInlet, resolve_stream
 from pyqtgraph import PlotWidget, plot
-from PyQtDeltaFrequency import DeltaFrequencyPG
 # from PyQtAlphaFrequency import AlphaFrequencyPG
 # from PyQtThetaFrequency import ThetaFrequencyPG
 from EEGScatter import EEGGraph
@@ -15,13 +14,15 @@ from EEGScatter import EEGGraph
 import pyqtgraph as pg
 import pyqtgraph.ptime as ptime
 import matplotlib.cm as cm
+import matplotlib.colors as colors
 
+import csv
 import random as r
 import numpy as np
 import scipy.signal as sps
 import socketserver
 import sys
-
+import time
 
 # Subclass QMainWindow to customise your application's main window
 class MainWindow(QMainWindow):
@@ -70,9 +71,7 @@ class EEGmodule(QGroupBox):
 		# set title of EEGmodule
 		self.setTitle("EEG Module")
 
-		# self.alpha = AlphaFrequencyPG()
-		# self.theta = ThetaFrequencyPG()
-		# self.delta = DeltaFrequencyPG()
+
 		self.test = 5
 		# create layout for EEG Module
 		self.layout = QHBoxLayout()
@@ -103,14 +102,36 @@ class EEGmodule(QGroupBox):
 		x,y,nodeList = EEGArray()
 		#set cmap
 		self.cmap = cm.get_cmap("jet")		
+		colormap = []
+		posi=[]
+		
+		for  i in range(self.cmap.N):
+			colormap.append( self.cmap(i))
+			posi.append(i/self.cmap.N)
+			if i == self.cmap.N-1:
+				posi[i-1]=1
+				
+		for i in range(len(colormap)):
+			lst = list(colormap[i])
+			lst[0] = lst[0]*255
+			lst[1] = lst[1]*255
+			lst[2] = lst[2]*255
+			lst[3] = lst[3]*255
+			colormap[i] = tuple(lst)
+		print(colormap)
+		self.pgCM = pg.ColorMap(pos = posi, color = colormap, mode='float')
 		# define number of electrodes
 		self.n = 64		
 		#initialize newdata
 		self.newdata = np.zeros(self.n)		
+		
 		#initialize 64 by 64 data array
-		self.data = np.zeros((self.n, self.n))
+		self.data = np.zeros((self.n,self.n))
+		
 		#get global max for normalization
-		self.globalMax = -(sys.maxsize)-1
+		self.aglobalMax = -(sys.maxsize)-1
+		self.tglobalMax = -(sys.maxsize)-1
+		self.dglobalMax = -(sys.maxsize)-1
 		
 		#Open StreamInlet
 		print("looking for an EEG stream...")
@@ -118,40 +139,67 @@ class EEGmodule(QGroupBox):
 		
 		self.inlet = StreamInlet(self.streams[0])
 		
+		
+		#setting colormap
+		position = [0.0, 0.25,0.5,0.75, 1.0]
+		map_colors = [(0,0,255), (0,255,255), (255,255,0), (0,128,0), (255,0,0)]
+		# colorm = cm.get_cmap('jet')
+		# colorm.init()
+		# transfer = (colorm._transfer*255).view(np.ndarray)
+		#self.CM = pg.ColorMap(position, colors, mode=float)
+		
+		
 		#create timer
 		self.timer = QTimer(self)
-		self.timer.setInterval(100)
+		#self.timer.setInterval(10000)
 		self.timer.timeout.connect(self.PullData)
-		self.timer.start()
+		self.timer.start(20)
 		
+		self.count = 0
+		
+	
 		
 		
 	def PullData(self):
 		
 		
+		starttime=time.time()
+		
+		self.count= self.count+1
+		# if self.count == 50:
+			# self.inlet = StreamInlet(self.streams[0])
+		
 		#pull data
 		sample = self.inlet.pull_sample()
 		self.newdata = np.asarray(sample[0][:self.n])
-		
+		#print(timestamp)
 		
 		for i in range(4):
 			if i == 1:
-				temp, self.globalMax, self.data = getCmapByFreqVal(self.data, self.newdata, self.deltaBand, self.globalMax)
+				temp, self.dglobalMax, self.data = getCmapByFreqVal(self.data, self.newdata, self.deltaBand, self.dglobalMax)
 				#set colors
-				acolors = self.cmap(temp)
-				self.delta.update_nodes(colors=acolors)
-				print(acolors)
-			if i == 2:
-				temp, self.globalMax, self.data = getCmapByFreqVal(self.data, self.newdata, self.thetaBand, self.globalMax)
-				#set colors
-				bcolors = self.cmap(temp)
-				self.theta.update_nodes(colors=bcolors)
-			if i == 3:
-				temp, self.globalMax, self.data = getCmapByFreqVal(self.data, self.newdata, self.alphaBand, self.globalMax)
-				#set colors
-				ccolors = self.cmap(temp)
-				self.alpha.update_nodes(colors=ccolors)				
 				
+				acolors = self.pgCM.map(temp)#self.CM.map(temp, mode='byte')
+				self.delta.update_nodes(colors=acolors)
+				
+			if i == 2:
+				temp, self.tglobalMax, self.data = getCmapByFreqVal(self.data, self.newdata, self.thetaBand, self.tglobalMax)
+				#set colors
+				bcolors = self.pgCM.map(temp)#self.CM.map(temp, mode='byte')
+				self.theta.update_nodes(colors=bcolors)
+			
+			if i == 3:
+				temp, self.aglobalMax, self.data = getCmapByFreqVal(self.data, self.newdata, self.alphaBand, self.aglobalMax)
+				#set colors
+				ccolors =self.pgCM.map(temp)#self.CM.map(temp, mode='byte')
+				self.alpha.update_nodes(colors=ccolors)				
+			
+		elapsed = time.time()-starttime	
+		self.timer.setInterval(elapsed*100)
+		#set onlclickhover to show power and node label
+			
+		
+		
 				
 		
 # create class to contain a widget created using pyqtgraph
