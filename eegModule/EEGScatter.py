@@ -37,6 +37,8 @@ class EEGGraph(QGroupBox):
 		#get the node positions
 		x,y,nodeList = EEGArray()
 		
+		self.setGeometry(0,0, 100,100)
+		
 		self.spots = []
 		for i in range(len(x)):
 			self.spots.append({'pos' : (x[i], y[i]), 'size': .35,  'pen':{'width':-1},'brush':pg.mkBrush(0,0,255)})

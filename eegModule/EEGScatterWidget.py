@@ -72,27 +72,49 @@ class EEGmodule(QGroupBox):
 		self.setTitle("EEG Module")
 
 
-		self.test = 5
+		self.testtest = 5
 		# create layout for EEG Module
-		self.layout = QHBoxLayout()
+		self.layout = QGridLayout()
+		
 		
 		#Creating graphs 
 		self.alpha=EEGGraph()
 		self.alpha.setGraphTitle("Alpha Band")
 		self.alphaBand = -3
+		#checkbox for alpha
+		alphabox = QCheckBox("alpha band", self)
+		alphabox.setChecked(True)
+		alphabox.stateChanged.connect(lambda:self.hideGraph( button=alphabox))
 		
+		
+		self.dlay = QHBoxLayout()
 		self.theta=EEGGraph()
 		self.theta.setGraphTitle("Theta Band")
 		self.thetaBand = -2
+		thetaBox = QCheckBox("Theta Band", self)
+		thetaBox.setChecked(True)
+		thetaBox.stateChanged.connect(lambda:self.hideGraph(button=thetaBox))
+		thetaBox.move(100,0)
+		
 		
 		self.delta=EEGGraph()
+		
 		self.delta.setGraphTitle("Delta Band")
 		self.deltaBand = -1
+		deltaBox = QCheckBox("Delta band", self)
+		deltaBox.setChecked(True)
+		deltaBox.stateChanged.connect(lambda:self.hideGraph( button=deltaBox))
+		deltaBox.move(200,0)
+		
 		
 		# add a simple label widget to layout
-		self.layout.addWidget(self.delta)
-		self.layout.addWidget(self.theta)
-		self.layout.addWidget(self.alpha)
+		# self.layout.addWidget(self.delta)
+		# self.layout.addWidget(self.theta)
+		# self.layout.addWidget(self.alpha)
+		#grid
+		self.layout.addWidget(self.delta, 0, 1,1,1)
+		self.layout.addWidget(self.theta, 0,2,1,1)
+		self.layout.addWidget(self.alpha,0,0,1,1)
 	
 		# set layout for module
 		self.setLayout(self.layout)
@@ -118,8 +140,15 @@ class EEGmodule(QGroupBox):
 			lst[2] = lst[2]*255
 			lst[3] = lst[3]*255
 			colormap[i] = tuple(lst)
-		print(colormap)
+		
 		self.pgCM = pg.ColorMap(pos = posi, color = colormap, mode='float')
+		
+		#creating the gradient fill.
+		# gradient = gradientW()
+		# gradient.setCofG(C=colormap, P=posi)
+		# # gradientBrush = QBrush(gradient)
+		# self.layout.addWidget(gradient)
+		
 		# define number of electrodes
 		self.n = 64		
 		#initialize newdata
@@ -196,12 +225,67 @@ class EEGmodule(QGroupBox):
 		self.timer.setInterval(elapsed*100)
 		#set onlclickhover to show power and node label
 			
+			
+			
+	def hideGraph(self, button=None):
+		if button.isChecked()==False:
+			if button.text() == "alpha band" and button.isChecked() == False:
+				self.layout.removeWidget(self.alpha)
+				self.alpha.setParent(None)
+				
+			if button.text() == 'Delta band' and button.isChecked() == False:
+				self.layout.removeWidget(self.delta)
+				self.delta.setParent(None)
+				
+			if button.text() == 'Theta Band' and button.isChecked() == False:
+				self.layout.removeWidget(self.theta)
+				self.theta.setParent(None)
+		else:
+			if button.text() == "alpha band" :			
+				self.layout.addWidget(self.alpha,0,0,1,1)
+				#self.layout.addWidget(self.alpha)
+			if button.text() == 'Delta band' :
+				self.layout.addWidget(self.delta, 0, 1,1,1)
+				#self.layout.addWidget(self.delta)
+			if button.text() == 'Theta Band':
+				self.layout.addWidget(self.theta, 0,2,1,1)
+				#self.layout.addWidget(self.theta)
 		
+		
+		
+		
+		
+		
+		
+		
+class checkboxes(QGroupBox):
+	def __init__(self, *args, **kwargs):
+	# have EEGmodule inherit attributes of QGroupBox
+		super(QGroupBox, self).__init__(*args, **kwargs)
+
+		#creating 3 boxes by default.
 		
 				
 		
 # create class to contain a widget created using pyqtgraph
-
+class gradientW(QGroupBox):
+	def __init__(self, *args, **kwargs):
+		# have EEGmodule inherit attributes of QGroupBox
+		super(QGroupBox, self).__init__(*args, **kwargs)
+		#gradient widget
+		self.gradient = QLinearGradient(0,0,1,0)
+		#set area to fill
+		# self.painter = QPainter(self)
+		# self.rect = QRect(0, 0, 100, 200)
+		
+		
+	def setCofG(self, C=None, P=None):
+		length = len(P)
+		#gradient.addStop(P[0], C[0])
+		for i in range(length):
+			self.gradient.setColorAt(P[i], QColor.fromRgb(C[i][0], C[i][1], C[i][2]))
+		#brush = QBrush(self.gradient)
+		#self.painter.fillRect(self.rect, brush)
 	
 # function to change application style to dark mode
 def darkMode():
