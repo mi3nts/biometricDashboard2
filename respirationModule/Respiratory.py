@@ -21,7 +21,9 @@ class MainWindow(QMainWindow):
         self.setWindowTitle("Respitory Module")
 
         # # resize main window
-        self.resize(1600, 1200)
+        self.resize(
+            MainWindow.width(self), MainWindow.height(self)
+        )  # WORK ON THIS --- DP
 
         # create a window widget for main window
         widget = QWidget()
@@ -68,6 +70,7 @@ class HR_Module(QGroupBox, QWidget):
         # Add the Gif
         HR_GIF = QtGui.QMovie("./images/hr.gif")
         self.HR_Gif_Label.setMovie(HR_GIF)
+        HR_GIF.setScaledSize(QSize().scaled(500, 500, Qt.KeepAspectRatioByExpanding))
         HR_GIF.start()
 
         self.setGeometry(
@@ -83,7 +86,7 @@ class HR_Module(QGroupBox, QWidget):
 
         # Dynamically Set the Position & size of the Label
         self.HR_Value_Label.setGeometry(
-            int(hrWidget.width() / 4), int(hrWidget.height() / 3), 50, 50
+            int(hrWidget.width() / 4), int(hrWidget.height() / 3), 125, 50
         )
 
         # Read the Data Using PyLSL
@@ -102,7 +105,7 @@ class HR_Module(QGroupBox, QWidget):
 
     def update_HR(self):
         self.sample2 = self.inlet.pull_sample()  # Get Sample
-        print(self.sample2[0][72], "\n")  # Print values for Debuging
+        # print(self.sample2[0][72], "\n")  # Print values for Debuging
         self.rand_text = str(
             self.sample2[0][72]
         )  # Specifically Get the HR Data and Convert to String
@@ -128,7 +131,7 @@ class SpO2_Module(QGroupBox, QWidget):
 
         self.setTitle("Sp02 Module")  # Set Title
         self.setStyleSheet("SpO2_Module{font-size:25px;color:blue;}")  # Set Title Font
-        self.layout = QVBoxLayout()
+        self.layout = QGridLayout()
 
         SpO2_Widget = QWidget()  # Create a SpO2 Widget
 
@@ -140,6 +143,7 @@ class SpO2_Module(QGroupBox, QWidget):
         # add Gif
         SpO2_Gif = QtGui.QMovie("./images/bub7.1.gif")
         self.SpO2_Gif_Label.setMovie(SpO2_Gif)
+        SpO2_Gif.setScaledSize(QSize().scaled(500, 500, Qt.KeepAspectRatioByExpanding))
         SpO2_Gif.start()
 
         self.setGeometry(
@@ -156,7 +160,7 @@ class SpO2_Module(QGroupBox, QWidget):
         # Create a QLabel for Displaying the Value
         self.SpO2_Value_Label = QLabel(SpO2_Widget)
 
-        # Dynamically Set the Position & size of the Label
+        # Dynamically Set the Position & size of the Labelp
         self.SpO2_Value_Label.setGeometry(
             int(SpO2_Widget.width() / 4.5), int(SpO2_Widget.height() / 3), 125, 50
         )
@@ -176,7 +180,7 @@ class SpO2_Module(QGroupBox, QWidget):
 
     def update_SpO2(self):
         self.sample2 = self.inlet.pull_sample()  # Get Sample
-        print(self.sample2[0][71], "\n")  # For Debugging
+        # print(self.sample2[0][71], "\n")  # For Debugging
         self.rand_text = str(
             self.sample2[0][71]
         )  # Specifically Get the Sp)2 Data and Convert to String
@@ -249,7 +253,7 @@ class PPG_GraphObject(QGroupBox):
             "left", '<span style="color:red;font-size:25px">Voltage</span>'
         )
         self.PPG_Graph.setLabel(
-            "bottom", '<span style="color:red;font-size:25px">Time (Sec)</span>'
+            "bottom", '<span style="color:red;font-size:25px">Time (msec)</span>'
         )
 
         self.PPG_Graph.setRange(yRange=(15000, 17000))  # Set Range of Y axis
@@ -281,13 +285,13 @@ class PPG_GraphObject(QGroupBox):
     def getPPGData(self):
         # Get Next Data Points
         self.sample = self.inlet.pull_sample()
-        print(self.sample[0][70], "\n")  # For Debugging
+        # print(self.sample[0][70], "\n")  # For Debugging
 
         return self.sample[0][70]
 
     def update_ppgData(self):
-        ppgData = 0
-        if len(self.xData) < 10:  # first ten seconds
+        ppgData = self.getPPGData()
+        if len(self.xData) < 1000:  # first ten seconds
             self.xData.append(self.xData[len(self.xData) - 1] + 20)
             ppgData = self.getPPGData()
             self.yData.append(ppgData)
@@ -296,7 +300,7 @@ class PPG_GraphObject(QGroupBox):
             ppgData = self.getPPGData()
             self.yData.append(ppgData)
             self.PPG_Graph.setRange(
-                xRange=(self.xData[0], self.xData[9])
+                xRange=(self.xData[0], self.xData[999])
             )  # change the visible x range of the graph
 
         self.PPG_Graph.plot(self.xData, self.yData, pen="r", clear=True)  # Update Plot
@@ -316,10 +320,10 @@ class ECG_GraphObject(QGroupBox):
             "left", '<span style="color:red;font-size:25px">Voltage</span>'
         )
         self.ECG_Graph.setLabel(
-            "bottom", '<span style="color:red;font-size:25px">Time (Sec)</span>'
+            "bottom", '<span style="color:red;font-size:25px">Time (msec)</span>'
         )
 
-        self.ECG_Graph.setRange(yRange=(1000, 14000))  # Set Range of Y axis
+        self.ECG_Graph.setRange(yRange=(6000, 14000))  # Set Range of Y axis
 
         self.ECG_Graph.showGrid(x=True, y=True, alpha=0.3)  # Create a Grid
 
@@ -348,14 +352,14 @@ class ECG_GraphObject(QGroupBox):
 
     def getECGData(self):
         self.sample = self.inlet.pull_sample()
-        print(self.sample[0][68], "\n")
+        # print(self.sample[0][68], "\n")
 
         return self.sample[0][68]
 
     def update_ecgData(self):
-        ecgData = 0
+        ecgData = self.getECGData()
 
-        if len(self.xData) < 10:  # first ten seconds
+        if len(self.xData) < 1000:  # first ten seconds
             self.xData.append(self.xData[len(self.xData) - 1] + 20)
             ecgData = self.getECGData()
             self.yData.append(ecgData)
@@ -364,7 +368,7 @@ class ECG_GraphObject(QGroupBox):
             ecgData = self.getECGData()
             self.yData.append(ecgData)
             self.ECG_Graph.setRange(
-                xRange=(self.xData[0], self.xData[9])
+                xRange=(self.xData[0], self.xData[999])
             )  # change the visible x range of the graph
 
         self.ECG_Graph.plot(self.xData, self.yData, pen="r", clear=True)  # Update Plot
