@@ -19,8 +19,8 @@ def getCmapByFreqVal(data, newdata, freqValue, globalMax):
 
     # compute power spectrum of data
     f, ps = sps.welch(data, fs=26)
-    print("ps", ps)
-    print("f", f)
+    #print("ps", ps)
+    #print("f", f)
 
     extractAmplitude = []
     # delta freq band
