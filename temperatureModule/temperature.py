@@ -24,6 +24,7 @@ class TemperatureModule():
 
         # Thermometer Box
         leftGroupBox = QGroupBox('Body Temperature') #label
+        leftGroupBox.setStyleSheet("color: white;")
         layout1 = QVBoxLayout()
         thermometer = Thermometer(layout1)
         layout1.addWidget(thermometer)
@@ -35,18 +36,19 @@ class TemperatureModule():
         # Instantiate GSR Class
         gsr = GSR(streams, inlet)
         # Instantiate Accelerometer Class
-        acc = Accelerometer()
+        acc = Accelerometer(streams, inlet)
         
         # Body temperature plot
         rightGroupBox = QGroupBox('Body Temperature Plot')
+        rightGroupBox.setStyleSheet("color: white;")
         layout2 = QVBoxLayout() # create a box
-      
         layout2.addWidget(bt.label)
         layout2.addWidget(bt.graphWidget) # add graphwidget into a box
         rightGroupBox.setLayout(layout2)
 
         # Body Temperature / GSR Numbering Label
         gsrLabel = QGroupBox('Body Temperature / GSR') 
+        gsrLabel.setStyleSheet("color: white;")
         numLabelBox = QVBoxLayout()
         numLabelBox.addWidget(bt.tempNumLabel)
         numLabelBox.addWidget(gsr.gsrNumLabel)
@@ -54,7 +56,8 @@ class TemperatureModule():
        
 
         # GSR graph
-        gsrGraph = QGroupBox('GSR')
+        gsrGraph = QGroupBox('GSR Plot')
+        gsrGraph.setStyleSheet("color: white;")
         layout3 = QVBoxLayout()
         layout3.addWidget(gsr.graphWidget)
         gsrGraph.setLayout(layout3) 
@@ -62,13 +65,16 @@ class TemperatureModule():
 
         # Accelerometer 3D Visualization
         acc3d = QGroupBox('Accelerometer 3D Visualization')
+        acc3d.setStyleSheet("color: white;")
         acc3dLayout = QVBoxLayout()
         acc3d.setLayout(acc3dLayout)
         
 
         # Accelerometer Plot
         accPlot = QGroupBox('Accelerometer Plot')
+        accPlot.setStyleSheet("color: white;")
         accPlotLayout = QVBoxLayout()
+        accPlotLayout.addWidget(acc.graphWidget)
         accPlot.setLayout(accPlotLayout)
 
         # Grid Layout

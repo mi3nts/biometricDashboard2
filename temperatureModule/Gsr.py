@@ -1,5 +1,6 @@
 from PyQt5 import *
 import pyqtgraph as pg
+import time
 
 class GSR():
     def __init__(self, streams, inlet):
@@ -10,13 +11,13 @@ class GSR():
         self.graphWidget.setTitle('<span style="font-size: 20px;">Galvanic Skin Response</span>') # Set Title
 
         self.graphWidget.setLabel('left', "GSR amplitude", units='uS') # Left label
-        self.graphWidget.setLabel('bottom', "Time", units='Seconds')   # Bottom label
+        #self.graphWidget.setLabel('bottom', "Time", units='Seconds')   # Bottom label
 
         # Get initial data
         self.seconds = [] # seconds data array, x value
         self.gsrData = [] # temperature data array, y value
 
-        self.graphWidget.plot(self.seconds, self.gsrData, clear=True) # plot initial value
+        self.graphWidget.plot(y=self.gsrData, clear=True) # plot initial value
         self.graphWidget.setRange(yRange=(44400, 56000))                    # change the visible x range of the graph
     
         self.count = 0  # Counter for downsampling
@@ -26,40 +27,49 @@ class GSR():
 
         self.streams = streams
         self.inlet = inlet
+        self.start_time = time.time()
 
         self.timer = pg.QtCore.QTimer()
         self.timer.timeout.connect(self.getGsrSignal) # get GSR signal every 20 ms
         self.timer.start(20) 
     
     def getGsrSignal(self): # downsample to output every 100ms
+        elapsed_time = time.time() - self.start_time
+        #print('Elapsed Time: ', elapsed_time)
+        self.start_time = time.time()
+
         sample, timestamp = self.inlet.pull_sample()
         data = sample[73] 
-        print('GSR: ', data)
-
-        if self.count >= 5:     # After 100ms
-            self.count = 0     # Reset counter
-            avg = self.sum / 5 # Get the average to downsample
-            self.sum = 0       # Reset Sum 
-            self.update(avg)
-        else:                  # If under 100ms, increment count and sum
-            self.count += 1
-            self.sum += data
+        #print('GSR: ', data)
+        self.update(data)
+        # if self.count == 5:     # After 100ms
+        #     self.count = 0     # Reset counter
+        #     avg = self.sum / 5 # Get the average to downsample
+        #     self.sum = 0       # Reset Sum 
+        #     self.update(avg)
+        # else:                  # If under 100ms, increment count and sum
+        #     self.count += 1
+        #     self.sum += data
         
 
     def update(self, data):
-        if len(self.gsrData) < 1000: # first ten seconds
-            if len(self.seconds) == 0: # Initialization
-                self.seconds.append(0)
-            else:
-                self.seconds.append(self.seconds[len(self.seconds) - 1] + 0.1)
+        #print("update")
+    
+    
+        if len(self.gsrData) < 500: # first 500 data
             self.gsrData.append(data)
-            self.graphWidget.plot(self.seconds, self.gsrData, pen=(255,165,0), clear=True) # update plot
-        
+            
         else: # after ten seconds
             self.gsrData.pop(0)
             self.gsrData.append(data) #updating GSR signal
 
-            self.graphWidget.plot(self.seconds, self.gsrData, pen=(255,165,0), clear=True) # update plot
+            # self.seconds.pop(0)
+            # self.seconds.append(self.seconds[len(self.seconds) - 1] + 0.1)
+
+            #self.graphWidget.setRange(xRange=(0, 500)) #change the visible x range of the graph
+
+
+        self.graphWidget.plot(y=self.gsrData, pen=(255,165,0), clear=True) # update plot
 
 
         gsrLabel = str(data) # Type casting from float to string
