@@ -140,13 +140,11 @@ class EEGmodule(QGroupBox):
 		self.inlet = StreamInlet(self.streams[0])
 		
 		
-		#setting colormap
-		position = [0.0, 0.25,0.5,0.75, 1.0]
-		map_colors = [(0,0,255), (0,255,255), (255,255,0), (0,128,0), (255,0,0)]
-		# colorm = cm.get_cmap('jet')
-		# colorm.init()
-		# transfer = (colorm._transfer*255).view(np.ndarray)
-		#self.CM = pg.ColorMap(position, colors, mode=float)
+		# self.view = pg.GraphicsItem()
+		# gradientItem = pg.GradientItemEditor()
+		# self.view.addItem(self.Colormap.getGradient().setOrientation('right'))
+		# self.layout.addWidget(self.view)
+		
 		
 		
 		#create timer

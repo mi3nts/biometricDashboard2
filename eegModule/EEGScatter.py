@@ -33,7 +33,7 @@ class EEGGraph(QGroupBox):
 		#creating the plot
 		self.scatter1 = pg.ScatterPlotItem(pxMode=False)
 		self.view.addItem(self.scatter1)
-		
+		#self.view.sigClicked.connect(self.clicked)
 		#get the node positions
 		x,y,nodeList = EEGArray()
 		
@@ -62,9 +62,10 @@ class EEGGraph(QGroupBox):
 	def update_nodes(self, colors=None):
 				
 		# elapsed_time = time.time() - start_time
-		print("colors:",colors)
+		#print(colors)
 		for i in range(len(self.spots)):
-			self.spots[i]['brush'] = pg.mkBrush(colors[i][0]*255,colors[i][1]*255,colors[i][2]*255,colors[i][3]*255)
+			self.spots[i]['brush'] = pg.mkBrush(colors[i]*255)
+		self.scatter1.clear()
 		self.scatter1.setData(self.spots)
 		
 		
@@ -72,3 +73,6 @@ class EEGGraph(QGroupBox):
 	def setGraphTitle(self, title):
 		self.view.setTitle(title)
 		
+
+	def clicked(self, pts):
+		print("clicked: %s" % pts)
