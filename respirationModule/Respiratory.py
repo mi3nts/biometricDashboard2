@@ -12,6 +12,31 @@ import time
 from pylsl import StreamInlet, resolve_stream
 
 
+class DataStream:
+    def __init__(self, *args, **kwargs):
+        super(DataStream, self).__init__()
+        print("looking for an Data stream...")
+        streams = resolve_stream()
+        self.inlet = StreamInlet(streams[0])
+        # self.dataStream = self.inlet.pull_sample()
+
+    def getPPGStream(self):
+        self.dataStream = self.inlet.pull_sample()
+        return self.dataStream[0][70]
+
+    def getECGStream(self):
+        self.dataStream = self.inlet.pull_sample()
+        return self.dataStream[0][68]
+
+    def getSpO2Stream(self):
+        self.dataStream = self.inlet.pull_sample()
+        return self.dataStream[0][71]
+
+    def getHRStream(self):
+        self.dataStream = self.inlet.pull_sample()
+        return self.dataStream[0][72]
+
+
 # The Applications MainWindow
 class MainWindow(QMainWindow):
     def __init__(self, *args, **kwargs):
@@ -24,6 +49,7 @@ class MainWindow(QMainWindow):
         self.resize(
             MainWindow.width(self), MainWindow.height(self)
         )  # WORK ON THIS --- DP
+        self.setMinimumSize(900, 600)
 
         # create a window widget for main window
         widget = QWidget()
@@ -37,9 +63,9 @@ class MainWindow(QMainWindow):
         # ECG Module: Top Right(Row:0, Column 1; Span 1 Row, Span 2 Columns)
         # PPG Module: Botton Right(Row:1, Column 1; Span 1 Row, Span 2 Columns)
 
-        layout.addWidget(HR_Module(), 0, 0, 1, 1)  # HR
+        layout.addWidget(HR_Module(DataStream()), 0, 0, 1, 1)  # HR
         layout.addWidget(ECG_Module(), 0, 1, 1, 2)  # ECG
-        layout.addWidget(SpO2_Module(), 1, 0, 1, 1)  # SPo2
+        layout.addWidget(SpO2_Module(DataStream()), 1, 0, 1, 1)  # SPo2
         layout.addWidget(PPG_Module(), 1, 1, 1, 2)  # PPG
 
         # add layout to window Widget
@@ -54,9 +80,9 @@ class MainWindow(QMainWindow):
 
 # HR Module Class
 class HR_Module(QGroupBox, QWidget):
-    def __init__(self, *args, **kwargs):
+    def __init__(self, DataStream):
         super(QGroupBox, self).__init__()
-
+        self.dstream = DataStream
         self.setTitle("Heart Rate Module")
         self.setStyleSheet("HR_Module{font-size:25px;}")  # Set Title Font
 
@@ -76,7 +102,7 @@ class HR_Module(QGroupBox, QWidget):
         self.setGeometry(
             hrWidget.height(), hrWidget.width(), hrWidget.height(), hrWidget.width()
         )
-        self.setMinimumSize(10, 10)
+        self.setMinimumSize(100, 100)
 
         # Initial value
         self.hr_Num = "98"
@@ -89,11 +115,6 @@ class HR_Module(QGroupBox, QWidget):
             int(hrWidget.width() / 4), int(hrWidget.height() / 3), 125, 50
         )
 
-        # Read the Data Using PyLSL
-        print("looking for an HR stream...")
-        streams = resolve_stream()
-        self.inlet = StreamInlet(streams[0])
-
         # Update the HR Value every 20 ms
         timer = QTimer(self)
         timer.timeout.connect(self.update_HR)
@@ -104,11 +125,10 @@ class HR_Module(QGroupBox, QWidget):
         self.setLayout(self.layout)
 
     def update_HR(self):
-        self.sample2 = self.inlet.pull_sample()  # Get Sample
         # print(self.sample2[0][72], "\n")  # Print values for Debuging
         self.rand_text = str(
-            self.sample2[0][72]
-        )  # Specifically Get the HR Data and Convert to String
+            self.dstream.getHRStream()
+        )  # Get the HR Data and Convert to String
         self.HR_Value_Label.setText(self.rand_text)  # Display Value
         self.HR_Value_Label.setFont(
             QtGui.QFont("Times", 50, QtGui.QFont.Bold)
@@ -126,12 +146,12 @@ class HR_Module(QGroupBox, QWidget):
 
 # SpO2 Module Class
 class SpO2_Module(QGroupBox, QWidget):
-    def __init__(self, *args, **kwargs):
+    def __init__(self, DataStream):
         super(QGroupBox, self).__init__()
-
+        self.dstream = DataStream
         self.setTitle("Sp02 Module")  # Set Title
         self.setStyleSheet("SpO2_Module{font-size:25px;color:blue;}")  # Set Title Font
-        self.layout = QGridLayout()
+        self.layout = QVBoxLayout()
 
         SpO2_Widget = QWidget()  # Create a SpO2 Widget
 
@@ -165,11 +185,6 @@ class SpO2_Module(QGroupBox, QWidget):
             int(SpO2_Widget.width() / 4.5), int(SpO2_Widget.height() / 3), 125, 50
         )
 
-        # Read the Data Using PyLSL
-        print("looking for an SpO2 stream...")
-        streams = resolve_stream()
-        self.inlet = StreamInlet(streams[0])
-
         # Update the SpO2 Value every 20 ms
         timer = QTimer(self)
         timer.timeout.connect(self.update_SpO2)
@@ -179,11 +194,10 @@ class SpO2_Module(QGroupBox, QWidget):
         self.setLayout(self.layout)
 
     def update_SpO2(self):
-        self.sample2 = self.inlet.pull_sample()  # Get Sample
         # print(self.sample2[0][71], "\n")  # For Debugging
         self.rand_text = str(
-            self.sample2[0][71]
-        )  # Specifically Get the Sp)2 Data and Convert to String
+            self.dstream.getSpO2Stream()
+        )  # Get the SpO2 Data and Convert to String
         self.SpO2_Value_Label.setText(self.rand_text)  # Display Updated Value
         self.SpO2_Value_Label.setFont(
             QtGui.QFont("Times", 50, QtGui.QFont.Bold)
@@ -212,7 +226,9 @@ class ECG_Module(QGroupBox):
         # create layout for ECG Module
         self.layout = QHBoxLayout()
 
-        self.layout.addWidget(ECG_GraphObject())  # add ECG Graph Object as Widget
+        self.layout.addWidget(
+            ECG_GraphObject(DataStream())
+        )  # add ECG Graph Object as Widget
 
         # set layout for module
         self.setLayout(self.layout)
@@ -232,14 +248,15 @@ class PPG_Module(QGroupBox):
         self.layout = QHBoxLayout()
 
         # Need to add PPG Graph Object
-        self.layout.addWidget(PPG_GraphObject())
+        self.layout.addWidget(PPG_GraphObject(DataStream()))
         # set layout for module
         self.setLayout(self.layout)
 
 
 class PPG_GraphObject(QGroupBox):
-    def __init__(self, *args, **kwargs):
-        super(QGroupBox, self).__init__(*args, **kwargs)
+    def __init__(self, DataStream):
+        super(QGroupBox, self).__init__()
+        self.dstream = DataStream
 
         self.PPG_Graph = pg.PlotWidget()  # Create a Plot Widget
 
@@ -253,7 +270,7 @@ class PPG_GraphObject(QGroupBox):
             "left", '<span style="color:red;font-size:25px">Voltage</span>'
         )
         self.PPG_Graph.setLabel(
-            "bottom", '<span style="color:red;font-size:25px">Time (msec)</span>'
+            "bottom", '<span style="color:red;font-size:25px">Time (Sec)</span>'
         )
 
         self.PPG_Graph.setRange(yRange=(15000, 17000))  # Set Range of Y axis
@@ -263,11 +280,6 @@ class PPG_GraphObject(QGroupBox):
         # Initial Data
         self.yData = [0]
         self.xData = [0]
-
-        # Read the Data Using PyLSL
-        print("looking for an PPG stream...")
-        streams = resolve_stream()
-        self.inlet = StreamInlet(streams[0])
 
         # Update the PPG Data every 20 ms
         self.timer = QTimer()
@@ -284,15 +296,14 @@ class PPG_GraphObject(QGroupBox):
 
     def getPPGData(self):
         # Get Next Data Points
-        self.sample = self.inlet.pull_sample()
+        # self.sample = self.inlet.pull_sample()
         # print(self.sample[0][70], "\n")  # For Debugging
-
-        return self.sample[0][70]
+        return self.dstream.getPPGStream()
 
     def update_ppgData(self):
-        ppgData = self.getPPGData()
+        ppgData = 0
         if len(self.xData) < 1000:  # first ten seconds
-            self.xData.append(self.xData[len(self.xData) - 1] + 20)
+            self.xData.append(self.xData[len(self.xData) - 1] + 50)
             ppgData = self.getPPGData()
             self.yData.append(ppgData)
         else:  # after ten seconds
@@ -307,9 +318,9 @@ class PPG_GraphObject(QGroupBox):
 
 
 class ECG_GraphObject(QGroupBox):
-    def __init__(self, *args, **kwargs):
-        super(QGroupBox, self).__init__(*args, **kwargs)
-
+    def __init__(self, DataStream):
+        super(QGroupBox, self).__init__()
+        self.dstream = DataStream
         self.ECG_Graph = pg.PlotWidget()  # Create a Plot
         self.ECG_Graph.setTitle(
             '<span style="color:red;font-size:25px">ECG Graph</span>'
@@ -320,7 +331,7 @@ class ECG_GraphObject(QGroupBox):
             "left", '<span style="color:red;font-size:25px">Voltage</span>'
         )
         self.ECG_Graph.setLabel(
-            "bottom", '<span style="color:red;font-size:25px">Time (msec)</span>'
+            "bottom", '<span style="color:red;font-size:25px">Time (Sec)</span>'
         )
 
         self.ECG_Graph.setRange(yRange=(6000, 14000))  # Set Range of Y axis
@@ -330,11 +341,6 @@ class ECG_GraphObject(QGroupBox):
         # Data
         self.yData = [0]
         self.xData = [0]
-
-        # Read the Data Using PyLSL
-        print("looking for an ECG stream...")
-        streams = resolve_stream()
-        self.inlet = StreamInlet(streams[0])
 
         # Update the ECG Data every 20 ms
         self.timer = QTimer()
@@ -351,16 +357,15 @@ class ECG_GraphObject(QGroupBox):
         self.setLayout(self.layout)
 
     def getECGData(self):
-        self.sample = self.inlet.pull_sample()
+        # self.sample = self.inlet.pull_sample()
         # print(self.sample[0][68], "\n")
-
-        return self.sample[0][68]
+        return self.dstream.getECGStream()
 
     def update_ecgData(self):
-        ecgData = self.getECGData()
+        ecgData = 0
 
         if len(self.xData) < 1000:  # first ten seconds
-            self.xData.append(self.xData[len(self.xData) - 1] + 20)
+            self.xData.append(self.xData[len(self.xData) - 1] + 25)
             ecgData = self.getECGData()
             self.yData.append(ecgData)
         else:  # after ten seconds
