@@ -34,7 +34,7 @@ class Thermometer(QtWidgets.QWidget):
     def initDrawing(self, painter):
         self.normal = 35.0
         self.critical = 38.0
-        self.m_min = 32.0
+        self.m_min = 34.0
         self.m_max = 40.0
         painter.setRenderHint(QtGui.QPainter.Antialiasing)
         painter.translate(self.width()/2.0, 0.0)
@@ -61,7 +61,7 @@ class Thermometer(QtWidgets.QWidget):
         painter.setBrush(QtGui.QBrush(linearGrad))
         painter.setPen(QtCore.Qt.black)
         painter.drawPath(path)
-        pen = QtGui.QPen()
+        pen = QtGui.QPen(QtGui.QColor(192, 192, 192))
         length = 12
         for i in range(33):
             pen.setWidthF(1.0)
