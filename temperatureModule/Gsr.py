@@ -72,5 +72,8 @@ class GSR():
         self.graphWidget.plot(y=self.gsrData, pen=(255,165,0), clear=True) # update plot
 
 
+
         gsrLabel = str(data) # Type casting from float to string
-        self.gsrNumLabel.setText(gsrLabel) # Update the temperature numbering label
+        self.gsrNumLabel.setText("GSR : " + gsrLabel) # Update the temperature numbering label
+        self.gsrNumLabel.setStyleSheet('font-weight: bold; font-size:7pt; color: white')
+
