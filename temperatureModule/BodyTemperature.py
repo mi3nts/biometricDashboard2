@@ -78,5 +78,6 @@ class BodyTemperature():
         self.thermometer.repaint()
 
         tempLabel = str(temp) # Type casting from float to string
-        self.tempNumLabel.setText(tempLabel) # Update the temperature numbering label
-
+        
+        self.tempNumLabel.setText("Temp(C): " + tempLabel) # Update the temperature numbering label
+        self.tempNumLabel.setStyleSheet('font-weight: bold; font-size:10pt; color: white')
