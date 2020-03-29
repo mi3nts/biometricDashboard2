@@ -6,10 +6,10 @@ from PyQt5.QtGui import *
 from PyQt5.QtMultimedia import *
 from pyqtgraph import PlotWidget, plot
 import pyqtgraph as pg 
-from BodyTemperature import * # Body Temperature Class
-from Gsr import *             # GSR Class
+from TemperatureModule_BodyTemp import * # Body Temperature Class
+from TemperatureModule_GSR import *             # GSR Class
 from Thermometer import *     # Thermometer Class
-from Accelerometer import *   # Accelerometer Class
+from TemperatureModule_Accelerometer import *   # Accelerometer Class
 from pylsl import StreamInlet, resolve_stream # Data Stream
 import time
 import sys 
