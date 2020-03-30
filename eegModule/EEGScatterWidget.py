@@ -9,11 +9,12 @@ from pylsl import StreamInlet, resolve_stream
 from pyqtgraph import PlotWidget, plot
 # from PyQtAlphaFrequency import AlphaFrequencyPG
 # from PyQtThetaFrequency import ThetaFrequencyPG
-from EEGScatter import EEGGraph
+from EEGScatter_submodule_graph import EEGGraph
+from MatPlotLibCmapToPyQtColorMap import cmapToColormap
 
 import pyqtgraph as pg
 import pyqtgraph.ptime as ptime
-import matplotlib.cm as cm
+import matplotlib.cm
 import matplotlib.colors as colors
 
 import csv
@@ -46,7 +47,7 @@ class MainWindow(QMainWindow):
         # columns and sits in the top left grid box. The respiration module sits
         # in the bottom left grid box. The temperature module sits in the bottom
         # right grid box.
-        layout.addWidget(EEGmodule(), 0, 0, 1, 2)
+        layout.addWidget(EEGmodule_main(), 0, 0, 1, 2)
         layout.addWidget(pg.GraphicsLayoutWidget(), 1, 0)
         #layout.addWidget(DeltaFrequencyPG(), 1, 1)
 
@@ -62,7 +63,7 @@ class MainWindow(QMainWindow):
 
 # create class to contain EEG module
 
-class EEGmodule(QGroupBox):
+class EEGmodule_main(QGroupBox):
     # initialize attributes of EEGmodule class
 	def __init__(self, *args, **kwargs):
 		# have EEGmodule inherit attributes of QGroupBox
@@ -71,84 +72,66 @@ class EEGmodule(QGroupBox):
 		# set title of EEGmodule
 		self.setTitle("EEG Module")
 
-
-		self.testtest = 5
 		# create layout for EEG Module
 		self.layout = QGridLayout()
-		
+		# set layout for module
+		self.setLayout(self.layout)
 		
 		#Creating graphs 
-		self.alpha=EEGGraph()
-		self.alpha.setGraphTitle("Alpha Band")
+		self.alphaGraph=EEGGraph()
+		self.alphaGraph.setGraphTitle("Alpha Band")
 		self.alphaBand = -3
-		#checkbox for alpha
-		alphabox = QCheckBox("alpha band", self)
+		######################################
+		self.thetaGraph=EEGGraph()
+		self.thetaGraph.setGraphTitle("Theta Band")
+		self.thetaBand = -2
+		######################################
+		self.deltaGraph=EEGGraph()
+		self.deltaGraph.setGraphTitle("Delta Band")
+		self.deltaBand = -1
+		#######################################
+		
+		
+		
+		
+		#checkbox for alphaGraph
+		alphabox = QCheckBox("alphaGraph band", self)
 		alphabox.setChecked(True)
 		alphabox.stateChanged.connect(lambda:self.hideGraph( button=alphabox))
 		
-		
-		self.dlay = QHBoxLayout()
-		self.theta=EEGGraph()
-		self.theta.setGraphTitle("Theta Band")
-		self.thetaBand = -2
 		thetaBox = QCheckBox("Theta Band", self)
 		thetaBox.setChecked(True)
 		thetaBox.stateChanged.connect(lambda:self.hideGraph(button=thetaBox))
 		thetaBox.move(100,0)
 		
-		
-		self.delta=EEGGraph()
-		
-		self.delta.setGraphTitle("Delta Band")
-		self.deltaBand = -1
 		deltaBox = QCheckBox("Delta band", self)
 		deltaBox.setChecked(True)
 		deltaBox.stateChanged.connect(lambda:self.hideGraph( button=deltaBox))
 		deltaBox.move(200,0)
 		
-		
 		# add a simple label widget to layout
-		# self.layout.addWidget(self.delta)
-		# self.layout.addWidget(self.theta)
-		# self.layout.addWidget(self.alpha)
+		# self.layout.addWidget(self.deltaGraph)
+		# self.layout.addWidget(self.thetaGraph)
+		# self.layout.addWidget(self.alphaGraph)
 		#grid
-		self.layout.addWidget(self.delta, 0, 1,1,1)
-		self.layout.addWidget(self.theta, 0,2,1,1)
-		self.layout.addWidget(self.alpha,0,0,1,1)
+		self.layout.addWidget(self.deltaGraph, 0, 1,1,1)
+		self.layout.addWidget(self.thetaGraph, 0,2,1,1)
+		self.layout.addWidget(self.alphaGraph,0,0,1,1)
 	
-		# set layout for module
-		self.setLayout(self.layout)
-		
-		
 		#get the node positions
 		x,y,nodeList = EEGArray()
+		
 		#set cmap
-		self.cmap = cm.get_cmap("jet")		
-		colormap = []
-		posi=[]
-		
-		for  i in range(self.cmap.N):
-			colormap.append( self.cmap(i))
-			posi.append(i/self.cmap.N)
-			if i == self.cmap.N-1:
-				posi[i-1]=1
-				
-		for i in range(len(colormap)):
-			lst = list(colormap[i])
-			lst[0] = lst[0]*255
-			lst[1] = lst[1]*255
-			lst[2] = lst[2]*255
-			lst[3] = lst[3]*255
-			colormap[i] = tuple(lst)
-		
-		self.pgCM = pg.ColorMap(pos = posi, color = colormap, mode='float')
-		
-		#creating the gradient fill.
-		# gradient = gradientW()
-		# gradient.setCofG(C=colormap, P=posi)
-		# # gradientBrush = QBrush(gradient)
-		# self.layout.addWidget(gradient)
-		
+		cmap = getattr(matplotlib.cm, 'jet')
+		self.color_list = cmapToColormap(cmap)
+		ticks = []
+		colors = []
+		for item in self.color_list:
+			ticks.append(item[0])
+			colors.append(item[1])
+			
+		self.pgCM = pg.ColorMap(pos=ticks, color=colors)
+		print(type(self.pgCM))
 		# define number of electrodes
 		self.n = 64		
 		#initialize newdata
@@ -205,21 +188,20 @@ class EEGmodule(QGroupBox):
 			if i == 1:
 				temp, self.dglobalMax, self.data = getCmapByFreqVal(self.data, self.newdata, self.deltaBand, self.dglobalMax)
 				#set colors
-				
-				acolors = self.pgCM.map(temp)#self.CM.map(temp, mode='byte')
-				self.delta.update_nodes(colors=acolors)
+				acolors = self.pgCM.map(temp)
+				self.deltaGraph.update_nodes(colors=acolors)
 				
 			if i == 2:
 				temp, self.tglobalMax, self.data = getCmapByFreqVal(self.data, self.newdata, self.thetaBand, self.tglobalMax)
 				#set colors
-				bcolors = self.pgCM.map(temp)#self.CM.map(temp, mode='byte')
-				self.theta.update_nodes(colors=bcolors)
+				bcolors = self.pgCM.map(temp)
+				self.thetaGraph.update_nodes(colors=bcolors)
 			
 			if i == 3:
 				temp, self.aglobalMax, self.data = getCmapByFreqVal(self.data, self.newdata, self.alphaBand, self.aglobalMax)
 				#set colors
-				ccolors =self.pgCM.map(temp)#self.CM.map(temp, mode='byte')
-				self.alpha.update_nodes(colors=ccolors)				
+				ccolors =self.pgCM.map(temp)
+				self.alphaGraph.update_nodes(colors=ccolors)				
 			
 		elapsed = time.time()-starttime	
 		self.timer.setInterval(elapsed*100)
@@ -229,27 +211,27 @@ class EEGmodule(QGroupBox):
 			
 	def hideGraph(self, button=None):
 		if button.isChecked()==False:
-			if button.text() == "alpha band" and button.isChecked() == False:
-				self.layout.removeWidget(self.alpha)
-				self.alpha.setParent(None)
+			if button.text() == "alphaGraph band" and button.isChecked() == False:
+				self.layout.removeWidget(self.alphaGraph)
+				self.alphaGraph.setParent(None)
 				
 			if button.text() == 'Delta band' and button.isChecked() == False:
-				self.layout.removeWidget(self.delta)
-				self.delta.setParent(None)
+				self.layout.removeWidget(self.deltaGraph)
+				self.deltaGraph.setParent(None)
 				
 			if button.text() == 'Theta Band' and button.isChecked() == False:
-				self.layout.removeWidget(self.theta)
-				self.theta.setParent(None)
+				self.layout.removeWidget(self.thetaGraph)
+				self.thetaGraph.setParent(None)
 		else:
-			if button.text() == "alpha band" :			
-				self.layout.addWidget(self.alpha,0,0,1,1)
-				#self.layout.addWidget(self.alpha)
+			if button.text() == "alphaGraph band" :			
+				self.layout.addWidget(self.alphaGraph,0,0,1,1)
+				#self.layout.addWidget(self.alphaGraph)
 			if button.text() == 'Delta band' :
-				self.layout.addWidget(self.delta, 0, 1,1,1)
-				#self.layout.addWidget(self.delta)
+				self.layout.addWidget(self.deltaGraph, 0, 1,1,1)
+				#self.layout.addWidget(self.deltaGraph)
 			if button.text() == 'Theta Band':
-				self.layout.addWidget(self.theta, 0,2,1,1)
-				#self.layout.addWidget(self.theta)
+				self.layout.addWidget(self.thetaGraph, 0,2,1,1)
+				#self.layout.addWidget(self.thetaGraph)
 		
 		
 		
