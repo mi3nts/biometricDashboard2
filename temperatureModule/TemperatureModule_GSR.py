@@ -2,16 +2,16 @@ from PyQt5 import *
 import pyqtgraph as pg
 import time
 
-class GSR():
-    def __init__(self, streams, inlet):
+class TemperatureModule_GSR():
+    def __init__(self, inlet):
         pg.setConfigOption('background', 'w') # Graph background color
         pg.setConfigOption('foreground', 'k') # Graph foreground color
 
         self.graphWidget = pg.PlotWidget() #pyqtgraph PlotWidget Class
-        self.graphWidget.setTitle('<span style="font-size: 20px;">Galvanic Skin Response</span>') # Set Title
+        self.graphWidget.setTitle('<span style="font-size: 15px;">Galvanic Skin Response</span>') # Set Title
 
         self.graphWidget.setLabel('left', "GSR amplitude", units='uS') # Left label
-        #self.graphWidget.setLabel('bottom', "Time", units='Seconds')   # Bottom label
+        self.graphWidget.setLabel('bottom', "Number of samples")   # Bottom label
 
         # Get initial data
         self.seconds = [] # seconds data array, x value
@@ -19,13 +19,14 @@ class GSR():
 
         self.graphWidget.plot(y=self.gsrData, clear=True) # plot initial value
         self.graphWidget.setRange(yRange=(44400, 56000))                    # change the visible x range of the graph
+        text_box = pg.TextItem(text='TEST', color=(200, 200, 200), html=None, anchor=(0, 0), border=None, fill=None, angle=0, rotateAxis=None)
+        self.graphWidget.addItem(text_box)
     
         self.count = 0  # Counter for downsampling
         self.sum = 0    # Sum for downsampling
 
         self.gsrNumLabel = QtGui.QLabel() # Body Temperature Number Display
 
-        self.streams = streams
         self.inlet = inlet
         self.start_time = time.time()
 
@@ -34,28 +35,19 @@ class GSR():
         self.timer.start(20) 
     
     def getGsrSignal(self): # downsample to output every 100ms
-        elapsed_time = time.time() - self.start_time
+        #elapsed_time = time.time() - self.start_time
         #print('Elapsed Time: ', elapsed_time)
-        self.start_time = time.time()
-
+        #self.start_time = time.time()
         sample, timestamp = self.inlet.pull_sample()
         data = sample[73] 
         #print('GSR: ', data)
         self.update(data)
-        # if self.count == 5:     # After 100ms
-        #     self.count = 0     # Reset counter
-        #     avg = self.sum / 5 # Get the average to downsample
-        #     self.sum = 0       # Reset Sum 
-        #     self.update(avg)
-        # else:                  # If under 100ms, increment count and sum
-        #     self.count += 1
-        #     self.sum += data
         
 
     def update(self, data):
         #print("update")
     
-    
+
         if len(self.gsrData) < 500: # first 500 data
             self.gsrData.append(data)
             
