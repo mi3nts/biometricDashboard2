@@ -14,7 +14,7 @@ class TemperatureModule_BodyTemp():
         self.graphWidget.setLabel('left', "Temperature", units='Celsius') # left label
         self.graphWidget.setLabel('bottom', "Number of samples")   # Bottom label
 
-        self.text_box = pg.TextItem(html='<span style="color: #0000ff;">Temperature is Low</span>', anchor=(0, 0))
+        self.text_box = pg.TextItem(html='<span></span>', anchor=(0, 0))
         self.text_box.setPos(0, 41.0)
         self.graphWidget.addItem(self.text_box)
 
@@ -51,19 +51,17 @@ class TemperatureModule_BodyTemp():
 
         if temp >= 38.0:
             self.curve.setData(self.temperature, pen='r') # if temperature is high, set line color red
-            # self.label.setText('<span style="font-size: 15px;"> Body Temperature is too high! <span>')
-            # self.label.setStyleSheet('color: red; background-color: white;')
+            self.text_box.setHtml('<span style="color: #FF0000;">Temperature is high</span>') # color = red
 
         elif 35.0 <= temp and temp < 38.0:
             self.curve.setData(self.temperature, pen='g') # if temperature is normal, set line color green
-            #self.label.setText('<span style="font-size: 15px;">Body Temperature is normal</span>')
-            #self.label.setStyleSheet('color: green; background-color: white;')
+            self.text_box.setHtml('<span style="color: #008000;">Temperature is normal</span>') # color = green
 
         else:
             self.curve.setData(self.temperature, pen='b') # if temperatre is too low, set line color blue
+            self.text_box.setHtml('<span style="color: #0000ff;">Temperature is low</span>') # color = blue
           
         
-
         # Update Thermometer Value
         self.thermometer.value = temp 
         self.thermometer.repaint()

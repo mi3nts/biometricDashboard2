@@ -68,7 +68,7 @@ class TemperatureModule_Main():
         self.Accelerometer_3D_Box = QGroupBox('Accelerometer 3D Visualization')
         self.Accelerometer_3D_Box.setStyleSheet("color: white;")
         layout5 = QVBoxLayout()
-        layout5.addWidget(acc.test)
+        layout5.addWidget(acc.visualization)
         self.Accelerometer_3D_Box.setLayout(layout5)
         
 

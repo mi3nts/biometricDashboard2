@@ -25,23 +25,27 @@ class TemperatureModule_Accelerometer():
         text_box.setPos(0, 5000)
         self.graphWidget.addItem(text_box)
 
-        self.test = gl.GLViewWidget()
-        g = gl.GLGridItem()
-        g.scale(2,2,1)
+
+        # 3D Model Visualization
+        self.visualization = gl.GLViewWidget()
         xgrid = gl.GLGridItem()
-        xgrid.rotate(90, 0, 1, 0)
-        xgrid.scale(2, 2, 1)
-        self.test.addItem(xgrid)
-        self.test.addItem(g)
+        xgrid.scale(0.3, 0.3, 0.3)
+        self.visualization.addItem(xgrid)
+
+        # create human face-looking object
         md = gl.MeshData.sphere(rows=10, cols=20)
         faceCount = md.faceCount()
         colors = np.ones((faceCount, 4), dtype=float)
-        colors[::2,0] = 0
-        colors[:,1] = np.linspace(0, 1, colors.shape[0])
+        colors[0:60] =  [0, 0, 0, 0]  # hair
+        colors[102] =  [0, 0, 1, 0.3] # left eye
+        colors[104] =  [0, 0, 1, 0.3] # right eye
+        colors[182] = [0, 0, 1, 0.3]  # mouth
         md.setFaceColors(colors)
-        m3 = gl.GLMeshItem(meshdata=md, smooth=False)#, shader='balloon')
-        m3.translate(0, 0, 0)
-        self.test.addItem(m3)
+
+        self.head = gl.GLMeshItem(meshdata=md, smooth=False)#, shader='balloon')
+        self.rotation = 0
+        self.head.rotate(10, 0, 1, 0)
+        self.visualization.addItem(self.head)
         
     
         #Timer Setup, every second update the data
@@ -82,3 +86,5 @@ class TemperatureModule_Accelerometer():
         self.y_curve.setData(self.accel[1], pen='g')
         self.z_curve.setData(self.accel[2], pen='b')
 
+        # update 3d object angle
+        self.head.rotate(10, 0, 1, 0)
