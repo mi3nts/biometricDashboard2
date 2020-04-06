@@ -1,5 +1,8 @@
 # Respiration Module
 
+Execution: Need all the files in one folder including the images
+
+
 RM_Main.py --- Contains the main Respiratory Module -- Tab Layout
 
 RM_Graphs.py -- Contains all the graphs widgtes (HR, SPo2, ECG, Resp, PPG)
