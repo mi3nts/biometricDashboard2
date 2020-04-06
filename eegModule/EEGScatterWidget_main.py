@@ -228,28 +228,49 @@ class EEGmodule_main(QGroupBox):
         # set onlclickhover to show power and node label
 
     def hideGraph(self, button=None):
-        if button.isChecked() == False:
-            if button.text() == "alphaGraph band" and button.isChecked() == False:
-                self.layout.removeWidget(self.alphaGraph)
-                self.alphaGraph.setParent(None)
+		fill_1=pg.PlotWidget()
+		fill_1.getPlotItem().hideAxis('bottom')
+		fill_1.getPlotItem().hideAxis('left')
+		fill_2=pg.PlotWidget()
+		fill_2.getPlotItem().hideAxis('bottom')
+		fill_2.getPlotItem().hideAxis('left')
+		fill_3=pg.PlotWidget()
+		fill_3.getPlotItem().hideAxis('left')
+		fill_3.getPlotItem().hideAxis('bottom')
 
-            if button.text() == 'Delta band' and button.isChecked() == False:
-                self.layout.removeWidget(self.deltaGraph)
-                self.deltaGraph.setParent(None)
 
-            if button.text() == 'Theta Band' and button.isChecked() == False:
-                self.layout.removeWidget(self.thetaGraph)
-                self.thetaGraph.setParent(None)
-        else:
-            if button.text() == "alphaGraph band":
-                self.layout.addWidget(self.alphaGraph, 0, 0, 1, 1)
-                # self.layout.addWidget(self.alphaGraph)
-            if button.text() == 'Delta band':
-                self.layout.addWidget(self.deltaGraph, 0, 1, 1, 1)
-                # self.layout.addWidget(self.deltaGraph)
-            if button.text() == 'Theta Band':
-                self.layout.addWidget(self.thetaGraph, 0, 2, 1, 1)
-                # self.layout.addWidget(self.thetaGraph)
+		if button.isChecked()==False:
+			if button.text() == "Alpha Band":
+				self.alphaGraph.setParent(None)
+				#self.layout.removeWidget(self.alphaGraph)
+				self.layout.addWidget(fill_1, 0,0,1,1)
+				
+			if button.text() == 'Theta Band':
+				self.thetaGraph.setParent(None)
+				#self.layout.removeWidget(self.thetaGraph)
+				self.layout.addWidget(fill_2, 0,1,1,1)
+				
+			if button.text() == 'Delta band':
+				self.deltaGraph.setParent(None)
+				#self.layout.removeWidget(self.deltaGraph)
+				self.layout.addWidget(fill_3, 0,2,1,1)
+		else:
+			if button.text() == "Alpha Band" :			
+				self.layout.addWidget(self.alphaGraph,0,0,1,1)
+				fill_1.setParent(None)
+				#self.layout.removeWidget(fill_1)
+				#fill_1.setParent(None)
+				#self.layout.addWidget(self.alphaGraph)
+			if button.text() == 'Delta band' :
+				self.layout.addWidget(self.deltaGraph, 0, 2,1,1)
+				#self.layout.removeWidget(fill_3)
+				fill_3.setParent(None)
+				#self.layout.addWidget(self.deltaGraph)
+			if button.text() == 'Theta Band':
+				self.layout.addWidget(self.thetaGraph, 0,1,1,1)
+				#self.layout.removeWidget(fill_2)
+				fill_2.setParent(None)
+				#self.layout.addWidget(self.thetaGraph)
 
 
 class checkboxes(QGroupBox):
