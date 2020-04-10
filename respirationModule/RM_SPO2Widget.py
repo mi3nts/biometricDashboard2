@@ -5,7 +5,7 @@ from PyQt5.QtCore import *
 
 
 class SpO2_Mod(QGroupBox):
-    def __init__(self, stream, inlet):
+    def __init__(self, inlet):
         super(QGroupBox, self).__init__()
 
         self.setTitle("Sp02 Module")  # Set Title
@@ -31,7 +31,6 @@ class SpO2_Mod(QGroupBox):
             self.SpO2_Widget.height(),
             self.SpO2_Widget.width(),
         )
-        self.setMinimumSize(400, 100)
 
         # Initial Value
         self.rand_text = "000.0"
@@ -41,14 +40,13 @@ class SpO2_Mod(QGroupBox):
 
         # Dynamically Set the Position & size of the Labelp
         self.SpO2_Value_Label.setGeometry(
-            int(self.SpO2_Widget.width() / 4.5),
-            int(self.SpO2_Widget.height() / 3),
+            int(self.SpO2_Widget.width() / 6),
+            int(self.SpO2_Widget.height() / 4),
             125,
             50,
         )
 
         self.inlet = inlet
-        self.stream = stream
 
         # Update the SpO2 Value every 20 ms
         timer = QTimer(self)

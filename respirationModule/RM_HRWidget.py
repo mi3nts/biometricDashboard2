@@ -5,7 +5,7 @@ from PyQt5.QtCore import *
 
 
 class HR_Module(QGroupBox):
-    def __init__(self, streams, inlet):
+    def __init__(self, inlet):
         super(QGroupBox, self).__init__()
 
         self.setTitle("Heart Rate Widget")
@@ -31,8 +31,6 @@ class HR_Module(QGroupBox):
             self.HR_Widget.width(),
         )
 
-        self.setMinimumSize(400, 100)
-
         # Initial value
         self.hr_Num = "98"
 
@@ -41,7 +39,7 @@ class HR_Module(QGroupBox):
 
         # Dynamically Set the Position & size of the Label
         self.HR_Value_Label.setGeometry(
-            int(self.HR_Widget.width() / 4.5), int(self.HR_Widget.height() / 3), 125, 50
+            int(self.HR_Widget.width() / 6), int(self.HR_Widget.height() / 4), 125, 50
         )
 
         self.inlet = inlet
