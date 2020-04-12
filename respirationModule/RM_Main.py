@@ -14,46 +14,23 @@ from RM_SPO2Widget import *
 from RM_HRWidget import *
 
 
-class RespiratoryModule(QMainWindow):
-    def __init__(self, *args, **kwargs):
-        super(RespiratoryModule, self).__init__(*args, **kwargs)
-
-        tabLayout = QHBoxLayout()
+class RespiratoryModule:
+    def __init__(self, inlet):
         window = QWidget()
         window.setWindowTitle("Respiratory Dashboard")
         window.resize(1600, 1400)
 
-        self.tabs = QTabWidget()
-
-        print("looking for an Data stream...")
-        streams = resolve_stream()  # Data Stream Initialization
-        inlet = StreamInlet(streams[0])  # Creating an inlet
-
-        # rep = MainWindow()
-        spo2 = SpO2_Mod(streams, inlet)
-        ppg = PPG_Graph(inlet)
-        ppg2 = PPG_Graph(inlet)
-        spgraph = SpO2_Graph(inlet)
-        hrw = HR_Module(streams, inlet)
-        hrgraph = HR_Graph(inlet)
-        ecgraph = ECG_Graph(inlet)
-        ecgraph2 = ECG_Graph(inlet)
-        rgraph = Resp_Graph(inlet)
-
-        GraphsGroupBox = QGroupBox("Respiratory Module Graphs")
-        GraphsGroupBox.setStyleSheet("color: Green;")
-        layout1 = QGridLayout()  # create a box
-        layout1.addWidget(rgraph.Resp_Graph, 0, 0)
-        layout1.addWidget(ecgraph2.ECG_Graph, 1, 0)  # add graphwidget into a box
-        layout1.addWidget(ppg.PPG_Graph, 2, 0)
-        layout1.addWidget(hrgraph.HR_Graph, 3, 0)
-        GraphsGroupBox.setLayout(layout1)
+        spo2 = SpO2_Mod(inlet)  # SpO2 Widget
+        ppg = PPG_Graph(inlet)  # PPG Graph
+        hrw = HR_Module(inlet)  # HR Widget
+        ecgraph = ECG_Graph(inlet)  # ECG Graph
+        rgraph = Resp_Graph(inlet)  # Respiratory Graph
 
         SpO2GroupBox = QGroupBox("SpO2")
         SpO2GroupBox.setStyleSheet("color: Green;")
-        layout3 = QGridLayout()  # create a box
-        layout3.addWidget(spo2.SpO2_Widget, 0, 0)
-        SpO2GroupBox.setLayout(layout3)
+        layout1 = QVBoxLayout()  # create a box
+        layout1.addWidget(spo2.SpO2_Widget)
+        SpO2GroupBox.setLayout(layout1)
 
         HRGroupBox = QGroupBox("HR")
         HRGroupBox.setStyleSheet("color: Green;")
@@ -61,32 +38,35 @@ class RespiratoryModule(QMainWindow):
         layout2.addWidget(hrw.HR_Widget)
         HRGroupBox.setLayout(layout2)
 
-        MainGroupBox = QGroupBox("Main Outlet")
-        MainGroupBox.setStyleSheet("color: Green;")
-        mlay = QGridLayout()  # create a box
-        mlay.addWidget(spo2.SpO2_Widget, 1, 0, 1, 1)
-        mlay.addWidget(hrw.HR_Widget, 0, 0, 1, 1)
-        mlay.addWidget(ppg2.PPG_Graph, 1, 1, 1, 3)
-        mlay.addWidget(ecgraph.ECG_Graph, 0, 1, 1, 3)
-        MainGroupBox.setLayout(mlay)
+        EcgGroupBox = QGroupBox("ECG")
+        EcgGroupBox.setStyleSheet("color: Green;")
+        layout3 = QHBoxLayout()  # create a box
+        layout3.addWidget(ecgraph.ECG_Graph)
+        EcgGroupBox.setLayout(layout3)
 
-        self.tab1 = MainGroupBox
-        self.tab2 = GraphsGroupBox
-        self.tab3 = QWidget()
+        PpgGroupBox = QGroupBox("PPG")
+        PpgGroupBox.setStyleSheet("color: Green;")
+        layout4 = QHBoxLayout()
+        layout4.addWidget(ppg.PPG_Graph)
+        PpgGroupBox.setLayout(layout4)
 
-        self.tabs.resize(300, 200)
+        RespGroupBox = QGroupBox("Resp")
+        RespGroupBox.setStyleSheet("color: Green;")
+        layout5 = QHBoxLayout()
+        layout5.addWidget(rgraph.Resp_Graph)
+        RespGroupBox.setLayout(layout5)
 
-        # self.tab3.setLayout(layout1)
-
-        tabLayout.addWidget(self.tabs)
-        self.tabs.addTab(self.tab1, "Overall")
-        self.tabs.addTab(self.tab2, "Graphs")
-        self.tabs.addTab(self.tab3, "SPO2")
+        mlay = QGridLayout()
+        mlay.addWidget(HRGroupBox, 0, 0, 3, 1)
+        mlay.addWidget(SpO2GroupBox, 3, 0, 3, 1)
+        mlay.addWidget(RespGroupBox, 0, 1, 2, 3)
+        mlay.addWidget(EcgGroupBox, 2, 1, 2, 3)
+        mlay.addWidget(PpgGroupBox, 4, 1, 2, 3)
 
         # Set the central widget of the Window. Widget will expand to take up all the space in the window by default.
         darkMode()
 
-        window.setLayout(tabLayout)
+        window.setLayout(mlay)
         window.show()
         app.exec_()
 
@@ -110,7 +90,15 @@ def darkMode():
     QApplication.setPalette(dark_palette)
 
 
+def getStream():
+    print("looking for an EEG stream...")
+    streams = resolve_stream()
+    inlet = StreamInlet(streams[0])
+    return inlet
+
+
 # run application
 if __name__ == "__main__":
     app = QApplication(sys.argv)
-    RespiratoryModule()
+    inlet = getStream()
+    RespiratoryModule(inlet)
