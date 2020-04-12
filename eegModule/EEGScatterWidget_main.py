@@ -28,58 +28,19 @@ import socketserver
 import sys
 import time
 
-# Subclass QMainWindow to customise your application's main window
-
-
-class MainWindow(QMainWindow):
-	def __init__(self, *args, **kwargs):
-		super(MainWindow, self).__init__(*args, **kwargs)
-
-		# set title of application window
-		self.setWindowTitle("Biometric Dashboard")
-
-		# # resize main window
-		self.resize(1600, 1200)
-
-		# create a window widget for main window
-		widget = QWidget()
-
-		# define a layout for window
-		layout = QGridLayout()
-
-		# add all modules to MainWindow where EEG module takes up 1 row and 2
-		# columns and sits in the top left grid box. The respiration module sits
-		# in the bottom left grid box. The temperature module sits in the bottom
-		# right grid box.
-		layout.addWidget(EEGmodule_main(), 0, 0, 1, 2)
-		layout.addWidget(pg.GraphicsLayoutWidget(), 1, 0)
-
-		#layout.addWidget(, 1, 1)
-
-		#layout.addWidget(DeltaFrequencyPG(), 1, 1)
-
-		# add layout to window Widget
-		widget.setLayout(layout)
-
-		# Set the central widget of the Window. Widget will expand
-		# to take up all the space in the window by default.
-		self.setCentralWidget(widget)
-
-		# change window style to dark mode
-		darkMode()
-
-
 class CmapImage(QWidget):
 
 	def __init__(self):
 		super().__init__()
 
 		self.im = QPixmap("./jet.png")
-
+		self.rotation =90
+		self.im = self.im.transformed(QTransform().rotate(self.rotation), Qt.SmoothTransformation)
 		self.label = QLabel()
 		self.im = self.im.scaled(
 			300, 350, Qt.KeepAspectRatio, Qt.FastTransformation)
 		self.label.setPixmap(self.im)
+		
 		self.grid = QGridLayout()
 		self.grid.addWidget(self.label, 0, 1)
 		self.setLayout(self.grid)
@@ -108,43 +69,40 @@ class EEGmodule_main(QGroupBox):
 		self.alphaGraph = EEG_Graph_Submodule()
 		self.alphaGraph.setGraphTitle("Alpha Band (8-12Hz)")
 		self.alphaBand = -3
-		self.alphaGraph.resize(200,200)
 		######################################
 		self.thetaGraph = EEG_Graph_Submodule()
 		self.thetaGraph.setGraphTitle("Theta Band (4-7Hz)")
 		self.thetaBand = -2
-		self.thetaGraph.resize(200,200)
 		######################################
 		self.deltaGraph = EEG_Graph_Submodule()
 		self.deltaGraph.setGraphTitle("Delta Band (0-4Hz)")
 		self.deltaBand = -1
-		self.deltaGraph.resize(200,200)
+		#self.deltaGraph.plotWidgetMain.resize(300,300)
 		#######################################
 
+		print(self.alphaGraph.geometry())
+		
 		# checkbox for alphaGraph
 		alphabox = QCheckBox("Alpha Band", self)
 		alphabox.setChecked(True)
 		alphabox.stateChanged.connect(lambda: self.hideGraph(button=alphabox))
-
+		###################################################
 		thetaBox = QCheckBox("Theta Band", self)
 		thetaBox.setChecked(True)
 		thetaBox.stateChanged.connect(lambda: self.hideGraph(button=thetaBox))
 		thetaBox.move(100, 0)
-
+		###################################################
 		deltaBox = QCheckBox("Delta Band", self)
 		deltaBox.setChecked(True)
 		deltaBox.stateChanged.connect(lambda: self.hideGraph(button=deltaBox))
 		deltaBox.move(200, 0)
+		###################################################
 
-		# add a simple label widget to layout
-		# self.layout.addWidget(self.deltaGraph)
-		# self.layout.addWidget(self.thetaGraph)
-		# self.layout.addWidget(self.alphaGraph)
-		# grid
-		self.layout.addWidget(self.deltaGraph, 0, 0, 1, 1)
-		self.layout.addWidget(self.thetaGraph, 0, 1, 1, 1)
-		self.layout.addWidget(self.alphaGraph, 0, 2, 1, 1)
-		self.layout.addWidget(CmapImage(), 0,3,1,1)
+		# add graphs to widget
+		self.layout.addWidget(self.deltaGraph, 0, 0)
+		self.layout.addWidget(self.thetaGraph, 1, 0)
+		self.layout.addWidget(self.alphaGraph, 2, 0)
+		self.layout.addWidget(CmapImage(), 3,0, 1, 1)
 		# get the node positions
 		x, y, nodeList = EEGArray()
 
@@ -246,12 +204,12 @@ class EEGmodule_main(QGroupBox):
 			if button.text() == "Alpha Band":
 				self.alphaGraph.setParent(None)
 				self.layout.removeWidget(self.alphaGraph)
-				self.layout.addWidget(fill_1, 0,2,1,1)
+				self.layout.addWidget(fill_1, 2,0,1,1)
 				
 			if button.text() == 'Theta Band':
 				self.thetaGraph.setParent(None)
 				self.layout.removeWidget(self.thetaGraph)
-				self.layout.addWidget(fill_2, 0,1,1,1)
+				self.layout.addWidget(fill_2, 1,0,1,1)
 				
 			if button.text() == "Delta Band":
 				self.deltaGraph.setParent(None)
@@ -259,10 +217,10 @@ class EEGmodule_main(QGroupBox):
 				self.layout.addWidget(fill_3, 0,0,1,1)
 		else:
 			if button.text() == "Alpha Band" :			
-				self.layout.addWidget(self.alphaGraph,0,2,1,1)
+				self.layout.addWidget(self.alphaGraph,2,0,1,1)
 				fill_1.setParent(None)
 			if button.text() == 'Theta Band':
-				self.layout.addWidget(self.thetaGraph, 0,1,1,1)
+				self.layout.addWidget(self.thetaGraph, 1,0,1,1)
 				#self.layout.removeWidget(fill_2)
 				fill_2.setParent(None)
 				#self.layout.addWidget(self.thetaGraph)
@@ -272,66 +230,4 @@ class EEGmodule_main(QGroupBox):
 				fill_3.setParent(None)
 
 
-class checkboxes(QGroupBox):
-    def __init__(self, *args, **kwargs):
-        # have EEGmodule inherit attributes of QGroupBox
-        super(QGroupBox, self).__init__(*args, **kwargs)
 
-        # creating 3 boxes by default.
-
-
-# create class to contain a widget created using pyqtgraph
-class gradientW(QGroupBox):
-    def __init__(self, *args, **kwargs):
-        # have EEGmodule inherit attributes of QGroupBox
-        super(QGroupBox, self).__init__(*args, **kwargs)
-        # gradient widget
-        self.gradient = QLinearGradient(0, 0, 1, 0)
-        # set area to fill
-        # self.painter = QPainter(self)
-        # self.rect = QRect(0, 0, 100, 200)
-
-    def setCofG(self, C=None, P=None):
-        length = len(P)
-        #gradient.addStop(P[0], C[0])
-        for i in range(length):
-            self.gradient.setColorAt(
-                P[i], QColor.fromRgb(C[i][0], C[i][1], C[i][2]))
-        #brush = QBrush(self.gradient)
-        #self.painter.fillRect(self.rect, brush)
-
-# function to change application style to dark mode
-
-
-def darkMode():
-    dark_palette = QPalette()
-    dark_palette.setColor(QPalette.Window, QColor(53, 53, 53))
-    dark_palette.setColor(QPalette.WindowText, Qt.white)
-    dark_palette.setColor(QPalette.Base, QColor(25, 25, 25))
-    dark_palette.setColor(QPalette.AlternateBase, QColor(53, 53, 53))
-    dark_palette.setColor(QPalette.ToolTipBase, Qt.white)
-    dark_palette.setColor(QPalette.ToolTipText, Qt.black)
-    dark_palette.setColor(QPalette.Text, Qt.white)
-    dark_palette.setColor(QPalette.Button, QColor(53, 53, 53))
-    dark_palette.setColor(QPalette.ButtonText, Qt.white)
-    dark_palette.setColor(QPalette.BrightText, Qt.red)
-    dark_palette.setColor(QPalette.Link, QColor(42, 130, 218))
-    dark_palette.setColor(QPalette.Highlight, QColor(42, 130, 218))
-    dark_palette.setColor(QPalette.HighlightedText, Qt.black)
-    QApplication.setPalette(dark_palette)
-
-
-# run application
-if __name__ == '__main__':
-    import sys
-
-    # You need one (and only one) QApplication instance per application.
-    # Pass in sys.argv to allow command line arguments for your app.
-    # If you know you won't use command line arguments QApplication([]) works too.
-    app = QApplication(sys.argv)
-    # create a window from the MainWindow class defined above
-    window = MainWindow()
-    # show the window
-    window.show()
-    # Start the event loop.
-    sys.exit(app.exec_())
