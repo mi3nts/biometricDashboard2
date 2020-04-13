@@ -40,7 +40,7 @@ class CmapImage(QWidget):
 		self.im = self.im.scaled(
 			300, 350, Qt.KeepAspectRatio, Qt.FastTransformation)
 		self.label.setPixmap(self.im)
-		
+		self.label.setScaledContents(True)
 		self.grid = QGridLayout()
 		self.grid.addWidget(self.label, 0, 1)
 		self.setLayout(self.grid)
@@ -64,7 +64,8 @@ class EEGmodule_main(QGroupBox):
 		self.layout = QGridLayout()
 		# set layout for module
 		self.setLayout(self.layout)
-
+		self.setGeometry(0,0,300,1000)
+		
 		# Creating graphs
 		self.alphaGraph = EEG_Graph_Submodule()
 		self.alphaGraph.setGraphTitle("Alpha Band (8-12Hz)")
@@ -102,7 +103,7 @@ class EEGmodule_main(QGroupBox):
 		self.layout.addWidget(self.deltaGraph, 0, 0)
 		self.layout.addWidget(self.thetaGraph, 1, 0)
 		self.layout.addWidget(self.alphaGraph, 2, 0)
-		self.layout.addWidget(CmapImage(), 3,0, 1, 1)
+		self.layout.addWidget(CmapImage(), 3,0)
 		# get the node positions
 		x, y, nodeList = EEGArray()
 

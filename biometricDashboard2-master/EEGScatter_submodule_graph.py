@@ -25,9 +25,11 @@ class EEG_Graph_Submodule(QGroupBox):
 
 		#making a plotWidgetMain to show scatter plot item in
 		self.plotWidgetMain = pg.PlotWidget()
-		self.layout = QHBoxLayout()
+		self.layout = QVBoxLayout()
+		
 		self.plotWidgetMain.getViewBox().setGeometry(0,0,300,300)
 		self.setGeometry(0,0,300,300)
+		self.resize(300,300)
 		#setting up so that a plotITEM can be added
 		pg.setConfigOption('leftButtonPan', False)
 
@@ -35,7 +37,6 @@ class EEG_Graph_Submodule(QGroupBox):
 		self.node_scatter_graph = pg.ScatterPlotItem(pxMode=False)
 		self.plotWidgetMain.addItem(self.node_scatter_graph)
 		#self.plotWidgetMain.sigClicked.connect(self.clicked)
-
 		#get the node positions
 		x,y,nodeList = EEGArray()
 		self.spots = []

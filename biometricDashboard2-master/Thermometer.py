@@ -14,7 +14,7 @@ OFFSET = 10
 SCALE_HEIGHT = 224
 
 class Thermometer(QtWidgets.QWidget):
-    def __init__(self):
+    def __init__(self, parent):
         super(Thermometer, self).__init__()
         self.value = 35
 

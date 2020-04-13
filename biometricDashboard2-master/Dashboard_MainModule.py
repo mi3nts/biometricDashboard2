@@ -27,6 +27,7 @@ from EEGScatterWidget_main import *
 from RM_Graphs import *
 from RM_SPO2Widget import *
 from RM_HRWidget import *
+from TemperatureModule_Main import *
 # Subclass QMainWindow to customise your application's main window
 
 
@@ -54,11 +55,15 @@ class MainWindow(QMainWindow):
 		ecgraph = ECG_Graph(inlet)  # ECG Graph
 		rgraph = Resp_Graph(inlet)  # Respiratory Graph
 		eegModule = EEGmodule_main(inlet) #EEG module
-		thermometer = Thermometer()
-		bt = TemperatureModule_BodyTemp(thermometer, inlet) 
-		gsr = TemperatureModule_GSR(inlet)
-		acc = TemperatureModule_Accelerometer(inlet)
-
+		#thermometer = Thermometer()
+		# bt = TemperatureModule_BodyTemp(thermometer, inlet) 
+		# gsr = TemperatureModule_GSR(inlet)
+		# acc = TemperatureModule_Accelerometer(inlet)
+		temperature_module = TemperatureModule_Main(inlet)
+		body_temp = temperature_module.NumberingLabelBox
+		gsr_plot = temperature_module.GSRPlotBox
+		#accelerometer = temperature_module.Acceleromtere_3D_Box
+		
 		#Create necessary groupbox
 		numbers_groupbox = QGroupBox()
 		graphs_groupbox = QGroupBox()
@@ -68,23 +73,26 @@ class MainWindow(QMainWindow):
 		#the non-graph widgets, HR, temperature, SP02
 		layout_numbers.addWidget(spo2.SpO2_Widget, 0, 0)
 		layout_numbers.addWidget(hrw.HR_Widget, 0, 1)
+		layout_numbers.addWidget(body_temp, 0,2)
+
 		numbers_groupbox.setLayout(layout_numbers)
 		##Add the temperature
 
 		#Adding graphs to layout
 		layout_graphs.addWidget(ecgraph.ECG_Graph,0,0)
-		layout_graphs.addWidget(ppg.PPG_Graph,1,0)
-		layout_graphs.addWidget(rgraph.Resp_Graph, 2, 0)
-		layout_graphs.addWidget(bt.graphWidget, 3,0)
-		layout_graphs.addWidget(gsr.graphWidget, 4, 0)
+		layout_graphs.addWidget(ppg.PPG_Graph,0,1)
+		layout_graphs.addWidget(rgraph.Resp_Graph, 1, 0)
+		#layout_graphs.addWidget(bt.graphWidget, 3,0)
+		layout_graphs.addWidget(gsr_plot, 1, 1)
 		graphs_groupbox.setLayout(layout_graphs)
+		
 		# add all modules to MainWindow where EEG module takes up 1 row and 2
 		# columns and sits in the top left grid box. The respiration module sits
 		# in the bottom left grid box. The temperature module sits in the bottom
 		# right grid box.
-		layout_window.addLayout(layout_eeg,0, 0, 8, 1)
-		layout_window.addWidget(numbers_groupbox,0,1, 4, 4)
-		layout_window.addWidget(graphs_groupbox, 4,1, 4, 4)
+		layout_window.addLayout(layout_eeg,0, 0, 10, 6)
+		layout_window.addWidget(numbers_groupbox,0,6, 7, 1)
+		layout_window.addWidget(graphs_groupbox, 7,6, 3, 1)
 
 		# add layout to window Widget
 		widget.setLayout(layout_window)

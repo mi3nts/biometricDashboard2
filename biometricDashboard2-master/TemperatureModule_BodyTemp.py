@@ -4,7 +4,8 @@ import pyqtgraph as pg
 class TemperatureModule_BodyTemp():
     def __init__(self, Thermometer, inlet):
         
-        pg.setConfigOption('background', 'w') #graph background color
+		
+        pg.setConfigOption('background', 'b') #graph background color
         pg.setConfigOption('foreground', 'k') #graph foreground color
 
         self.thermometer = Thermometer # Initilize Thermometer

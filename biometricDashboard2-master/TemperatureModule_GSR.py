@@ -4,8 +4,8 @@ import time
 
 class TemperatureModule_GSR():
     def __init__(self, inlet):
-        pg.setConfigOption('background', 'w') # Graph background color
-        pg.setConfigOption('foreground', 'k') # Graph foreground color
+        pg.setConfigOption('background', 'k') # Graph background color
+        pg.setConfigOption('foreground', 'w') # Graph foreground color
 
         self.graphWidget = pg.PlotWidget() #pyqtgraph PlotWidget Class
         self.graphWidget.setTitle('<span style="font-size: 15px;">Galvanic Skin Response</span>') # Set Title

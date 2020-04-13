@@ -19,8 +19,8 @@ import sys
 
 class TemperatureModule_Main():
     def __init__(self, inlet):
-        app = QApplication([]) # PyQT application starts
-        window = QWidget() # create a window
+        #app = QApplication([]) # PyQT application starts
+        #window = QWidget() # create a window
 
 
         # Thermometer Box
@@ -94,39 +94,39 @@ class TemperatureModule_Main():
         mainLayout.addWidget(self.Accelerometer_3D_Box, 2, 0, 1, 2)
         mainLayout.addWidget(self.AcceleromterPlotBox, 2, 2, 1, 2)
 
-        darkMode() # Apply Dark Mode
+        #darkMode() # Apply Dark Mode
     
-        window.setLayout(mainLayout) # set layout inside a window
-        window.show() # show window
-        app.exec_() # Run PyQt application
+        # window.setLayout(mainLayout) # set layout inside a window
+        # window.show() # show window
+        # app.exec_() # Run PyQt application
     
         
-def darkMode():
-    dark_palette = QPalette()
-    dark_palette.setColor(QPalette.Window, QColor(53, 53, 53))
-    dark_palette.setColor(QPalette.WindowText, Qt.white)
-    dark_palette.setColor(QPalette.Base, QColor(25, 25, 25))
-    dark_palette.setColor(QPalette.AlternateBase, QColor(53, 53, 53))
-    dark_palette.setColor(QPalette.ToolTipBase, Qt.white)
-    dark_palette.setColor(QPalette.ToolTipText, Qt.black)
-    dark_palette.setColor(QPalette.Text, Qt.white)
-    dark_palette.setColor(QPalette.Button, QColor(53, 53, 53))
-    dark_palette.setColor(QPalette.ButtonText, Qt.white)
-    dark_palette.setColor(QPalette.BrightText, Qt.red)
-    dark_palette.setColor(QPalette.Link, QColor(42, 130, 218))
-    dark_palette.setColor(QPalette.Highlight, QColor(42, 130, 218))
-    dark_palette.setColor(QPalette.HighlightedText, Qt.black)
-    QApplication.setPalette(dark_palette)
+# def darkMode():
+    # dark_palette = QPalette()
+    # dark_palette.setColor(QPalette.Window, QColor(53, 53, 53))
+    # dark_palette.setColor(QPalette.WindowText, Qt.white)
+    # dark_palette.setColor(QPalette.Base, QColor(25, 25, 25))
+    # dark_palette.setColor(QPalette.AlternateBase, QColor(53, 53, 53))
+    # dark_palette.setColor(QPalette.ToolTipBase, Qt.white)
+    # dark_palette.setColor(QPalette.ToolTipText, Qt.black)
+    # dark_palette.setColor(QPalette.Text, Qt.white)
+    # dark_palette.setColor(QPalette.Button, QColor(53, 53, 53))
+    # dark_palette.setColor(QPalette.ButtonText, Qt.white)
+    # dark_palette.setColor(QPalette.BrightText, Qt.red)
+    # dark_palette.setColor(QPalette.Link, QColor(42, 130, 218))
+    # dark_palette.setColor(QPalette.Highlight, QColor(42, 130, 218))
+    # dark_palette.setColor(QPalette.HighlightedText, Qt.black)
+    # QApplication.setPalette(dark_palette)
 
 
-# function to grab data stream
-def getStream():
-    print("looking for an EEG stream...")
-    streams = resolve_stream()
-    inlet = StreamInlet(streams[0])
-    return inlet
+# # function to grab data stream
+# def getStream():
+    # print("looking for an EEG stream...")
+    # streams = resolve_stream()
+    # inlet = StreamInlet(streams[0])
+    # return inlet
 
-# Main Function
-if __name__ == '__main__':
-    inlet = getStream()
-    TemperatureModule_Main(inlet)
+# # Main Function
+# if __name__ == '__main__':
+    # inlet = getStream()
+    # TemperatureModule_Main(inlet)
