@@ -121,7 +121,7 @@ def darkMode():
 
 # function to grab data stream
 def getStream():
-    print("looking for an EEG stream...")
+    print("looking for data stream...")
     streams = resolve_stream()
     inlet = StreamInlet(streams[0])
     return inlet
