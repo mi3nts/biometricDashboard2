@@ -1,6 +1,9 @@
+# Respiratory Module --- Graphs
+# Author: Nikhil Nannapaneni
+
+# Imports
 from PyQt5 import *
 import pyqtgraph as pg
-import time
 
 
 class PPG_Graph:
@@ -17,9 +20,6 @@ class PPG_Graph:
         self.PPG_Graph.setLabel(
             "left", '<span style="color:red;font-size:25px">Voltage</span>'
         )
-        # self.PPG_Graph.setLabel(
-        #     "bottom", '<span style="color:red;font-size:25px">Time (Sec)</span>'
-        # )
 
         # Initial Data
         self.yData = []
@@ -47,7 +47,7 @@ class PPG_Graph:
             self.yData.pop(0)
             self.yData.append(self.getPPGData())
 
-        self.PPG_Curve.setData(self.yData, pen="r")  # Update Plot
+        self.PPG_Curve.setData(self.yData, pen="b")  # Update Plot
 
 
 class ECG_Graph:
@@ -66,7 +66,7 @@ class ECG_Graph:
 
         self.ECG_Curve = self.ECG_Graph.plot()
         self.ECG_Graph.setRange(yRange=(1400, 13050))  # Set Range of Y axis
-        self.ECG_Graph.showGrid(x=True, y=True, alpha=0.5)  # Create a Grid
+        self.ECG_Graph.showGrid(x=True, y=True, alpha=0.3)  # Create a Grid
 
         self.inlet = inlet
 
@@ -83,7 +83,7 @@ class ECG_Graph:
             self.yData.pop(0)
             self.yData.append(sample[0][68])
 
-        self.ECG_Curve.setData(self.yData, pen="b")  # Update Plot
+        self.ECG_Curve.setData(self.yData, pen="g")  # Update Plot
 
 
 class HR_Graph:
@@ -100,7 +100,7 @@ class HR_Graph:
 
         self.HR_Curve = self.HR_Graph.plot()
         self.HR_Graph.setRange(yRange=(70, 100))  # Set Range of Y axis
-        self.HR_Graph.showGrid(x=True, y=True, alpha=0.5)  # Create a Grid
+        self.HR_Graph.showGrid(x=True, y=True, alpha=0.3)  # Create a Grid
 
         self.inlet = inlet
 
@@ -137,7 +137,7 @@ class SpO2_Graph:
 
         self.SpO2_Curve = self.SpO2_Graph.plot()
         self.SpO2_Graph.setRange(yRange=(95, 100))  # Set Range of Y axis
-        self.SpO2_Graph.showGrid(x=True, y=True, alpha=0.5)  # Create a Grid
+        self.SpO2_Graph.showGrid(x=True, y=True, alpha=0.3)  # Create a Grid
 
         self.inlet = inlet
 
@@ -173,7 +173,7 @@ class Resp_Graph:
 
         self.Resp_Curve = self.Resp_Graph.plot()
         self.Resp_Graph.setRange(yRange=(33, 39))  # Set Range of Y axis
-        self.Resp_Graph.showGrid(x=True, y=True, alpha=0.5)  # Create a Grid
+        self.Resp_Graph.showGrid(x=True, y=True, alpha=0.3)  # Create a Grid
 
         self.inlet = inlet
 

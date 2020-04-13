@@ -26,32 +26,30 @@ class RespiratoryModule:
         ecgraph = ECG_Graph(inlet)  # ECG Graph
         rgraph = Resp_Graph(inlet)  # Respiratory Graph
 
-        SpO2GroupBox = QGroupBox("SpO2")
-        SpO2GroupBox.setStyleSheet("color: Green;")
-        layout1 = QVBoxLayout()  # create a box
-        layout1.addWidget(spo2.SpO2_Widget)
+        SpO2GroupBox = QGroupBox()
+        layout1 = QGridLayout()  # create a box
+        layout1.addWidget(spo2.SpO2_Widget, 0, 0, 9, 1)
+        layout1.addWidget(spo2.SpO2_Condition_Label, 9, 0, 1, 1)
         SpO2GroupBox.setLayout(layout1)
 
-        HRGroupBox = QGroupBox("HR")
-        HRGroupBox.setStyleSheet("color: Green;")
-        layout2 = QVBoxLayout()  # create a box
-        layout2.addWidget(hrw.HR_Widget)
+        HRGroupBox = QGroupBox()
+        # HRGroupBox.setStyleSheet("color: Green;")
+        layout2 = QGridLayout()  # create a box
+        layout2.addWidget(hrw.HR_Widget, 0, 0, 9, 1)
+        layout2.addWidget(hrw.HR_Condition_Label, 9, 0, 1, 1)
         HRGroupBox.setLayout(layout2)
 
-        EcgGroupBox = QGroupBox("ECG")
-        EcgGroupBox.setStyleSheet("color: Green;")
+        EcgGroupBox = QGroupBox()
         layout3 = QHBoxLayout()  # create a box
         layout3.addWidget(ecgraph.ECG_Graph)
         EcgGroupBox.setLayout(layout3)
 
-        PpgGroupBox = QGroupBox("PPG")
-        PpgGroupBox.setStyleSheet("color: Green;")
+        PpgGroupBox = QGroupBox()
         layout4 = QHBoxLayout()
         layout4.addWidget(ppg.PPG_Graph)
         PpgGroupBox.setLayout(layout4)
 
-        RespGroupBox = QGroupBox("Resp")
-        RespGroupBox.setStyleSheet("color: Green;")
+        RespGroupBox = QGroupBox()
         layout5 = QHBoxLayout()
         layout5.addWidget(rgraph.Resp_Graph)
         RespGroupBox.setLayout(layout5)

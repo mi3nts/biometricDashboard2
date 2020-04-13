@@ -13,8 +13,6 @@ class SpO2_Mod(QGroupBox):
 
         self.SpO2_Widget = QWidget()  # Create a SpO2 Widget
 
-        # self.SpO2_Widget.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
-
         self.SpO2_Gif_Label = QtGui.QLabel(
             self.SpO2_Widget
         )  # Create a Label for the SpO2 Gif
@@ -37,6 +35,10 @@ class SpO2_Mod(QGroupBox):
 
         # Create a QLabel for Displaying the Value
         self.SpO2_Value_Label = QLabel(self.SpO2_Widget)
+        self.SpO2_Value_Label.setFont(
+            QtGui.QFont("Times", 50, QtGui.QFont.Bold)
+        )  # Set Font
+        self.SpO2_Value_Label.setStyleSheet("color:blue")
 
         # Dynamically Set the Position & size of the Labelp
         self.SpO2_Value_Label.setGeometry(
@@ -45,6 +47,11 @@ class SpO2_Mod(QGroupBox):
             125,
             50,
         )
+
+        # SpO2 Condition Label
+        self.SpO2_Condition_Label = QLabel()
+        self.SpO2_Condition_Label.setFont(QtGui.QFont("Times", 15, QtGui.QFont.Bold))
+        self.SpO2_Condition_Label.setAlignment(Qt.AlignCenter)
 
         self.inlet = inlet
 
@@ -56,11 +63,21 @@ class SpO2_Mod(QGroupBox):
     def update_SpO2(self):
         # print(self.sample2[0][71], "\n")  # For Debugging
         sample = self.inlet.pull_sample()
-        data = str(sample[0][71])  # Get the SpO2 Data and Convert to String
+        num = sample[0][71]
+        data = str(num)  # Get the SpO2 Data and Convert to String
         self.SpO2_Value_Label.setText(data)  # Display Updated Value
-        self.SpO2_Value_Label.setFont(
-            QtGui.QFont("Times", 50, QtGui.QFont.Bold)
-        )  # Set Font
+
+        if num >= 95:
+            self.SpO2_Condition_Label.setText("Normal -- Healthy")
+            self.SpO2_Condition_Label.setStyleSheet("color: green")
+
+        elif num > 85 and num <= 94:
+            self.SpO2_Condition_Label.setText("Hypoxic")
+            self.SpO2_Condition_Label.setStyleSheet("color: yellow")
+
+        else:
+            self.SpO2_Condition_Label.setText("Severely Hypoxic")
+            self.SpO2_Condition_Label.setStyleSheet("color: red")
 
     # Resize the Gif based on the Window Size
     def resizeEvent(self, event):
