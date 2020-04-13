@@ -59,11 +59,16 @@ class MainWindow(QMainWindow):
 		gsr = TemperatureModule_GSR(inlet)
 		acc = TemperatureModule_Accelerometer(inlet)
 
+		#Create necessary groupbox
+		numbers_groupbox = QGroupBox()
+		graphs_groupbox = QGroupBox()
+		
 		#add the layout widget into the window
 		layout_eeg.addWidget(eegModule)
 		#the non-graph widgets, HR, temperature, SP02
 		layout_numbers.addWidget(spo2.SpO2_Widget, 0, 0)
 		layout_numbers.addWidget(hrw.HR_Widget, 0, 1)
+		numbers_groupbox.setLayout(layout_numbers)
 		##Add the temperature
 
 		#Adding graphs to layout
@@ -72,14 +77,14 @@ class MainWindow(QMainWindow):
 		layout_graphs.addWidget(rgraph.Resp_Graph, 2, 0)
 		layout_graphs.addWidget(bt.graphWidget, 3,0)
 		layout_graphs.addWidget(gsr.graphWidget, 4, 0)
-
+		graphs_groupbox.setLayout(layout_graphs)
 		# add all modules to MainWindow where EEG module takes up 1 row and 2
 		# columns and sits in the top left grid box. The respiration module sits
 		# in the bottom left grid box. The temperature module sits in the bottom
 		# right grid box.
-		layout_window.addLayout(layout_eeg,0, 0, 10, 1)
-		layout_window.addLayout(layout_numbers,0,1,4,3)
-		layout_window.addLayout(layout_graphs, 1,1,6,3)
+		layout_window.addLayout(layout_eeg,0, 0, 8, 1)
+		layout_window.addWidget(numbers_groupbox,0,1, 4, 4)
+		layout_window.addWidget(graphs_groupbox, 4,1, 4, 4)
 
 		# add layout to window Widget
 		widget.setLayout(layout_window)

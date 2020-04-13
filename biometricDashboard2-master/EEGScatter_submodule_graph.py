@@ -26,7 +26,8 @@ class EEG_Graph_Submodule(QGroupBox):
 		#making a plotWidgetMain to show scatter plot item in
 		self.plotWidgetMain = pg.PlotWidget()
 		self.layout = QHBoxLayout()
-
+		self.plotWidgetMain.getViewBox().setGeometry(0,0,300,300)
+		self.setGeometry(0,0,300,300)
 		#setting up so that a plotITEM can be added
 		pg.setConfigOption('leftButtonPan', False)
 
@@ -68,7 +69,9 @@ class EEG_Graph_Submodule(QGroupBox):
 		
 		
 	def setGraphTitle(self, title):
-		self.plotWidgetMain.setTitle(title, fontsize=40)
+		self.plotWidgetMain.setTitle(title)
+		#self.setTitle(title)
+		#self.setStyleSheet("EEG_Graph_Submodule{font-size:25px;}")
 		
 
 	def clicked(self, pts):
