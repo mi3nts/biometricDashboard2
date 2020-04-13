@@ -1,0 +1,172 @@
+@import "colors";
+
+//General styles
+* {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: "Dosis", sans-serif;
+  line-height: 1.6;
+  background: $dark-color3;
+}
+a {
+  text-decoration: none;
+}
+
+ul {
+  list-style: none;
+}
+
+//button
+.button {
+  &-light {
+    color: $light-color1;
+    cursor: pointer;
+    background: $dark-color1;
+
+    width: fit-content;
+    padding: 1rem;
+  }
+
+  &-light:hover {
+    background: $light-color1;
+    color: $dark-color1;
+  }
+
+  &-dark {
+    cursor: pointer;
+    width: fit-content;
+    padding: 1rem;
+    background: $light-color1;
+    color: $dark-color1;
+  }
+
+  &-dark:hover {
+    color: $light-color1;
+    cursor: pointer;
+    background: $dark-color1;
+    a {
+      color: $light-color1;
+    }
+  }
+}
+//------------------------------------------------------------------------
+//navbar
+.navbar {
+  display: flex;
+  justify-content: flex-end;
+  align-content: center;
+
+  &-tabs {
+    display: flex;
+  }
+
+  &-tab {
+    padding: 0.6rem 1rem 0.6rem 1rem;
+    margin: 15px 30px 10px 20px;
+    border-radius: 10%;
+  }
+}
+
+//------------------------------------------------------------------------
+//home section1
+.home {
+  &-section1 {
+    background: $bg-image no-repeat center right/ cover;
+    height: 100vh;
+
+    &-center {
+      margin-top: 15vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+    }
+    &-header {
+      display: inline-block;
+      margin-top: auto;
+      margin-bottom: auto;
+      text-align: center;
+      color: $light-color1;
+      font-size: 5rem;
+      font-family: "Fjalla One", sans-serif;
+    }
+
+    &-button {
+      padding: 1rem 2rem 1rem 2rem;
+      margin-top: 3rem;
+      background: $light-color1;
+
+      font-size: 1.4rem;
+
+      a {
+        color: $dark-color1;
+      }
+    }
+
+    &-image {
+      margin-top: 3rem;
+      margin-left: auto;
+      margin-right: auto;
+    }
+  }
+}
+
+//------------------------------------------------------------------------
+
+.background {
+  height: 60vh;
+  background: white;
+
+  &-box {
+    line-height: 2.4rem;
+    padding: 3rem;
+    margin-bottom: 20px;
+    margin-left: 30px;
+    margin-right: 30px;
+  }
+}
+//------------------------------------------------------------------------
+.title {
+  text-align: center;
+  color: white;
+  padding: 1rem;
+  font-size: 2.5rem;
+
+  &-dark {
+    color: $dark-color1;
+  }
+}
+//section 2 boxes
+.box {
+  height: 100vh;
+  display: grid;
+  flex-direction: column;
+  justify-content: center;
+  padding: 1.5rem;
+  color: white;
+  .boxes {
+    padding: 1rem;
+    margin-bottom: 20px;
+    margin-left: 30px;
+    margin-right: 30px;
+    border: solid $light-color1 2px;
+  }
+
+  &-title {
+    color: $light-color1;
+  }
+
+  &-light {
+    background: $light-color2;
+  }
+
+  &-medium {
+    background: $dark-color1;
+  }
+  &-dark {
+    background: $dark-color2;
+  }
+}
