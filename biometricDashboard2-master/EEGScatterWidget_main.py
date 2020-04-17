@@ -68,15 +68,15 @@ class EEGmodule_main(QGroupBox):
 		
 		# Creating graphs
 		self.alphaGraph = EEG_Graph_Submodule()
-		self.alphaGraph.setGraphTitle("Alpha Band (8-12Hz)")
+		self.alphaGraph.setGraphTitle('<span style="color:white;font-size:20px">Alpha Band (8-12Hz)</span>')
 		self.alphaBand = -3
 		######################################
 		self.thetaGraph = EEG_Graph_Submodule()
-		self.thetaGraph.setGraphTitle("Theta Band (4-7Hz)")
+		self.thetaGraph.plotWidgetMain.setTitle('<span style="color:white;font-size:20px">Theta Graph (4-7)</span>')
 		self.thetaBand = -2
 		######################################
 		self.deltaGraph = EEG_Graph_Submodule()
-		self.deltaGraph.setGraphTitle("Delta Band (0-4Hz)")
+		self.deltaGraph.setGraphTitle('<span style="color:white;font-size:20px">Delta Band (0-4Hz)</span>')
 		self.deltaBand = -1
 		#self.deltaGraph.plotWidgetMain.resize(300,300)
 		#######################################
@@ -196,17 +196,17 @@ class EEGmodule_main(QGroupBox):
 		if button.isChecked()==False:
 			if button.text() == "Alpha Band":
 				self.alphaGraph.setParent(None)
-				self.layout.removeWidget(self.alphaGraph)
+				#self.layout.removeWidget(self.alphaGraph)
 				self.layout.addWidget(fill_1, 2,0,1,1)
 				
 			if button.text() == 'Theta Band':
 				self.thetaGraph.setParent(None)
-				self.layout.removeWidget(self.thetaGraph)
+				#self.layout.removeWidget(self.thetaGraph)
 				self.layout.addWidget(fill_2, 1,0,1,1)
 				
 			if button.text() == "Delta Band":
 				self.deltaGraph.setParent(None)
-				self.layout.removeWidget(self.deltaGraph)
+				#self.layout.removeWidget(self.deltaGraph)
 				self.layout.addWidget(fill_3, 0,0,1,1)
 		else:
 			if button.text() == "Alpha Band" :			
