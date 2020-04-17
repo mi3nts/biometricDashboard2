@@ -12,7 +12,6 @@ class HR_Module(QGroupBox):
         self.setStyleSheet("HR_Module{font-size:25px;}")  # Set Title Font
 
         self.HR_Widget = QWidget()  # Create hrWidget
-        # self.HR_Widget.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
 
         self.HR_Gif_Label = QtGui.QLabel(
             self.HR_Widget
@@ -36,11 +35,18 @@ class HR_Module(QGroupBox):
 
         # Create a QLabel for Displaying the HR Value
         self.HR_Value_Label = QLabel(self.HR_Widget)
+        self.HR_Value_Label.setFont(QtGui.QFont("Times", 50, QtGui.QFont.Bold))
+        self.HR_Value_Label.setStyleSheet("color:red")
 
         # Dynamically Set the Position & size of the Label
         self.HR_Value_Label.setGeometry(
             int(self.HR_Widget.width() / 6), int(self.HR_Widget.height() / 4), 125, 50
         )
+
+        # Heart Rate -- Condition label
+        self.HR_Condition_Label = QLabel()
+        self.HR_Condition_Label.setFont(QtGui.QFont("Times", 15, QtGui.QFont.Bold))
+        self.HR_Condition_Label.setAlignment(Qt.AlignCenter)
 
         self.inlet = inlet
 
@@ -50,13 +56,37 @@ class HR_Module(QGroupBox):
         timer.start(20)
 
     def update_HR(self):
-        # print(self.sample2[0][72], "\n")  # Print values for Debuging
         sample = self.inlet.pull_sample()
-        data = str(sample[0][72])  # Get the HR Data and Convert to String
+        num = sample[0][72]  # Get the HR Data and Convert to String
+        data = str(num)
         self.HR_Value_Label.setText(data)  # Display Value
-        self.HR_Value_Label.setFont(
-            QtGui.QFont("Times", 50, QtGui.QFont.Bold)
-        )  # Change Font
+        # Change Font
+        if num > 60 and num <= 80:
+            self.HR_Condition_Label.setText("Condition White! -- Normal Heart Rate")
+
+        elif num > 80 and num <= 114:
+            self.HR_Condition_Label.setText(
+                "Condition Yellow! -- Normal but High Heart Rate"
+            )
+            self.HR_Condition_Label.setStyleSheet("color: yellow")
+
+        elif num > 114 and num <= 145:
+            self.HR_Condition_Label.setText(
+                "Condition Red! -- Motor Skills Deteriorates"
+            )
+            self.HR_Condition_Label.setStyleSheet("color: red")
+
+        elif num > 145 and num <= 175:
+            self.HR_Condition_Label.setText(
+                "Condition Grey! -- Cognitivie Processing Deteriorates"
+            )
+            self.HR_Condition_Label.setStyleSheet("color: grey")
+
+        elif num > 175 and num <= 220:
+            self.HR_Condition_Label.setText(
+                "Condition Black! -- Irational Flight or Flee"
+            )
+            self.HR_Condition_Label.setStyleSheet("color: black")
 
     # Resize the Gif based on the Window Size
     def resizeEvent(self, event):
