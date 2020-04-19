@@ -69,10 +69,10 @@ class EEG_Graph_Submodule(QGroupBox):
 		self.node_scatter_graph.setData(self.spots)
 		
 		
-	def setGraphTitle(self, title):
-		self.plotWidgetMain.setTitle(title)
-		#self.setTitle(title)
-		#self.setStyleSheet("EEG_Graph_Submodule{font-size:25px;}")
+	# def setGraphTitle(self, title):
+		# self.plotWidgetMain.setTitle(title)
+		# #self.setTitle(title)
+		# #self.setStyleSheet("EEG_Graph_Submodule{font-size:25px;}")
 		
 
 	def clicked(self, pts):
