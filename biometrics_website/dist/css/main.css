@@ -5,7 +5,8 @@
 body {
   font-family: "Dosis", sans-serif;
   line-height: 1.6;
-  background: #222629; }
+  background: #222629;
+  margin-right: 200px; }
 
 a {
   text-decoration: none; }
@@ -16,9 +17,10 @@ ul {
 .button-light {
   color: #fcdb6a;
   cursor: pointer;
-  background: #575757;
-  width: fit-content;
-  padding: 1rem; }
+  background: #474b4f;
+  width: auto;
+  padding: 1rem;
+  border-bottom: solid #fcdb6a 3px; }
 
 .button-light:hover {
   background: #fcdb6a;
@@ -38,55 +40,94 @@ ul {
   .button-dark:hover a {
     color: #fcdb6a; }
 
-.navbar {
-  display: flex;
-  justify-content: flex-end;
-  align-content: center; }
-  .navbar-tabs {
-    display: flex; }
-  .navbar-tab {
-    padding: 0.6rem 1rem 0.6rem 1rem;
-    margin: 15px 30px 10px 20px;
-    border-radius: 10%; }
+#navbar {
+  display: grid;
+  grid-auto-flow: row;
+  height: 100%;
+  min-width: 200px;
+  width: auto;
+  position: fixed;
+  right: 0;
+  overflow-x: hidden;
+  text-align: center; }
+  #navbar a {
+    display: flex;
+    align-items: center;
+    padding-top: auto;
+    padding-bottom: auto;
+    align-items: center;
+    justify-content: center;
+    padding: 14px;
+    text-decoration: none; }
+
+/* The sticky class is added to the navbar with JS when it reaches its scroll position */
+.sticky {
+  position: fixed;
+  top: 0;
+  width: 100%; }
+
+/* Add some top padding to the page content to prevent sudden quick movement (as the navigation bar gets a new position at the top of the page (position:fixed and top:0) */
+.sticky + .content {
+  padding-top: 60px; }
 
 .home-section1 {
   background: url("../img/background.jpg") no-repeat center right/cover;
   height: 100vh; }
   .home-section1-center {
-    margin-top: 15vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column; }
+    display: block;
+    margin-left: auto;
+    margin-right: auto; }
   .home-section1-header {
-    display: inline-block;
-    margin-top: auto;
-    margin-bottom: auto;
+    display: block;
+    margin: auto;
+    padding-top: 30vh;
     text-align: center;
     color: #fcdb6a;
-    font-size: 5rem;
+    font-size: 6rem;
     font-family: "Fjalla One", sans-serif; }
-  .home-section1-button {
-    padding: 1rem 2rem 1rem 2rem;
-    margin-top: 3rem;
-    background: #fcdb6a;
-    font-size: 1.4rem; }
-    .home-section1-button a {
-      color: #575757; }
   .home-section1-image {
     margin-top: 3rem;
     margin-left: auto;
     margin-right: auto; }
 
-.background {
-  height: 60vh;
-  background: white; }
-  .background-box {
+#background {
+  height: auto;
+  min-height: 100vh;
+  background: #ebeaecfa; }
+  #background-box {
+    background: #474b4f;
+    color: white;
     line-height: 2.4rem;
-    padding: 3rem;
+    padding: 2rem;
     margin-bottom: 20px;
-    margin-left: 30px;
-    margin-right: 30px; }
+    margin-left: 4rem;
+    margin-right: 1rem;
+    border-radius: 15%; }
+  #background a {
+    margin-top: 3rem;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+    color: #474b4f;
+    cursor: pointer;
+    font-size: 1.2rem;
+    padding: 1rem;
+    background: #fcdb6a; }
+
+.section2 {
+  display: grid;
+  padding: 1rem;
+  margin-top: 3rem;
+  grid-auto-flow: column;
+  grid-template-columns: 1.3fr 1fr; }
+
+video {
+  width: 100%;
+  margin: 1rem;
+  max-height: 1000px;
+  min-height: 450px;
+  height: auto; }
 
 .title {
   text-align: center;
@@ -94,26 +135,102 @@ ul {
   padding: 1rem;
   font-size: 2.5rem; }
   .title-dark {
-    color: #575757; }
+    display: inline-block;
+    color: #575757;
+    border-bottom: solid #fcdb6a 5px;
+    padding-bottom: 0.4rem; }
+  .title-light {
+    color: #fcdb6a; }
 
-.box {
-  height: 100vh;
-  display: grid;
-  flex-direction: column;
-  justify-content: center;
+.center-title {
+  text-align: center; }
+
+#abstract {
+  min-height: 100vh;
+  height: auto;
   padding: 1.5rem;
   color: white; }
-  .box .boxes {
+  #abstract .boxes {
+    display: grid;
+    grid-auto-flow: row;
+    grid-template-rows: 1fr 1fr 1fr;
+    justify-content: center;
     padding: 1rem;
     margin-bottom: 20px;
     margin-left: 30px;
     margin-right: 30px;
     border: solid #fcdb6a 2px; }
-  .box-title {
+  #abstract-title {
     color: #fcdb6a; }
-  .box-light {
+  #abstract-light {
     background: #aaaaaa; }
-  .box-medium {
-    background: #575757; }
-  .box-dark {
-    background: #474b4f; }
+
+.module {
+  background: #ebeaecfa;
+  min-height: 100vh;
+  height: auto; }
+  .module-container {
+    padding: 2rem;
+    padding-top: 0;
+    display: grid;
+    grid-auto-flow: row; }
+  .module-video {
+    max-height: 700px;
+    max-width: 900px;
+    margin-top: 3rem;
+    margin-left: auto;
+    margin-right: auto; }
+
+.module-text {
+  color: white;
+  text-align: center;
+  background: #474b4f;
+  border-radius: 1%;
+  margin-top: 2rem;
+  margin-bottom: auto;
+  padding: 1rem;
+  line-height: 2.3rem;
+  font-size: 1rem; }
+
+#ecg {
+  background: #222629; }
+  #ecg-text {
+    background: #222629;
+    color: white; }
+  #ecg-header {
+    color: #fcdb6a; }
+
+#team {
+  height: 100vh; }
+  #team .team-title {
+    margin-bottom: 2rem;
+    border-bottom: solid #fcdb6a 1px; }
+  #team .person {
+    color: white;
+    height: 300px;
+    display: grid;
+    grid-auto-flow: column;
+    grid-template-columns: 1fr 1fr;
+    border-bottom: solid #fcdb6a 1px; }
+    #team .person-name {
+      font-size: 2rem;
+      padding-bottom: 1rem; }
+    #team .person-image {
+      margin-left: auto;
+      margin-right: auto;
+      margin-top: auto;
+      margin-bottom: auto;
+      max-height: 250px;
+      max-width: 250px;
+      height: auto;
+      width: auto;
+      padding: 1rem; }
+    #team .person-text {
+      text-align: center;
+      margin-top: auto;
+      margin-bottom: auto;
+      margin-left: auto;
+      margin-right: auto;
+      padding: 1rem;
+      font-size: 0.9rem;
+      line-height: 1.5rem; }

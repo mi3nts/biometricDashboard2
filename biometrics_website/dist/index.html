@@ -9,82 +9,119 @@
       href="https://fonts.googleapis.com/css2?family=Fjalla+One&display=swap"
       rel="stylesheet"
     />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script>
+$(document).ready(function(){
+  // Add smooth scrolling to all links
+  $("a").on('click', function(event) {
+
+    // Make sure this.hash has a value before overriding default behavior
+    if (this.hash !== "") {
+      // Prevent default anchor click behavior
+      event.preventDefault();
+
+      // Store hash
+      var hash = this.hash;
+
+      // Using jQuery's animate() method to add smooth page scroll
+      // The optional number (800) specifies the number of milliseconds it takes to scroll to the specified area
+      $('html, body').animate({
+        scrollTop: $(hash).offset().top
+      }, 800, function(){
+   
+        // Add hash (#) to URL when done scrolling (default click behavior)
+        window.location.hash = hash;
+      });
+    } // End if
+  });
+});
+</script>
     <link rel="stylesheet" href="css/main.css" />
   </head>
-  <!-- ------------------------------------------------------------------------------- -->
+  <!-- ------------------------------BODY------------------------------------------------- -->
   <body>
     <div class="container">
       <div class="home-section1">
-        <nav class="navbar">
-          <ul class="navbar-tabs">
-            <li class="navbar-tab button-light">Home</li>
-            <li class="navbar-tab button-light">Project</li>
-            <li class="navbar-tab button-light">Team</li>
-          </ul>
-        </nav>
+        <div id="navbar">
+              <a class="navbar-tab button-light" href="#background" target="_blank">Background</a>
+            
+            
+              <a  class="navbar-tab button-light"href="#abstract" target="_blank">Abstract</a>
+            
+           
+              <a  class="navbar-tab button-light"href="#eeg" target="_blank">EEG</a>
+         
+            
+              <a  class="navbar-tab button-light"href="#ecg" target="_blank">ECG</a>
+           
+            
+              <a  class="navbar-tab button-light"href="#temperature" target="_blank">Temperature</a>
+           
+              <a class="navbar-tab button-light" href="#team" target="_blank">Team</a>
+        </div>
+
         <div class="home-section1-center">
-          <p class="home-section1-header">Biometrics Dashboard</p>
-          <div class="home-section1-button button-dark">
+          <div class="home-section1-header">Biometrics Dashboard</div>
+          <!-- <div class="home-section1-button button-dark">
             <a href="work.html" target="_blank">View Work</a>
+          </div> -->
+        </div>
+     
+      </div>
+      <!-- ------------------------------------------------------------------------------- -->
+      <div id="background">
+        <div class="center-title">
+        <h2 class="title title-dark">BACKGROUND</h2>
+      </div>
+        <div class="section2">
+          <video width="500" height="240" controls>
+            <source src="movie.mp4" type="video/mp4" />
+            Your browser does not support the video tag.
+          </video>
+          <div id="background-box">
+            <p class="content-dark">
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Alias
+              ullam, laborum accusantium adipisci possimus asperiores. Minus,
+              sequi officia natus alias aut nihil! Tempora veniam assumenda
+              numquam voluptates inventore aspernatur modi, architecto odit
+              maxime in fugit velit excepturi quasi sapiente, quaerat ipsum
+              blanditiis maiores sed exercitationem esse porro, repellendus
+              animi! D, numquam voluptates inventore aspernatur modi, architecto odit
+              ma
+            </p>
           </div>
         </div>
+        <a  href="https://github.com/mi3nts/biometricDashboard2" target="_blank">Access Source Code</a>
       </div>
-      <!-- ------------------------------------------------------------------------------- -->
-      <div class="background">
-        <h2 class="title title-dark">BACKGROUND</h2>
-        <div class="background-box">
-          <p class="content-dark">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Alias
-            ullam, laborum accusantium adipisci possimus asperiores. Minus,
-            sequi officia natus alias aut nihil! Tempora veniam assumenda
-            numquam voluptates inventore aspernatur modi, architecto odit maxime
-            in fugit velit excepturi quasi sapiente, quaerat ipsum blanditiis
-            maiores sed exercitationem esse porro, repellendus animi! Deleniti
-            in officiis et esse consectetur totam quis accusantium nemo soluta,
-            minus, laudantium vel animi numquam ea voluptates quia facilis ipsa,
-            harum mollitia commodi. Porro accusamus perspiciatis et minima sint
-            voluptas tempore vero, ullam, placeat modi ad vitae totam laboriosam
-            itaque architecto perferendis praesentium quidem nesciunt. Deleniti
-            sint quae ex delectus porro sunt incidunt ea unde. Blanditiis
-            mollitia laboriosam eveniet itaque! Accusamus fugiat molestias
-            magnam voluptas aspernatur nulla, beatae corrupti reiciendis
-            adipisci ve
-          </p>
-        </div>
-      </div>
-      <!-- ------------------------------------------------------------------------------- -->
-      <h1 class="title title-light">ABOUT MODULES</h1>
-      <div class="box">
+      <!-- ---------------------------------- ABSTRACT-------------------------------------------- -->
+     
+      <div id="abstract">
+          <h2 class="title">ABSTRACT</h2>
         <div class="boxes box-light">
-          <h2 class="box-title">EEG</h2>
+          <h2 id="abstract-title">PURPOSE</h2>
           <p class="content-light">
             Lorem ipsum dolor sit amet consectetur, adipisicing elit. Eligendi
             voluptatibus molestias sequi ex id, explicabo nam vitae eos nostrum
             inventore perspiciatis, alias iusto et eveniet necessitatibus maxime
             assumenda ea ipsum sapiente porro consequuntur aliquam doloremque.
             Eveniet minima facere quasi quo.in officiis et esse consectetur
-            totam quis accusantium nemo soluta, minus, laudantium vel animi
-            numquam ea voluptates quia facilis ipsa, harum mollitia commodi.
-            Porro accusamus perspiciatis et minima sint voluptas tempore vero,
-            ullam, placeat modi ad vitae totam laboriosam itaque architecto
-            perferendis praesentium quidem nesciunt. Deleniti sint quae ex
-            delectus porro sunt incidunt ea unde. Blanditiis mollitia laboriosam
+           riosam
             eveniet itaque! Accusamus fugiat molestias magnam voluptas
           </p>
         </div>
         <div class="boxes box-medium">
-          <h2 class="box-title">ECG</h2>
+          <h2 id="abstract-title">IMPLEMENTATION</h2>
           <p class="content-light">
             Lorem ipsum dolor sit amet consectetur, adipisicing elit. Eligendi
             voluptatibus molestias sequi ex id, explicabo nam vitae eos nostrum
             inventore perspiciatis, alias iusto et eveniet necessitatibus maxime
             assumenda ea ipsum sapiente porro consequuntur aliquam doloremque.
-            Eveniet minima facere quasi quo.
+            Eveniet minima facere quasßi quo.
           </p>
         </div>
 
         <div class="boxes box-dark">
-          <h2 class="box-title">Temperature</h2>
+          <h2 id="abstract-title">RESOURCES USED</h2>
           <p class="content-light">
             Lorem ipsum dolor sit amet consectetur, adipisicing elit. Eligendi
             voluptatibus molestias sequi ex id, explicabo nam vitae eos nostrum
@@ -95,6 +132,97 @@
         </div>
       </div>
     </div>
-    <h1></h1>
+
+    <!-- ---------------------------------- MODULES-------------------------------------------- -->
+    <div id="eeg" class = "module">
+        <div class="center-title">
+      <h2 class="title title-dark">EEG MODULE</h2>
+        </div>
+      <div class=" module-container">
+        <video class=" module-video" controls>
+          <source src="movie.mp4" type="video/mp4" />
+          Your browser does not support the video tag.
+        </video>
+        <p class= " module-text">
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Sapiente nisi similique, voluptas vel fugiat est officiis accusamus ex beatae sint ullam. Quos corporis quaerat debitis, ullam accusantium sapiente repellendus ex vel assumenda modi tempora nesciunt laudantium suscipit ut nisi reiciendis dolorem aut harum, nihil odio architecto neque praesentium! Voluptatum cupiditate architecto inventore cum aspernatur eaque dignissimos, nesciunt dolore omnis optio asperiores enim quae sint exercitationem natus dolores cumque nihil facilis dicta, reiciendis magnam ex porro illum? Atque, laudantium provident? Iure architecto dolor facilis, hic corrupti eveniet provident ad, necessitatibus exercitationem cumque ullam quas, libero quisquam. Sint eum porro provident ut.
+        </p>
+      </div>
+    </div>
+
+    <div id="ecg" class = "module">
+        <h2 class="title title-light ecg-header">ECG MODULE</h2>
+        <div class=" module-container">
+          <video class=" module-video" controls>
+            <source src="movie.mp4" type="video/mp4" />
+            Your browser does not support the video tag.
+          </video>
+          <p class = "module-text" id ="ecg-text">
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Sapiente nisi similique, voluptas vel fugiat est officiis accusamus ex beatae sint ullam. Quos corporis quaerat debitis, ullam accusantium sapiente repellendus ex vel assumenda modi tempora nesciunt laudantium suscipit ut nisi reiciendis dolorem aut harum, nihil odio architecto neque praesentium! Voluptatum cupiditate architecto inventore cum aspernatur eaque dignissimos, nesciunt dolore omnis optio asperiores enim quae sint exercitationem natus dolores cumque nihil facilis dicta, reiciendis magnam ex porro illum? Atque, laudantium provident? Iure architecto dolor facilis, hic corrupti eveniet provident ad, necessitatibus exercitationem cumque ullam quas, libero quisquam. Sint eum porro provident ut.
+          </p>
+        </div>
+      </div>
+
+      
+      <div id="temperature" class = "module">
+          <div class="center-title">
+          <h2 class="title title-dark">TEMPERATURE MODULE</h2>
+          </div>
+          <div class=" module-container">
+            <video class="module-video" controls>
+              <source src="movie.mp4" type="video/mp4" />
+              Your browser does not support the video tag.
+            </video>
+            <p class = "module-text">
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Sapiente nisi similique, voluptas vel fugiat est officiis accusamus ex beatae sint ullam. Quos corporis quaerat debitis, ullam accusantium sapiente repellendus ex vel assumenda modi tempora nesciunt laudantium suscipit ut nisi reiciendis dolorem aut harum, nihil odio architecto neque praesentium! Voluptatum cupiditate architecto inventore cum aspernatur eaque dignissimos, nesciunt dolore omnis optio asperiores enim quae sint exercitationem natus dolores cumque nihil facilis dicta, reiciendis magnam ex porro illum? Atque, laudantium provident? Iure architecto dolor facilis, hic corrupti eveniet provident ad, necessitatibus exercitationem cumque ullam quas, libero quisquam. Sint eum porro provident ut.
+            </p>
+          </div>
+        </div>
+    
+
+          <!-- ---------------------------------- TEAMS-------------------------------------------- -->
+          <div id="team">
+            <div class="center-title"></div>
+              <h2 class="title title-light team-title">TEAM</h2>
+
+              <div class="person">
+                  <img class= "person-image"src="./img/bikram.jpg" alt="">
+                <div class="person-text">
+                  <h2 class="person-name">William Hood</h2>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quia ipsum labore, tempora sint enim, explicabo necessitatibus deleniti dicta obcaecati doloremque, nesciunt consequatur repellendus quibusdam provident voluptatibus facere ducimus voluptas adipisci.</div>
+              </div>
+
+              <div class="person">
+                <div class="person-text">
+                  <h2 class="person-name">William Hood</h2>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quia ipsum labore, tempora sint enim, explicabo necessitatibus deleniti dicta obcaecati doloremque, nesciunt consequatur repellendus quibusdam provident voluptatibus facere ducimus voluptas adipisci.</div>
+                <img class= "person-image"src="./img/bikram.jpg" alt="">
+              </div>
+
+              <div class="person">
+                  <img class= "person-image"src="./img/bikram.jpg" alt="">
+                <div class="person-text">
+                  <h2 class="person-name">William Hood</h2>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quia ipsum labore, tempora sint enim, explicabo necessitatibus deleniti dicta obcaecati doloremque, nesciunt consequatur repellendus quibusdam provident voluptatibus facere ducimus voluptas adipisci.</div>
+              </div>
+
+              <div class="person">
+                <div class="person-text">
+                  <h2 class="person-name">William Hood</h2>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quia ipsum labore, tempora sint enim, explicabo necessitatibus deleniti dicta obcaecati doloremque, nesciunt consequatur repellendus quibusdam provident voluptatibus facere ducimus voluptas adipisci.</div>
+                <img class= "person-image"src="./img/bikram.jpg" alt="">
+              </div>
+
+              <div class="person">
+                  <img class= "person-image"src="./img/bikram.jpg" alt="">
+                <div class="person-text">
+                  <h2 class="person-name">William Hood</h2>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quia ipsum labore, tempora sint enim, explicabo necessitatibus deleniti dicta obcaecati doloremque, nesciunt consequatur repellendus quibusdam provident voluptatibus facere ducimus voluptas adipisci.</div>
+              </div>
+
+              <div class="person">
+                <div class="person-text">
+                  <h2 class="person-name">William Hood</h2>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quia ipsum labore, tempora sint enim, explicabo necessitatibus deleniti dicta obcaecati doloremque, nesciunt consequatur repellendus quibusdam provident voluptatibus facere ducimus voluptas adipisci.</div>
+                <img class= "person-image"src="./img/bikram.jpg" alt="">
+              </div>
+
+              
+          </div>
+    </div>
+
   </body>
 </html>
