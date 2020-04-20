@@ -1,6 +1,8 @@
 from PyQt5 import *
 import pyqtgraph as pg
 import time
+import numpy as np   
+
 
 class TemperatureModule_GSR():
     def __init__(self, inlet):
@@ -64,8 +66,7 @@ class TemperatureModule_GSR():
         self.graphWidget.plot(y=self.gsrData, pen=(255,165,0), clear=True) # update plot
 
 
-
-        gsrLabel = str(data) # Type casting from float to string
+        gsrLabel = str(np.round(data, 2)) # Type casting from float to string
 
         self.gsrNumLabel.setText("GSR AMPLITUDE:\n" + gsrLabel) # Update the temperature numbering label
         self.gsrNumLabel.setStyleSheet('font-weight: bold; font-size:10pt; color: black')
