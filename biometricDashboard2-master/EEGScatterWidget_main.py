@@ -36,7 +36,9 @@ class CmapImage(QWidget):
 		self.im = QPixmap("./jet.png")
 		self.rotation =-90
 		self.im = self.im.transformed(QTransform().rotate(self.rotation), Qt.SmoothTransformation)
-		self.label = QLabel()
+		self.label = QLabel(" Frequencies")
+        	self.title = QLabel("Normalized Frequencies")
+        	self.title.setAlignment(Qt.AlignCenter)
 		self.im = self.im.scaled(
 			300, 350, Qt.KeepAspectRatio, Qt.FastTransformation)
 		self.label.setPixmap(self.im)
