@@ -82,7 +82,16 @@ class MainWindow(QMainWindow):
         layout6.addWidget(self.thermometer)
         self.ThermometerBox.setLayout(layout6)
 
+        self.ThermometerBox2 = QGroupBox()  # label
+        # self.ThermometerBox.setStyleSheet("color: white;")
+        layout16 = QVBoxLayout()
+        self.thermometer2 = Thermometer(layout16)
+        layout16.addWidget(self.thermometer2)
+        self.ThermometerBox2.setLayout(layout16)
+
         self.bt = TemperatureModule_BodyTemp(self.thermometer, inlet)
+        self.bt2 = TemperatureModule_BodyTemp(self.thermometer2, inlet)
+
         # Instantiate GSR Class
         self.gsr = TemperatureModule_GSR(inlet)
         self.gsr2 = TemperatureModule_GSR(inlet)
@@ -159,27 +168,20 @@ def tempTabUI(self):
     mainLayout = QGridLayout()
 
     # First Row = Body Temperature Module
-    mainLayout.addWidget(self.ThermometerBox2, 0, 0, 1, 2)
-    mainLayout.addWidget(self.BodyTempBox, 0, 2, 1, 2)
+    mainLayout.addWidget(self.ThermometerBox2, 0, 0, 1, 1)
+    mainLayout.addWidget(self.BodyTempBox, 0, 2, 1, 3)
 
     # Second Row = GSR Module
-    mainLayout.addWidget(self.NumberingLabelBox, 1, 0, 1, 2)
-    mainLayout.addWidget(self.GSRPlotBox2, 1, 2, 1, 2)
+    mainLayout.addWidget(self.NumberingLabelBox, 1, 0, 1, 1)
+    mainLayout.addWidget(self.GSRPlotBox2, 1, 2, 1, 3)
 
     # Accelerometer
-    mainLayout.addWidget(self.Accelerometer_3D_Box, 2, 0, 1, 2)
-    mainLayout.addWidget(self.AcceleromterPlotBox, 2, 2, 1, 2)
+    mainLayout.addWidget(self.Accelerometer_3D_Box, 2, 0, 1, 1)
+    mainLayout.addWidget(self.AcceleromterPlotBox, 2, 2, 1, 3)
     self.temp_tab.setLayout(mainLayout)
 
 
 def biometricWidgets(self):
-
-    self.ThermometerBox2 = QGroupBox()  # label
-    # self.ThermometerBox.setStyleSheet("color: white;")
-    layout16 = QVBoxLayout()
-    self.thermometer2 = Thermometer(layout16)
-    layout16.addWidget(self.thermometer2)
-    self.ThermometerBox2.setLayout(layout16)
 
     self.SpO2GroupBox = QGroupBox()
     layout1 = QGridLayout()  # create a box
@@ -268,7 +270,7 @@ def biometricWidgets(self):
     self.GSRPlotBox2.setStyleSheet("color: white;")
     layout19 = QVBoxLayout()
     layout19.addWidget(self.gsr2.graphWidget)
-    self.GSRPlotBox.setLayout(layout19)
+    self.GSRPlotBox2.setLayout(layout19)
 
     # Accelerometer 3D Visualization
     self.Accelerometer_3D_Box = QGroupBox("Accelerometer 3D Visualization")
@@ -319,6 +321,7 @@ if __name__ == "__main__":
     # Pass in sys.argv to allow command line arguments for your app.
     # If you know you won't use command line arguments QApplication([]) works too.
     app = QApplication(sys.argv)
+    app.setStyle("Fusion")
     # create a window from the MainWindow class defined above
     window = MainWindow(inlet)
     # show the window

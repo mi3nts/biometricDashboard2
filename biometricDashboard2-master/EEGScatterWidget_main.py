@@ -79,7 +79,7 @@ class EEGmodule_main(QGroupBox):
         ######################################
         self.thetaGraph = EEG_Graph_Submodule()
         self.thetaGraph.plotWidgetMain.setTitle(
-            '<span style="color:white;font-size:20px">Theta Band (4-7Hz)</span>'
+            '<span style="color:white;font-size:20px">Theta Graph (4-7Hz)</span>'
         )
         self.thetaBand = -2
         ######################################
@@ -113,7 +113,8 @@ class EEGmodule_main(QGroupBox):
         self.layout.addWidget(self.deltaGraph, 0, 0, 1, 1)
         self.layout.addWidget(self.thetaGraph, 0, 1, 1, 1)
         self.layout.addWidget(self.alphaGraph, 0, 2, 1, 1)
-        self.layout.addWidget(CmapImage(), 1, 0)
+        self.layout.addWidget(CmapImage(), 2, 1, 1, 1)
+        self.layout.addWidget(QLabel("Normalized Power"), 1, 0, 3, 1)
         # get the node positions
         x, y, nodeList = EEGArray()
 
@@ -206,30 +207,28 @@ class EEGmodule_main(QGroupBox):
         if button.isChecked() == False:
             if button.text() == "Alpha Band":
                 self.alphaGraph.setParent(None)
-                self.layout.removeWidget(self.alphaGraph)
-                self.layout.addWidget(fill_1, 0,2, 1, 1)
+                # self.layout.removeWidget(self.alphaGraph)
+                self.layout.addWidget(fill_1, 0, 2, 1, 1)
 
             if button.text() == "Theta Band":
                 self.thetaGraph.setParent(None)
-                self.layout.removeWidget(self.thetaGraph)
-                self.layout.addWidget(fill_2, 0,1, 1, 1)
+                # self.layout.removeWidget(self.thetaGraph)
+                self.layout.addWidget(fill_2, 0, 1, 1, 1)
 
             if button.text() == "Delta Band":
                 self.deltaGraph.setParent(None)
-                self.layout.removeWidget(self.deltaGraph)
+                # self.layout.removeWidget(self.deltaGraph)
                 self.layout.addWidget(fill_3, 0, 0, 1, 1)
         else:
             if button.text() == "Alpha Band":
+                self.layout.addWidget(self.alphaGraph, 0, 2, 1, 1)
                 fill_1.setParent(None)
-                self.layout.removeWidget(fill_1)
-                self.layout.addWidget(self.alphaGraph, 0,2, 1, 1)
-                
             if button.text() == "Theta Band":
+                self.layout.addWidget(self.thetaGraph, 0, 1, 1, 1)
+                # self.layout.removeWidget(fill_2)
                 fill_2.setParent(None)
-                self.layout.removeWidget(fill_2)
-                self.layout.addWidget(self.thetaGraph, 0,1, 1, 1)
-                
-            if button.text() == "Delta Band":                
-                self.layout.removeWidget(fill_3)
-                fill_3.setParent(None)
+                # self.layout.addWidget(self.thetaGraph)
+            if button.text() == "Delta Band":
                 self.layout.addWidget(self.deltaGraph, 0, 0, 1, 1)
+                # self.layout.removeWidget(fill_3)
+                fill_3.setParent(None)
