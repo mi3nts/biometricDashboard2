@@ -40,7 +40,7 @@ class EEG_Graph_Submodule(QGroupBox):
 		#get the node positions
 		x,y,nodeList = EEGArray()
 		self.spots = []
-		self.value = [];
+		self.value = []
 		#initialize the spots as blue
 		for i in range(len(x)):
 			self.spots.append({'pos' : (x[i], y[i]), 'size': .35,  'pen':{'width':-1},'brush':pg.mkBrush(0,0,255)})
