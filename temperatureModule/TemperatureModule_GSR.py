@@ -66,6 +66,6 @@ class TemperatureModule_GSR():
 
 
         gsrLabel = str(data) # Type casting from float to string
-        self.gsrNumLabel.setText("GSR : " + gsrLabel) # Update the temperature numbering label
-        self.gsrNumLabel.setStyleSheet('font-weight: bold; font-size:7pt; color: white')
 
+        self.gsrNumLabel.setText("GSR AMPLITUDE:\n" + gsrLabel) # Update the temperature numbering label
+        self.gsrNumLabel.setStyleSheet('font-weight: bold; font-size:10pt; color: black')
