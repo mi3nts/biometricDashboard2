@@ -62,23 +62,22 @@ class HR_Module(QGroupBox):
         self.HR_Value_Label.setText(data)  # Display Value
         # Change Font
         if num > 60 and num <= 80:
-            self.HR_Condition_Label.setText("Condition White! -- Normal Heart Rate")
+            self.HR_Condition_Label.setText("Condition White! - Normal HR")
+            self.HR_Condition_Label.setStyleSheet("color: white")
 
         elif num > 80 and num <= 114:
-            self.HR_Condition_Label.setText(
-                "Condition Yellow! -- Normal but High Heart Rate"
-            )
+            self.HR_Condition_Label.setText("Condition Yellow! - Normal but High HR")
             self.HR_Condition_Label.setStyleSheet("color: yellow")
 
         elif num > 114 and num <= 145:
             self.HR_Condition_Label.setText(
-                "Condition Red! -- Motor Skills Deteriorates"
+                "Condition Red! - Motor Skills Deteriorates"
             )
             self.HR_Condition_Label.setStyleSheet("color: red")
 
         elif num > 145 and num <= 175:
             self.HR_Condition_Label.setText(
-                "Condition Grey! -- Cognitivie Processing Deteriorates"
+                "Condition Grey! - Cognitivie Processing Deteriorates"
             )
             self.HR_Condition_Label.setStyleSheet("color: grey")
 

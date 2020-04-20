@@ -13,12 +13,12 @@ class PPG_Graph:
 
         # Set Title
         self.PPG_Graph.setTitle(
-            '<span style="color:red;font-size:25px">PPG Graph</span>'
+            '<span style="color:white;font-size:25px">PPG Graph</span>'
         )
 
         # Axis Labels
         self.PPG_Graph.setLabel(
-            "left", '<span style="color:red;font-size:25px">Voltage</span>'
+            "left", '<span style="color:white;font-size:25px">Voltage</span>'
         )
 
         # Initial Data
@@ -26,7 +26,7 @@ class PPG_Graph:
 
         self.PPG_Curve = self.PPG_Graph.plot()
         self.PPG_Graph.setRange(yRange=(15500, 17500))  # Set Range of Y axis
-        self.PPG_Graph.showGrid(x=True, y=True, alpha=0.5)  # Create a Grid
+        self.PPG_Graph.showGrid(x=True, y=True, alpha=0.3)  # Create a Grid
 
         self.inlet = inlet
 
@@ -54,12 +54,12 @@ class ECG_Graph:
     def __init__(self, inlet):
         self.ECG_Graph = pg.PlotWidget()  # Create a Plot
         self.ECG_Graph.setTitle(
-            '<span style="color:red;font-size:25px">ECG Graph</span>'
+            '<span style="color:white;font-size:25px">ECG Graph</span>'
         )
 
         # Axis Labels
         self.ECG_Graph.setLabel(
-            "left", '<span style="color:red;font-size:25px">Voltage</span>'
+            "left", '<span style="color:white;font-size:25px">Voltage</span>'
         )
         # initial data
         self.yData = []
@@ -83,17 +83,19 @@ class ECG_Graph:
             self.yData.pop(0)
             self.yData.append(sample[0][68])
 
-        self.ECG_Curve.setData(self.yData, pen="g")  # Update Plot
+        self.ECG_Curve.setData(self.yData, pen="b")  # Update Plot
 
 
 class HR_Graph:
     def __init__(self, inlet):
         self.HR_Graph = pg.PlotWidget()  # Create a Plot
-        self.HR_Graph.setTitle('<span style="color:red;font-size:25px">HR Graph</span>')
+        self.HR_Graph.setTitle(
+            '<span style="color:white;font-size:25px">HR Graph</span>'
+        )
 
         # Axis Labels
         self.HR_Graph.setLabel(
-            "left", '<span style="color:red;font-size:25px">Heart Rate</span>'
+            "left", '<span style="color:white;font-size:25px">Heart Rate</span>'
         )
         # initial data
         self.yData = []
@@ -117,20 +119,20 @@ class HR_Graph:
             self.yData.pop(0)
             self.yData.append(sample[0][72])
 
-        self.HR_Curve.setData(self.yData, pen="g")  # Update Plot
+        self.HR_Curve.setData(self.yData, pen="b")  # Update Plot
 
 
 class SpO2_Graph:
     def __init__(self, inlet):
         self.SpO2_Graph = pg.PlotWidget()  # Create a Plot
         self.SpO2_Graph.setTitle(
-            '<span style="color:red;font-size:25px">SpO2 Graph</span>'
+            '<span style="color:white;font-size:25px">SpO2 Graph</span>'
         )
 
         # Axis Labels
         self.SpO2_Graph.setLabel(
             "left",
-            '<span style="color:red;font-size:25px">Oxygen Saturation (%) </span>',
+            '<span style="color:white;font-size:25px">Oxygen Saturation (%) </span>',
         )
         # initial data
         self.yData = []
@@ -154,19 +156,19 @@ class SpO2_Graph:
             self.yData.pop(0)
             self.yData.append(sample[0][71])
 
-        self.SpO2_Curve.setData(self.yData, pen="r")  # Update Plot
+        self.SpO2_Curve.setData(self.yData, pen="b")  # Update Plot
 
 
 class Resp_Graph:
     def __init__(self, inlet):
         self.Resp_Graph = pg.PlotWidget()  # Create a Plot
         self.Resp_Graph.setTitle(
-            '<span style="color:red;font-size:25px">Resp Graph</span>'
+            '<span style="color:white;font-size:25px">Resp Graph</span>'
         )
 
         # Axis Labels
         self.Resp_Graph.setLabel(
-            "left", '<span style="color:red;font-size:25px">Respiration (%) </span>',
+            "left", '<span style="color:white;font-size:20px">Breaths/min</span>',
         )
         # initial data
         self.yData = []
@@ -190,4 +192,4 @@ class Resp_Graph:
             self.yData.pop(0)
             self.yData.append(sample[0][69])
 
-        self.Resp_Curve.setData(self.yData, pen="r")  # Update Plot
+        self.Resp_Curve.setData(self.yData, pen="b")  # Update Plot
