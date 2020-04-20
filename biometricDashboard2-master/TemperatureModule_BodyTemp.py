@@ -87,5 +87,5 @@ class TemperatureModule_BodyTemp:
         self.tempNumLabel.setText("TEMPERATURE:\n " + tempLabel + " C°")
         # Update the temperature numbering label
         self.tempNumLabel.setStyleSheet(
-            "font-weight: bold; font-size:10pt; color: black"
+            "font-weight: bold; font-size:15pt; color: black"
         )
