@@ -39,7 +39,7 @@ class CmapImage(QWidget):
         self.im = self.im.transformed(QTransform().rotate(
             self.rotation), Qt.SmoothTransformation)
         self.label = QLabel(" Frequencies")
-        self.title = QLabel("Scale")
+        self.title = QLabel("Normalized Amplitude")
         # self.title.setMinimumHeight(self.grid.height())
         self.title.setAlignment(Qt.AlignCenter)
         self.im = self.im.scaled(
