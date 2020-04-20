@@ -207,12 +207,12 @@ class EEGmodule_main(QGroupBox):
             if button.text() == "Alpha Band":
                 self.alphaGraph.setParent(None)
                 self.layout.removeWidget(self.alphaGraph)
-                self.layout.addWidget(fill_1, 2, 0, 1, 1)
+                self.layout.addWidget(fill_1, 0,2, 1, 1)
 
             if button.text() == "Theta Band":
                 self.thetaGraph.setParent(None)
                 self.layout.removeWidget(self.thetaGraph)
-                self.layout.addWidget(fill_2, 1, 0, 1, 1)
+                self.layout.addWidget(fill_2, 0,1, 1, 1)
 
             if button.text() == "Delta Band":
                 self.deltaGraph.setParent(None)
@@ -222,12 +222,12 @@ class EEGmodule_main(QGroupBox):
             if button.text() == "Alpha Band":
                 fill_1.setParent(None)
                 self.layout.removeWidget(fill_1)
-                self.layout.addWidget(self.alphaGraph, 2, 0, 1, 1)
+                self.layout.addWidget(self.alphaGraph, 0,2, 1, 1)
                 
             if button.text() == "Theta Band":
                 fill_2.setParent(None)
                 self.layout.removeWidget(fill_2)
-                self.layout.addWidget(self.thetaGraph, 1, 0, 1, 1)
+                self.layout.addWidget(self.thetaGraph, 0,1, 1, 1)
                 
             if button.text() == "Delta Band":                
                 self.layout.removeWidget(fill_3)
