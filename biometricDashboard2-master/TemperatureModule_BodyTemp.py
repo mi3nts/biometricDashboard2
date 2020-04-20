@@ -78,6 +78,6 @@ class TemperatureModule_BodyTemp():
         self.thermometer.repaint()
 
         tempLabel = str(temp) 
-        
-        self.tempNumLabel.setText("Temp(C): " + tempLabel) # Update the temperature numbering label
-        self.tempNumLabel.setStyleSheet('font-weight: bold; font-size:10pt; color: black;')
+
+	self.tempNumLabel.setText("TEMPERATURE:\n " + tempLabel + " C°") # Update the temperature numbering label
+        self.tempNumLabel.setStyleSheet('font-weight: bold; font-size:10pt; color: black')
