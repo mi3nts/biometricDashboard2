@@ -51,6 +51,8 @@ class MainWindow(QMainWindow):
         self.resp_tab = QWidget()
         self.temp_tab = QWidget()
 
+        self.bm_tabs.setStyleSheet("color:black;")
+
         # Adding tabs to the Screen
         self.bm_tabs.addTab(self.main_tab, "Main Tab")
         self.bm_tabs.addTab(self.eeg_tab, "EEG Tab")
@@ -59,19 +61,28 @@ class MainWindow(QMainWindow):
 
         # Setting up Widgets
         self.spo2 = SpO2_Mod(inlet)  # spo2 widget
+        self.spo22 = SpO2_Mod(inlet)  # spo2 widget
         self.ppg = PPG_Graph(inlet)  # PPG Graph
         self.ppg2 = PPG_Graph(inlet)
         self.hrw = HR_Module(inlet)  # HR Widget
+        self.hrw2 = HR_Module(inlet)  # HR Widget
         self.ecgraph = ECG_Graph(inlet)  # ECG Graph
         self.ecgraph2 = ECG_Graph(inlet)  # ECG Graph
         self.rgraph = Resp_Graph(inlet)
         self.rgraph2 = Resp_Graph(inlet)  # Respiratory Graph
-        self.hrgraph = HR_Graph(inlet)
-        self.spo2graph = SpO2_Graph(inlet)
         self.eegModule = EEGmodule_main(inlet)  # EEG module
         self.eegModule2 = EEGmodule_main(inlet)
+        self.cmap = CmapImage()
 
-        
+        # Thermometer Box
+        self.ThermometerBox = QGroupBox()  # label
+        # self.ThermometerBox.setStyleSheet("color: white;")
+        layout6 = QVBoxLayout()
+        self.thermometer = Thermometer(layout6)
+        layout6.addWidget(self.thermometer)
+        self.ThermometerBox.setLayout(layout6)
+
+        self.bt = TemperatureModule_BodyTemp(self.thermometer, inlet)
         # Instantiate GSR Class
         self.gsr = TemperatureModule_GSR(inlet)
         self.gsr2 = TemperatureModule_GSR(inlet)
@@ -83,7 +94,7 @@ class MainWindow(QMainWindow):
         mainTabUI(self)
         respTabUI(self)
         tempTabUI(self)
-        # eegTabUI(self)
+        eegTabUI(self)
 
         # add layout to window Widget
         # 	self.main_tab.setLayout(layout_window)
@@ -96,8 +107,11 @@ class MainWindow(QMainWindow):
 
 
 def mainTabUI(self):
-    layout_eeg = QVBoxLayout()
-    layout_eeg.addWidget(self.eegModule)
+    layout_eeg = QGridLayout()
+    layout_eeg.addWidget(self.eegModule.deltaGraph, 1, 0)
+    layout_eeg.addWidget(self.eegModule.thetaGraph, 2, 0)
+    layout_eeg.addWidget(self.eegModule.alphaGraph, 3, 0)
+    layout_eeg.addWidget(self.cmap, 4, 0)
 
     layout_numbers = QGridLayout()
     layout_numbers.addWidget(self.SpO2GroupBox, 0, 0)
@@ -117,26 +131,26 @@ def mainTabUI(self):
     graphsGroup.setLayout(layout_graphs)
 
     mainTabLayout = QGridLayout()
-    mainTabLayout.addLayout(layout_eeg, 0, 0, 10, 6)
-    mainTabLayout.addWidget(numGroup, 0, 6, 7, 1)
-    mainTabLayout.addWidget(graphsGroup, 7, 6, 3, 1)
+    mainTabLayout.addLayout(layout_eeg, 0, 0, 12, 6)
+    mainTabLayout.addWidget(numGroup, 0, 6, 9, 1)
+    mainTabLayout.addWidget(graphsGroup, 9, 6, 3, 1)
 
     self.main_tab.setLayout(mainTabLayout)
 
 
 def respTabUI(self):
     mlay = QGridLayout()
-    mlay.addWidget(self.HrgGroupBox, 0, 0)
-    mlay.addWidget(self.SpgGroupBox, 1, 0)
-    mlay.addWidget(self.RespGroupBox2, 2, 0)
-    mlay.addWidget(self.EcgGroupBox2, 3, 0)
-    mlay.addWidget(self.PpgGroupBox2, 4, 0)
+    mlay.addWidget(self.HRGroupBox2, 0, 0, 3, 1)
+    mlay.addWidget(self.SpO2GroupBox2, 3, 0, 3, 1)
+    mlay.addWidget(self.RespGroupBox2, 0, 1, 2, 3)
+    mlay.addWidget(self.EcgGroupBox2, 2, 1, 2, 3)
+    mlay.addWidget(self.PpgGroupBox2, 4, 1, 2, 3)
     self.resp_tab.setLayout(mlay)
 
 
 def eegTabUI(self):
-    layout_eeg2 = QVBoxLayout()
-    layout_eeg2.addWidget(self.eegModule)
+    layout_eeg2 = QGridLayout()
+    layout_eeg2.addWidget(self.eegModule2)
     self.eeg_tab.setLayout(layout_eeg2)
 
 
@@ -167,19 +181,27 @@ def biometricWidgets(self):
     layout16.addWidget(self.thermometer2)
     self.ThermometerBox2.setLayout(layout16)
 
-    self.bt2= TemperatureModule_BodyTemp(self.thermometer2, inlet)
-
     self.SpO2GroupBox = QGroupBox()
     layout1 = QGridLayout()  # create a box
-    layout1.addWidget(self.spo2.SpO2_Widget, 0, 0, 9, 1)
-    layout1.addWidget(self.spo2.SpO2_Condition_Label, 9, 0, 1, 1)
+    layout1.addWidget(self.spo2.SpO2_Widget, 0, 0)
     self.SpO2GroupBox.setLayout(layout1)
+
+    self.SpO2GroupBox2 = QGroupBox()
+    layout21 = QGridLayout()  # create a box
+    layout21.addWidget(self.spo22.SpO2_Widget, 0, 0, 9, 1)
+    layout21.addWidget(self.spo22.SpO2_Condition_Label, 9, 0, 1, 1)
+    self.SpO2GroupBox2.setLayout(layout21)
 
     self.HRGroupBox = QGroupBox()
     layout2 = QGridLayout()  # create a box
-    layout2.addWidget(self.hrw.HR_Widget, 0, 0, 9, 1)
-    layout2.addWidget(self.hrw.HR_Condition_Label, 9, 0, 1, 1)
+    layout2.addWidget(self.hrw.HR_Widget, 0, 0)
     self.HRGroupBox.setLayout(layout2)
+
+    self.HRGroupBox2 = QGroupBox()
+    layout22 = QGridLayout()  # create a box
+    layout22.addWidget(self.hrw2.HR_Widget, 0, 0, 9, 1)
+    layout22.addWidget(self.hrw2.HR_Condition_Label, 9, 0, 1, 1)
+    self.HRGroupBox2.setLayout(layout22)
 
     self.EcgGroupBox = QGroupBox()
     layout3 = QHBoxLayout()  # create a box
@@ -211,30 +233,20 @@ def biometricWidgets(self):
     layout12.addWidget(self.rgraph2.Resp_Graph)
     self.RespGroupBox2.setLayout(layout12)
 
-    self.HrgGroupBox = QGroupBox()
-    layout6 = QHBoxLayout()  # create a box
-    layout6.addWidget(self.hrgraph.HR_Graph)
-    self.HrgGroupBox.setLayout(layout6)
+    # self.HrgGroupBox = QGroupBox()
+    # layout6 = QHBoxLayout()  # create a box
+    # layout6.addWidget(self.hrgraph.HR_Graph)
+    # self.HrgGroupBox.setLayout(layout6)
 
-    self.SpgGroupBox = QGroupBox()
-    layout7 = QHBoxLayout()  # create a box
-    layout7.addWidget(self.spo2graph.SpO2_Graph)
-    self.SpgGroupBox.setLayout(layout7)
-    
-    # Thermometer Box
-    self.ThermometerBox = QGroupBox()  
-    layout6 = QVBoxLayout()
-    thermometer = Thermometer(layout6)
-    layout6.addWidget(thermometer)
-    self.bt = TemperatureModule_BodyTemp(thermometer, inlet)
-    layout6.addWidget(self.bt.label)
-    self.ThermometerBox.setLayout(layout6)
+    # self.SpgGroupBox = QGroupBox()
+    # layout7 = QHBoxLayout()  # create a box
+    # layout7.addWidget(self.spo2graph.SpO2_Graph)
+    # self.SpgGroupBox.setLayout(layout7)
 
     self.BodyTempBox = QGroupBox()
     self.BodyTempBox.setStyleSheet("color: white;")
     layout8 = QVBoxLayout()  # create a box
-    layout8.addWidget(self.bt2.graphWidget)  # add graphwidget into a box
-    layout8.addWidget(self.bt2.label)
+    layout8.addWidget(self.bt.graphWidget)  # add graphwidget into a box
     self.BodyTempBox.setLayout(layout8)
 
     # Body Temperature / GSR Numbering Label Box
@@ -256,7 +268,7 @@ def biometricWidgets(self):
     self.GSRPlotBox2.setStyleSheet("color: white;")
     layout19 = QVBoxLayout()
     layout19.addWidget(self.gsr2.graphWidget)
-    self.GSRPlotBox2.setLayout(layout19)
+    self.GSRPlotBox.setLayout(layout19)
 
     # Accelerometer 3D Visualization
     self.Accelerometer_3D_Box = QGroupBox("Accelerometer 3D Visualization")
@@ -271,8 +283,6 @@ def biometricWidgets(self):
     layout11 = QVBoxLayout()
     layout11.addWidget(self.acc.graphWidget)
     self.AcceleromterPlotBox.setLayout(layout11)
-
-  
 
 
 def darkMode():

@@ -50,7 +50,7 @@ class SpO2_Mod(QGroupBox):
 
         # SpO2 Condition Label
         self.SpO2_Condition_Label = QLabel()
-        self.SpO2_Condition_Label.setFont(QtGui.QFont("Times", 15, QtGui.QFont.Bold))
+        self.SpO2_Condition_Label.setFont(QtGui.QFont("Times", 25, QtGui.QFont.Bold))
         self.SpO2_Condition_Label.setAlignment(Qt.AlignCenter)
 
         self.inlet = inlet
