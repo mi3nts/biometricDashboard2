@@ -34,7 +34,7 @@ class Thermometer(QtWidgets.QWidget):
     def initDrawing(self, painter):
         self.normal = 35.0
         self.critical = 38.0
-        self.m_min = 30.0
+        self.m_min = 25.0
         self.m_max = 40.0
         painter.setRenderHint(QtGui.QPainter.Antialiasing)
         painter.translate(self.width()/2.0, 0.0)
