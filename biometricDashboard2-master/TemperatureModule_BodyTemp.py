@@ -5,8 +5,8 @@ class TemperatureModule_BodyTemp():
     def __init__(self, Thermometer, inlet):
         
 		
-        pg.setConfigOption('background', 'b') #graph background color
-        pg.setConfigOption('foreground', 'k') #graph foreground color
+        pg.setConfigOption('background', 'k') #graph background color
+        pg.setConfigOption('foreground', 'w') #graph foreground color
 
         self.thermometer = Thermometer # Initilize Thermometer
 
@@ -25,9 +25,13 @@ class TemperatureModule_BodyTemp():
 
         self.curve = self.graphWidget.plot() # plot initialization
         self.graphWidget.setRange(yRange=(25.0, 41.0)) # change the visible x range of the graph
+        self.graphWidget.showGrid(x=True, y=True, alpha=0.5)  # Create a Grid
+
 
         self.tempNumLabel = QtGui.QLabel() # Body Temperature Number Display
-        
+
+        self.label = QtGui.QLabel()
+      
         self.inlet = inlet
        
         self.timer = pg.QtCore.QTimer()
@@ -52,22 +56,28 @@ class TemperatureModule_BodyTemp():
 
         if temp >= 38.0:
             self.curve.setData(self.temperature, pen='r') # if temperature is high, set line color red
-            self.text_box.setHtml('<span style="color: #FF0000;">Temperature is high</span>') # color = red
+            self.label.setText('Too High')
+            self.label.setStyleSheet('font-weight: bold; font-size:10pt; color: red;')
+            #self.text_box.setHtml('<span style="color: #FF0000;">Temperature is high</span>') # color = red
 
         elif 35.0 <= temp and temp < 38.0:
             self.curve.setData(self.temperature, pen='g') # if temperature is normal, set line color green
-            self.text_box.setHtml('<span style="color: #008000;">Temperature is normal</span>') # color = green
+            self.label.setText('Normal')
+            self.label.setStyleSheet('font-weight: bold; font-size:10pt; color: green;')
+            #self.text_box.setHtml('<span style="color: #008000;">Temperature is normal</span>') # color = green
 
         else:
             self.curve.setData(self.temperature, pen='b') # if temperatre is too low, set line color blue
-            self.text_box.setHtml('<span style="color: #0000ff;">Temperature is low</span>') # color = blue
+            self.label.setText('Too Low')
+            self.label.setStyleSheet('font-weight: bold; font-size:10pt; color: blue;')
+            #self.text_box.setHtml('<span style="color: #0000ff;">Temperature is low</span>') # color = blue
           
         
         # Update Thermometer Value
         self.thermometer.value = temp 
         self.thermometer.repaint()
 
-        tempLabel = str(temp) # Type casting from float to string
+        tempLabel = str(temp) 
         
         self.tempNumLabel.setText("Temp(C): " + tempLabel) # Update the temperature numbering label
-        self.tempNumLabel.setStyleSheet('font-weight: bold; font-size:10pt; color: white')
+        self.tempNumLabel.setStyleSheet('font-weight: bold; font-size:10pt; color: black;')

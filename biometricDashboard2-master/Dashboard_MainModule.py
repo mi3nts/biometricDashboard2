@@ -71,15 +71,7 @@ class MainWindow(QMainWindow):
         self.eegModule = EEGmodule_main(inlet)  # EEG module
         self.eegModule2 = EEGmodule_main(inlet)
 
-        # Thermometer Box
-        self.ThermometerBox = QGroupBox()  # label
-        # self.ThermometerBox.setStyleSheet("color: white;")
-        layout6 = QVBoxLayout()
-        self.thermometer = Thermometer(layout6)
-        layout6.addWidget(self.thermometer)
-        self.ThermometerBox.setLayout(layout6)
-
-        self.bt = TemperatureModule_BodyTemp(self.thermometer, inlet)
+        
         # Instantiate GSR Class
         self.gsr = TemperatureModule_GSR(inlet)
         self.gsr2 = TemperatureModule_GSR(inlet)
@@ -173,7 +165,9 @@ def biometricWidgets(self):
     layout16 = QVBoxLayout()
     self.thermometer2 = Thermometer(layout16)
     layout16.addWidget(self.thermometer2)
-    self.ThermometerBox.setLayout(layout16)
+    self.ThermometerBox2.setLayout(layout16)
+
+    self.bt2= TemperatureModule_BodyTemp(self.thermometer2, inlet)
 
     self.SpO2GroupBox = QGroupBox()
     layout1 = QGridLayout()  # create a box
@@ -226,11 +220,21 @@ def biometricWidgets(self):
     layout7 = QHBoxLayout()  # create a box
     layout7.addWidget(self.spo2graph.SpO2_Graph)
     self.SpgGroupBox.setLayout(layout7)
+    
+    # Thermometer Box
+    self.ThermometerBox = QGroupBox()  
+    layout6 = QVBoxLayout()
+    thermometer = Thermometer(layout6)
+    layout6.addWidget(thermometer)
+    self.bt = TemperatureModule_BodyTemp(thermometer, inlet)
+    layout6.addWidget(self.bt.label)
+    self.ThermometerBox.setLayout(layout6)
 
     self.BodyTempBox = QGroupBox()
     self.BodyTempBox.setStyleSheet("color: white;")
     layout8 = QVBoxLayout()  # create a box
-    layout8.addWidget(self.bt.graphWidget)  # add graphwidget into a box
+    layout8.addWidget(self.bt2.graphWidget)  # add graphwidget into a box
+    layout8.addWidget(self.bt2.label)
     self.BodyTempBox.setLayout(layout8)
 
     # Body Temperature / GSR Numbering Label Box
@@ -252,7 +256,7 @@ def biometricWidgets(self):
     self.GSRPlotBox2.setStyleSheet("color: white;")
     layout19 = QVBoxLayout()
     layout19.addWidget(self.gsr2.graphWidget)
-    self.GSRPlotBox.setLayout(layout19)
+    self.GSRPlotBox2.setLayout(layout19)
 
     # Accelerometer 3D Visualization
     self.Accelerometer_3D_Box = QGroupBox("Accelerometer 3D Visualization")
@@ -267,6 +271,8 @@ def biometricWidgets(self):
     layout11 = QVBoxLayout()
     layout11.addWidget(self.acc.graphWidget)
     self.AcceleromterPlotBox.setLayout(layout11)
+
+  
 
 
 def darkMode():

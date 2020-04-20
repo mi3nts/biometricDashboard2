@@ -13,6 +13,8 @@ class TemperatureModule_GSR():
         self.graphWidget.setLabel('left', "GSR amplitude", units='uS') # Left label
         self.graphWidget.setLabel('bottom', "Number of samples")   # Bottom label
 
+        self.graphWidget.showGrid(x=True, y=True, alpha=0.5)  # Create a Grid
+
         # Get initial data
         self.seconds = [] # seconds data array, x value
         self.gsrData = [] # temperature data array, y value
@@ -67,5 +69,5 @@ class TemperatureModule_GSR():
 
         gsrLabel = str(data) # Type casting from float to string
         self.gsrNumLabel.setText("GSR : " + gsrLabel) # Update the temperature numbering label
-        self.gsrNumLabel.setStyleSheet('font-weight: bold; font-size:7pt; color: white')
+        self.gsrNumLabel.setStyleSheet('font-weight: bold; font-size:7pt; color: black;')
 
