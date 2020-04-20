@@ -1,6 +1,7 @@
 from PyQt5 import *
 import pyqtgraph as pg
 import time
+import numpy as np   
 
 class TemperatureModule_GSR():
     def __init__(self, inlet):
