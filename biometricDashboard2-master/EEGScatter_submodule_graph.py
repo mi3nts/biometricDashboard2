@@ -15,21 +15,20 @@ from GetCmapValues import getCmapByFreqVal
 		# self.timer.timeout.connect(self.update_nodes)
 		# self.timer.start()
 
-class EEG_Graph_Submodule(QGroupBox):
+class EEG_Graph_Submodule():
     # initialize attributes of EEGmodule class
-	def __init__(self, *args, **kwargs):
+	#def __init__(self, *args, **kwargs):
+	def __init__(self):
 		# have EEGmodule inherit attributes of QGroupBox
-		super(QGroupBox, self).__init__(*args, **kwargs)
-		
-		#neded variable
+		#super(QGroupBox, self).__init__(*args, **kwargs)
 
 		#making a plotWidgetMain to show scatter plot item in
 		self.plotWidgetMain = pg.PlotWidget()
-		self.layout = QVBoxLayout()
+		#self.layout = QHBoxLayout()
 		
-		self.plotWidgetMain.getViewBox().setGeometry(0,0,300,300)
-		self.setGeometry(0,0,300,300)
-		self.resize(300,300)
+		#self.plotWidgetMain.getViewBox().setGeometry(0,0,300,300)
+		#self.setGeometry(0,0,300,300)
+		#self.resize(300,300)
 		#setting up so that a plotITEM can be added
 		pg.setConfigOption('leftButtonPan', False)
 
@@ -50,12 +49,12 @@ class EEG_Graph_Submodule(QGroupBox):
 		#hide axis
 		self.plotWidgetMain.getPlotItem().hideAxis('bottom')
 		self.plotWidgetMain.getPlotItem().hideAxis('left')
-
+		
 		# create layout for EEG Module
-		self.layout.addWidget(self.plotWidgetMain)
+		#self.layout.addWidget(self.plotWidgetMain)
 
 		# set layout for module
-		self.setLayout(self.layout)
+		#self.setLayout(self.layout)
 		
 	def update_nodes(self, colors=None, data=None):
 				
