@@ -45,7 +45,7 @@ class HR_Module(QGroupBox):
 
         # Heart Rate -- Condition label
         self.HR_Condition_Label = QLabel()
-        self.HR_Condition_Label.setFont(QtGui.QFont("Times", 15, QtGui.QFont.Bold))
+        self.HR_Condition_Label.setFont(QtGui.QFont("Times", 20, QtGui.QFont.Bold))
         self.HR_Condition_Label.setAlignment(Qt.AlignCenter)
 
         self.inlet = inlet

@@ -215,42 +215,48 @@ class EEGmodule_main(QGroupBox):
 
 	def hideGraph(self, button=None):
 		fill_1 = pg.PlotWidget()
+		fill_1.setBackground(None)
 		fill_1.getPlotItem().hideAxis("bottom")
 		fill_1.getPlotItem().hideAxis("left")
 		fill_2 = pg.PlotWidget()
+		fill_2.setBackground(None)
 		fill_2.getPlotItem().hideAxis("bottom")
 		fill_2.getPlotItem().hideAxis("left")
 		fill_3 = pg.PlotWidget()
 		fill_3.getPlotItem().hideAxis("left")
 		fill_3.getPlotItem().hideAxis("bottom")
+		fill_3.setBackground(None)
 
 		if button.isChecked() == False:
 			if button.text() == "Alpha Band":
-				self.alphaG.setParent(None)
-				self.layout.removeWidget(self.alphaG)
 				self.layout.addWidget(fill_1, 1, 4, 1, 2)
+				self.layout.removeWidget(self.alphaG)
+				self.alphaG.setParent(None)
+				
 
 			if button.text() == "Theta Band":
-				self.thetaG.setParent(None)
-				self.layout.removeWidget(self.thetaG)
 				self.layout.addWidget(fill_2, 1, 2, 1, 2)
+				self.layout.removeWidget(self.thetaG)
+				self.thetaG.setParent(None)
+				
 
 			if button.text() == "Delta Band":
-				self.deltaG.setParent(None)
-				self.layout.removeWidget(self.deltaG)
 				self.layout.addWidget(fill_3, 1, 0, 1, 2)
+				self.layout.removeWidget(self.deltaG)
+				self.deltaG.setParent(None)
+				
 		else:
 			if button.text() == "Alpha Band":
-				fill_1.setParent(None)
-				self.layout.removeWidget(fill_1)
 				self.layout.addWidget(self.alphaG, 1, 4, 1, 2)
+				self.layout.removeWidget(fill_1)
+				fill_1.setParent(None)
 				
 			if button.text() == "Theta Band":
-				fill_2.setParent(None)
-				self.layout.removeWidget(fill_2)
 				self.layout.addWidget(self.thetaG, 1, 2, 1, 2)
+				self.layout.removeWidget(fill_2)
+				fill_2.setParent(None)
 				
 			if button.text() == "Delta Band":
-				fill_3.setParent(None)
-				self.layout.removeWidget(fill_3)
 				self.layout.addWidget(self.deltaG, 1, 0, 1, 2)
+				self.layout.removeWidget(fill_3)
+				fill_3.setParent(None)

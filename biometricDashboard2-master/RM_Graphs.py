@@ -18,7 +18,7 @@ class PPG_Graph:
 
         # Axis Labels
         self.PPG_Graph.setLabel(
-            "left", '<span style="color:white;font-size:25px">Voltage</span>'
+            "left", '<span style="color:white;font-size:18px">Millivolts (mV)</span>'
         )
 
         # Initial Data
@@ -47,7 +47,7 @@ class PPG_Graph:
             self.yData.pop(0)
             self.yData.append(self.getPPGData())
 
-        self.PPG_Curve.setData(self.yData, pen="b")  # Update Plot
+        self.PPG_Curve.setData(self.yData, pen="r")  # Update Plot
 
 
 class ECG_Graph:
@@ -59,7 +59,7 @@ class ECG_Graph:
 
         # Axis Labels
         self.ECG_Graph.setLabel(
-            "left", '<span style="color:white;font-size:25px">Voltage</span>'
+            "left", '<span style="color:white;font-size:18px">Millivolts (mV)</span>'
         )
         # initial data
         self.yData = []
@@ -83,7 +83,7 @@ class ECG_Graph:
             self.yData.pop(0)
             self.yData.append(sample[0][68])
 
-        self.ECG_Curve.setData(self.yData, pen="b")  # Update Plot
+        self.ECG_Curve.setData(self.yData, pen="w")  # Update Plot
 
 
 class HR_Graph:
@@ -192,4 +192,4 @@ class Resp_Graph:
             self.yData.pop(0)
             self.yData.append(sample[0][69])
 
-        self.Resp_Curve.setData(self.yData, pen="b")  # Update Plot
+        self.Resp_Curve.setData(self.yData, pen="y")  # Update Plot

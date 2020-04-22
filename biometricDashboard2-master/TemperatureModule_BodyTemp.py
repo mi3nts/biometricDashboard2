@@ -29,7 +29,7 @@ class TemperatureModule_BodyTemp:
         self.graphWidget.setRange(
             yRange=(25.0, 41.0)
         )  # change the visible x range of the graph
-        self.graphWidget.showGrid(x=True, y=True, alpha=0.5)  # Create a Grid
+        self.graphWidget.showGrid(x=True, y=True, alpha=0.3)  # Create a Grid
         self.tempNumLabel = QtGui.QLabel()  # Body Temperature Number Display
 
         self.label = QtGui.QLabel()
@@ -47,7 +47,7 @@ class TemperatureModule_BodyTemp:
         self.update(temp)
 
     def update(self, temp):
-        if len(self.temperature) < 500:  # First ten seconds
+        if len(self.temperature) < 200:  # First ten seconds
             self.temperature.append(temp)
 
         else:  # after ten seconds
@@ -87,5 +87,5 @@ class TemperatureModule_BodyTemp:
         self.tempNumLabel.setText("TEMPERATURE:\n " + tempLabel + " C°")
         # Update the temperature numbering label
         self.tempNumLabel.setStyleSheet(
-            "font-weight: bold; font-size:15pt; color: black"
+            "font-weight: bold; font-size:10pt; color: black"
         )

@@ -89,5 +89,5 @@ class TemperatureModule_GSR:
             "GSR AMPLITUDE:\n" + gsrLabel
         )  # Update the temperature numbering label
         self.gsrNumLabel.setStyleSheet(
-            "font-weight: bold; font-size:15pt; color: black"
+            "font-weight: bold; font-size:10pt; color: black"
         )

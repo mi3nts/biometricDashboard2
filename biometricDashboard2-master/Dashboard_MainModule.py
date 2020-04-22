@@ -27,7 +27,8 @@ from EEGScatterWidget_main import *
 from RM_Graphs import *
 from RM_SPO2Widget import *
 from RM_HRWidget import *
-from RM_Main import *
+
+# from RM_Main import *
 from TemperatureModule_Main import *
 
 # Subclass QMainWindow to customise your application's main window
@@ -75,15 +76,15 @@ class MainWindow(QMainWindow):
         self.cmap = CmapImage()
 
         # Thermometer Box
-        self.ThermometerBox = QGroupBox()  # label
-        # self.ThermometerBox.setStyleSheet("color: white;")
+        self.ThermometerBox = QGroupBox("Body Temperature")  # label
+        self.ThermometerBox.setStyleSheet("color: white;")
         layout6 = QVBoxLayout()
         self.thermometer = Thermometer(layout6)
         layout6.addWidget(self.thermometer)
         self.ThermometerBox.setLayout(layout6)
 
-        self.ThermometerBox2 = QGroupBox()  # label
-        # self.ThermometerBox.setStyleSheet("color: white;")
+        self.ThermometerBox2 = QGroupBox("Body Temperature")  # label
+        self.ThermometerBox.setStyleSheet("color: white;")
         layout16 = QVBoxLayout()
         self.thermometer2 = Thermometer(layout16)
         layout16.addWidget(self.thermometer2)
@@ -98,6 +99,8 @@ class MainWindow(QMainWindow):
         # Instantiate Accelerometer Class
         self.acc = TemperatureModule_Accelerometer(inlet)
 
+        ######################################################
+
         biometricWidgets(self)
 
         mainTabUI(self)
@@ -105,10 +108,8 @@ class MainWindow(QMainWindow):
         tempTabUI(self)
         eegTabUI(self)
 
-        # add layout to window Widget
-        # 	self.main_tab.setLayout(layout_window)
-        # Set the central widget of the Window. Widget will expand
-        # to take up all the space in the window by default.
+        # self.bm_tabs.currentChanged.connect(lambda: onChange(self))
+
         self.setCentralWidget(self.bm_tabs)
 
         # change window style to dark mode
@@ -117,17 +118,23 @@ class MainWindow(QMainWindow):
 
 def mainTabUI(self):
     layout_eeg = QGridLayout()
-    layout_eeg.addWidget(self.eegModule.deltaGraph, 1, 0)
-    layout_eeg.addWidget(self.eegModule.thetaGraph, 2, 0)
-    layout_eeg.addWidget(self.eegModule.alphaGraph, 3, 0)
+    # layout_eeg.addWidget(self.eegModule.deltaGraph, 1, 0)
+    # layout_eeg.addWidget(self.eegModule.thetaGraph, 2, 0)
+    # layout_eeg.addWidget(self.eegModule.alphaGraph, 3, 0)
+    layout_eeg.addWidget(self.eegModule.deltaG, 1, 0)
+    layout_eeg.addWidget(self.eegModule.thetaG, 2, 0)
+    layout_eeg.addWidget(self.eegModule.alphaG, 3, 0)
     layout_eeg.addWidget(self.cmap, 4, 0)
+    # print(self.eegModule.alphaG.parentWidget())
+    self.eegGroupBox = QGroupBox()
+    self.eegGroupBox.setLayout(layout_eeg)
 
     layout_numbers = QGridLayout()
     layout_numbers.addWidget(self.SpO2GroupBox, 0, 0)
     layout_numbers.addWidget(self.HRGroupBox, 0, 1)
     layout_numbers.addWidget(self.ThermometerBox, 0, 2)
-    numGroup = QGroupBox()
-    numGroup.setLayout(layout_numbers)
+    self.numGroup = QGroupBox()
+    self.numGroup.setLayout(layout_numbers)
 
     layout_graphs = QGridLayout()
 
@@ -136,14 +143,13 @@ def mainTabUI(self):
     layout_graphs.addWidget(self.PpgGroupBox, 0, 1)
     layout_graphs.addWidget(self.RespGroupBox, 1, 0)
     layout_graphs.addWidget(self.GSRPlotBox, 1, 1)
-    graphsGroup = QGroupBox()
-    graphsGroup.setLayout(layout_graphs)
+    self.graphsGroup = QGroupBox()
+    self.graphsGroup.setLayout(layout_graphs)
 
     mainTabLayout = QGridLayout()
-    mainTabLayout.addLayout(layout_eeg, 0, 0, 12, 6)
-    mainTabLayout.addWidget(numGroup, 0, 6, 9, 1)
-    mainTabLayout.addWidget(graphsGroup, 9, 6, 3, 1)
-
+    mainTabLayout.addWidget(self.eegGroupBox, 0, 0, 22, 1)
+    mainTabLayout.addWidget(self.numGroup, 0, 1, 20, 1)
+    mainTabLayout.addWidget(self.graphsGroup, 20, 1, 2, 1)
     self.main_tab.setLayout(mainTabLayout)
 
 
@@ -165,41 +171,45 @@ def eegTabUI(self):
 
 def tempTabUI(self):
     # Grid Layout
-    mainLayout = QGridLayout()
+    self.mainLayout = QGridLayout()
 
     # First Row = Body Temperature Module
-    mainLayout.addWidget(self.ThermometerBox2, 0, 0, 1, 1)
-    mainLayout.addWidget(self.BodyTempBox, 0, 2, 1, 3)
+    self.mainLayout.addWidget(self.ThermometerBox2, 0, 0, 1, 1)
+    self.mainLayout.addWidget(self.BodyTempBox, 0, 2, 1, 3)
 
     # Second Row = GSR Module
-    mainLayout.addWidget(self.NumberingLabelBox, 1, 0, 1, 1)
-    mainLayout.addWidget(self.GSRPlotBox2, 1, 2, 1, 3)
+    self.mainLayout.addWidget(self.NumberingLabelBox, 1, 0, 1, 1)
+    self.mainLayout.addWidget(self.GSRPlotBox2, 1, 2, 1, 3)
 
     # Accelerometer
-    mainLayout.addWidget(self.Accelerometer_3D_Box, 2, 0, 1, 1)
-    mainLayout.addWidget(self.AcceleromterPlotBox, 2, 2, 1, 3)
-    self.temp_tab.setLayout(mainLayout)
+    self.mainLayout.addWidget(self.Accelerometer_3D_Box, 2, 0, 1, 1)
+    self.mainLayout.addWidget(self.AcceleromterPlotBox, 2, 2, 1, 3)
+    self.temp_tab.setLayout(self.mainLayout)
 
 
 def biometricWidgets(self):
 
-    self.SpO2GroupBox = QGroupBox()
+    self.SpO2GroupBox = QGroupBox("Oxygent Saturation (%)")
+    self.SpO2GroupBox.setStyleSheet("color: white;")
     layout1 = QGridLayout()  # create a box
     layout1.addWidget(self.spo2.SpO2_Widget, 0, 0)
     self.SpO2GroupBox.setLayout(layout1)
 
-    self.SpO2GroupBox2 = QGroupBox()
+    self.SpO2GroupBox2 = QGroupBox("Oxygent Saturation (%)")
+    self.SpO2GroupBox2.setStyleSheet("color: white;")
     layout21 = QGridLayout()  # create a box
     layout21.addWidget(self.spo22.SpO2_Widget, 0, 0, 9, 1)
     layout21.addWidget(self.spo22.SpO2_Condition_Label, 9, 0, 1, 1)
     self.SpO2GroupBox2.setLayout(layout21)
 
-    self.HRGroupBox = QGroupBox()
+    self.HRGroupBox = QGroupBox("Heart Rate (Beats/min)")
+    self.HRGroupBox.setStyleSheet("color: white;")
     layout2 = QGridLayout()  # create a box
     layout2.addWidget(self.hrw.HR_Widget, 0, 0)
     self.HRGroupBox.setLayout(layout2)
 
-    self.HRGroupBox2 = QGroupBox()
+    self.HRGroupBox2 = QGroupBox("Heart Rate (Beats/min)")
+    self.HRGroupBox2.setStyleSheet("color: white;")
     layout22 = QGridLayout()  # create a box
     layout22.addWidget(self.hrw2.HR_Widget, 0, 0, 9, 1)
     layout22.addWidget(self.hrw2.HR_Condition_Label, 9, 0, 1, 1)
@@ -235,17 +245,7 @@ def biometricWidgets(self):
     layout12.addWidget(self.rgraph2.Resp_Graph)
     self.RespGroupBox2.setLayout(layout12)
 
-    # self.HrgGroupBox = QGroupBox()
-    # layout6 = QHBoxLayout()  # create a box
-    # layout6.addWidget(self.hrgraph.HR_Graph)
-    # self.HrgGroupBox.setLayout(layout6)
-
-    # self.SpgGroupBox = QGroupBox()
-    # layout7 = QHBoxLayout()  # create a box
-    # layout7.addWidget(self.spo2graph.SpO2_Graph)
-    # self.SpgGroupBox.setLayout(layout7)
-
-    self.BodyTempBox = QGroupBox()
+    self.BodyTempBox = QGroupBox("Body Temperature")
     self.BodyTempBox.setStyleSheet("color: white;")
     layout8 = QVBoxLayout()  # create a box
     layout8.addWidget(self.bt.graphWidget)  # add graphwidget into a box
@@ -253,7 +253,6 @@ def biometricWidgets(self):
 
     # Body Temperature / GSR Numbering Label Box
     self.NumberingLabelBox = QGroupBox()
-    self.NumberingLabelBox.setStyleSheet("color: white;")
     numLabelBox = QVBoxLayout()
     numLabelBox.addWidget(self.bt.tempNumLabel)
     numLabelBox.addWidget(self.gsr.gsrNumLabel)
@@ -261,13 +260,11 @@ def biometricWidgets(self):
 
     # GSR Plot Box
     self.GSRPlotBox = QGroupBox()
-    self.GSRPlotBox.setStyleSheet("color: white;")
     layout9 = QVBoxLayout()
     layout9.addWidget(self.gsr.graphWidget)
     self.GSRPlotBox.setLayout(layout9)
 
     self.GSRPlotBox2 = QGroupBox()
-    self.GSRPlotBox2.setStyleSheet("color: white;")
     layout19 = QVBoxLayout()
     layout19.addWidget(self.gsr2.graphWidget)
     self.GSRPlotBox2.setLayout(layout19)
@@ -280,8 +277,7 @@ def biometricWidgets(self):
     self.Accelerometer_3D_Box.setLayout(layout10)
 
     # Accelerometer Plot
-    self.AcceleromterPlotBox = QGroupBox("Accelerometer Plot")
-    self.AcceleromterPlotBox.setStyleSheet("color: white;")
+    self.AcceleromterPlotBox = QGroupBox()
     layout11 = QVBoxLayout()
     layout11.addWidget(self.acc.graphWidget)
     self.AcceleromterPlotBox.setLayout(layout11)
@@ -321,7 +317,7 @@ if __name__ == "__main__":
     # Pass in sys.argv to allow command line arguments for your app.
     # If you know you won't use command line arguments QApplication([]) works too.
     app = QApplication(sys.argv)
-    app.setStyle("Fusion")
+    app.setStyle("Oxygen")
     # create a window from the MainWindow class defined above
     window = MainWindow(inlet)
     # show the window
