@@ -1,3 +1,7 @@
+"""
+Biometrics dashboard
+William Hood, Nikhil Nannapaneni, Akito Ito
+"""
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
 from PyQt5.QtCore import *
@@ -118,7 +122,7 @@ class MainWindow(QMainWindow):
 		darkMode()
 
 		#######################################################
-		#Setup timer to avoid all the other issues going on.
+		#Setup timer to avoid all multiple timers with multiple delays
 		self.timer = QTimer(self)
 		self.timer.timeout.connect(self.UpdateModules)
 		self.timer.start(20)
@@ -126,7 +130,7 @@ class MainWindow(QMainWindow):
 	def UpdateModules(self):
 		#pulling data
 		sample = self.inlet.pull_sample()
-		
+		#updating all widgets
 		self.eegModule.UpdateNodes(sample)
 		self.eegModule2.UpdateNodes(sample)
 		self.ppg.update_ppgData(sample)
@@ -156,27 +160,27 @@ def mainTabUI(self):
 	self.eegGroupBox = QGroupBox()
 	self.eegGroupBox.setLayout(layout_eeg)
 
-	layout_numbers = QGridLayout()
-	layout_numbers.addWidget(self.SpO2GroupBox, 0, 0)
-	layout_numbers.addWidget(self.HRGroupBox, 0, 1)
-	layout_numbers.addWidget(self.ThermometerBox, 0, 2)
-	self.numGroup = QGroupBox()
-	self.numGroup.setLayout(layout_numbers)
+	self.layout_numbers = QGridLayout()
+	self.layout_numbers.addWidget(self.SpO2GroupBox, 0, 0)
+	self.layout_numbers.addWidget(self.HRGroupBox, 0, 1)
+	self.layout_numbers.addWidget(self.ThermometerBox, 0, 2)
+	# self.numGroup = QGroupBox()
+	# self.numGroup.setLayout(layout_numbers)
 
-	layout_graphs = QGridLayout()
+	self.layout_graphs = QGridLayout()
 
 	# Adding graphs to layout
-	layout_graphs.addWidget(self.EcgGroupBox, 0, 0)
-	layout_graphs.addWidget(self.PpgGroupBox, 0, 1)
-	layout_graphs.addWidget(self.RespGroupBox, 1, 0)
-	layout_graphs.addWidget(self.GSRPlotBox, 1, 1)
-	self.graphsGroup = QGroupBox()
-	self.graphsGroup.setLayout(layout_graphs)
+	self.layout_graphs.addWidget(self.EcgGroupBox, 0, 0)
+	self.layout_graphs.addWidget(self.PpgGroupBox, 0, 1)
+	self.layout_graphs.addWidget(self.RespGroupBox, 1, 0)
+	self.layout_graphs.addWidget(self.GSRPlotBox, 1, 1)
+	# self.graphsGroup = QGroupBox()
+	# self.graphsGroup.setLayout(layout_graphs)
 
 	mainTabLayout = QGridLayout()
 	mainTabLayout.addWidget(self.eegGroupBox, 0, 0, 22, 1)
-	mainTabLayout.addWidget(self.numGroup, 0, 1, 20, 1)
-	mainTabLayout.addWidget(self.graphsGroup, 20, 1, 2, 1)
+	mainTabLayout.addLayout(self.layout_numbers, 0, 1, 20, 1)
+	mainTabLayout.addLayout(self.layout_graphs, 20, 1, 2, 1)
 	self.main_tab.setLayout(mainTabLayout)
 
 
