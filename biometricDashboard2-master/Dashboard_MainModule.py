@@ -317,7 +317,7 @@ if __name__ == "__main__":
     # Pass in sys.argv to allow command line arguments for your app.
     # If you know you won't use command line arguments QApplication([]) works too.
     app = QApplication(sys.argv)
-    app.setStyle("Oxygen")
+    app.setStyle("Fusion")
     # create a window from the MainWindow class defined above
     window = MainWindow(inlet)
     # show the window
