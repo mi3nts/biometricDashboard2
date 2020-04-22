@@ -53,7 +53,9 @@ class MainWindow(QMainWindow):
 		self.temp_tab = QWidget()
 
 		self.bm_tabs.setStyleSheet("color:black;")
-
+		
+		self.inlet = inlet
+		
 		# Adding tabs to the Screen
 		self.bm_tabs.addTab(self.main_tab, "Main Tab")
 		self.bm_tabs.addTab(self.eeg_tab, "EEG Tab")
@@ -122,23 +124,26 @@ class MainWindow(QMainWindow):
 		self.timer.start(20)
 		
 	def UpdateModules(self):
-		self.eegModule.UpdateNodes()
-		self.eegModule2.UpdateNodes()
-		self.ppg.update_ppgData()
-		self.ppg2.update_ppgData()
-		self.ecgraph.update_ecgData()
-		self.ecgraph2.update_ecgData()
-		self.hrw.update_HR()
-		self.hrw2.update_HR()
-		self.spo2.update_SpO2()
-		self.spo22.update_SpO2()
-		self.rgraph.update_RespData()
-		self.rgraph2.update_RespData()
-		self.acc.getValues()
-		self.bt.getBodyTemp()
-		self.bt2.getBodyTemp()
-		self.gsr.getGsrSignal()
-		self.gsr2.getGsrSignal()
+		#pulling data
+		sample = self.inlet.pull_sample()
+		
+		self.eegModule.UpdateNodes(sample)
+		self.eegModule2.UpdateNodes(sample)
+		self.ppg.update_ppgData(sample)
+		self.ppg2.update_ppgData(sample)
+		self.ecgraph.update_ecgData(sample)
+		self.ecgraph2.update_ecgData(sample)
+		self.hrw.update_HR(sample)
+		self.hrw2.update_HR(sample)
+		self.spo2.update_SpO2(sample)
+		self.spo22.update_SpO2(sample)
+		self.rgraph.update_RespData(sample)
+		self.rgraph2.update_RespData(sample)
+		self.acc.getValues(sample)
+		self.bt.getBodyTemp(sample)
+		self.bt2.getBodyTemp(sample)
+		self.gsr.getGsrSignal(sample)
+		self.gsr2.getGsrSignal(sample)
 		
 			
 def mainTabUI(self):

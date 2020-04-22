@@ -171,10 +171,10 @@ class EEGmodule_main(QGroupBox):
 
 		
 
-	def UpdateNodes(self ):
+	def UpdateNodes(self, sample ):
 
 		# pull data
-		sample = self.inlet.pull_sample()
+		# sample = self.inlet.pull_sample()
 		self.newdata = np.asarray(sample[0][: self.n])
 		# print(timestamp)
 
