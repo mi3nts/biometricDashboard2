@@ -8,6 +8,7 @@ class TemperatureModule_Accelerometer:
 	def __init__(self, inlet):
 		pg.setConfigOption("background", "k")  # graph background color
 		pg.setConfigOption("foreground", "w")  # graph foreground color
+		pg.setConfigOption("antialias", True)
 		self.graphWidget = pg.PlotWidget()  # pyqtgraph PlotWidget Class
 		self.graphWidget.setTitle(
 			'<span style="font-size: 15px;"> Accelerometer </span>'

@@ -4,10 +4,13 @@
 # Imports
 from PyQt5 import *
 import pyqtgraph as pg
-
-
+pg.setConfigOption("background", "k")  # graph background color
+pg.setConfigOption("foreground", "w")  # graph foreground color
+pg.setConfigOption("antialias", True)
 class PPG_Graph:
 	def __init__(self, inlet):
+	
+		
 
 		self.PPG_Graph = pg.PlotWidget()  # Create a Plot Widget
 
@@ -26,8 +29,10 @@ class PPG_Graph:
 
 		self.PPG_Curve = self.PPG_Graph.plot()
 		self.PPG_Graph.setRange(yRange=(15500, 17500))  # Set Range of Y axis
+		self.PPG_Graph.setLimits(minYRange= 2000)
 		self.PPG_Graph.showGrid(x=True, y=True, alpha=0.3)  # Create a Grid
-
+		self.PPG_Graph.enableAutoRange(axis='y')
+		self.PPG_Graph.setAutoVisible(y=True)
 		self.inlet = inlet
 
         # Update the PPG Data every 20 ms
@@ -67,8 +72,10 @@ class ECG_Graph:
 
 		self.ECG_Curve = self.ECG_Graph.plot()
 		self.ECG_Graph.setRange(yRange=(1400, 13050))  # Set Range of Y axis
+		self.ECG_Graph.setLimits(minYRange=1000)  # Set miinmum span
 		self.ECG_Graph.showGrid(x=True, y=True, alpha=0.3)  # Create a Grid
-
+		self.ECG_Graph.enableAutoRange(axis='y')
+		self.ECG_Graph.setAutoVisible(y=True)
 		self.inlet = inlet
 
         # # Update the ECG Data every 20 ms
@@ -176,8 +183,10 @@ class Resp_Graph:
 
 		self.Resp_Curve = self.Resp_Graph.plot()
 		self.Resp_Graph.setRange(yRange=(33, 39))  # Set Range of Y axis
+		self.Resp_Graph.setLimits(minYRange=10)  # Set Range of Y axis
 		self.Resp_Graph.showGrid(x=True, y=True, alpha=0.3)  # Create a Grid
-
+		self.Resp_Graph.enableAutoRange(axis='y')
+		self.Resp_Graph.setAutoVisible(y=True)
 		self.inlet = inlet
 
         # Update the Resp Data every 20 ms

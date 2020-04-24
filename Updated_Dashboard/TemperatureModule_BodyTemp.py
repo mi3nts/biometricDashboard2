@@ -7,7 +7,8 @@ class TemperatureModule_BodyTemp:
 
 		pg.setConfigOption("background", "k")  # graph background color
 		pg.setConfigOption("foreground", "w")  # graph foreground color
-
+		pg.setConfigOption("antialias", True)
+		
 		self.thermometer = Thermometer  # Initilize Thermometer
 
 		self.graphWidget = pg.PlotWidget()  # pyqtgraph PlotWidget Class
@@ -30,6 +31,11 @@ class TemperatureModule_BodyTemp:
 			yRange=(25.0, 41.0)
 		)  # change the visible x range of the graph
 		self.graphWidget.showGrid(x=True, y=True, alpha=0.3)  # Create a Grid
+		self.graphWidget.enableAutoRange(axis='y')
+		self.graphWidget.setAutoVisible(y=True)
+		
+		
+		
 		self.tempNumLabel = QtGui.QLabel()  # Body Temperature Number Display
 
 		self.label = QtGui.QLabel()

@@ -8,7 +8,7 @@ class TemperatureModule_GSR:
 	def __init__(self, inlet):
 		pg.setConfigOption("background", "k")  # Graph background color
 		pg.setConfigOption("foreground", "w")  # Graph foreground color
-
+		pg.setConfigOption("antialias", True)
 		self.graphWidget = pg.PlotWidget()  # pyqtgraph PlotWidget Class
 		self.graphWidget.setTitle(
 			'<span style="font-size: 20px;">Galvanic Skin Response</span>'
@@ -32,6 +32,10 @@ class TemperatureModule_GSR:
 		self.graphWidget.setRange(
 			yRange=(44400, 56000)
 		)  # change the visible x range of the graph
+		self.graphWidget.enableAutoRange(axis='y')
+		self.graphWidget.setAutoVisible(y=True)
+		self.graphWidget.setLimits(minYRange=200)
+		
 		text_box = pg.TextItem(
 			text="TEST",
 			color=(200, 200, 200),
