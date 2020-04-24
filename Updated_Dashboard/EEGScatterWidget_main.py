@@ -10,7 +10,7 @@ from EEGArray import EEGArray
 from GetCmapValues import getCmapByFreqVal
 from pylsl import StreamInlet, resolve_stream
 from pyqtgraph import PlotWidget, plot
-
+from gradient import Gradient
 # from PyQtAlphaFrequency import AlphaFrequencyPG
 # from PyQtThetaFrequency import ThetaFrequencyPG
 from EEGScatter_submodule_graph import EEG_Graph_Submodule
@@ -18,7 +18,7 @@ from MatPlotLibCmapToPyQtColorMap import cmapToColormap
 
 import pyqtgraph as pg
 import pyqtgraph.ptime as ptime
-import matplotlib.cm
+from matplotlib import cm
 import matplotlib.colors as colors
 
 import csv
@@ -114,42 +114,55 @@ class EEGmodule_main(QGroupBox):
 		self.deltaBox.setChecked(True)
 		self.deltaBox.stateChanged.connect(lambda: self.hideGraph(button=self.deltaBox))
 		self.deltaBox.move(200, 0)
-		###################################################
-
-		#add check boxes to layout
-		self.layout.addWidget(self.alphaBox,0,4)
-		self.layout.addWidget(self.deltaBox,0,0)
-		self.layout.addWidget(self.thetaBox,0,2)
-		# add graphs to widget
-		self.layout.addWidget(self.deltaG, 1, 0, 1, 2)
-		self.layout.addWidget(self.thetaG, 1, 2, 1, 2)
-		self.layout.addWidget(self.alphaG, 1, 4, 1, 2)
+		###################################################	
 		
-		self.layout.addWidget(CmapImage(), 2, 2, 1, 2)
+		
+		#######################################################
+		#add check boxes to layout
+		self.layout.addWidget(self.alphaBox,1,4)
+		self.layout.addWidget(self.deltaBox,1,0)
+		self.layout.addWidget(self.thetaBox,1,2)
+		# add graphs to widget
+		self.layout.addWidget(self.deltaG, 2, 0, 1, 2)
+		self.layout.addWidget(self.thetaG, 2, 2, 1, 2)
+		self.layout.addWidget(self.alphaG, 2, 4, 1, 2)
+		
+		self.layout.addWidget(CmapImage(), 3, 2, 1, 2)
 		label = QLabel("Normalized Power")
 		label.setStyleSheet("QLabel{color:white; font:20px;}")
-		self.layout.addWidget(label, 2, 1, 1,1)
+		self.layout.addWidget(label, 3, 1, 1,1)
 		fill = pg.PlotWidget()
 		fill.getPlotItem().hideAxis("bottom")
 		fill.getPlotItem().hideAxis("left")
 		fill.setBackground(background=None)
-		self.layout.addWidget(fill, 3,0,1,6)
+		self.layout.addWidget(fill, 4,0,1,6)
 		
 		# get the node positions
 		x, y, nodeList = EEGArray()
 
 		# set cmap
-		cmap = getattr(matplotlib.cm, "jet")
-		self.color_list = cmapToColormap(cmap)
+		#cmap = getattr(matplotlib.cm, "jet")
+		#self.color_list = cmapToColormap(cmap)
+		#print(pg.graphicsItems.GradientEditorItem.Gradients.keys())
+		colormap = cm.get_cmap("jet")
+		colormap._init()
+		lut = (colormap._lut * 255).view(np.ndarray) #convert to numpy array
+		#print(lut)
 		ticks = []
 		colors = []
-		for item in self.color_list:
-			ticks.append(item[0])
-			colors.append(item[1])
-
+		for item in range(len(lut)-3):
+			ticks.append(item)
+			colors.append(lut[item])
+			print(item, " ", colors[item])
 		self.pgCM = pg.ColorMap(pos=ticks, color=colors)
+		#print(self.pgCM.getColors())
+		# self.grad = Gradient(colors=colors,ticks=ticks)
+		# self.gradient = self.grad.gradient
+		#self.layout.addWidget(self.gradient, 3, 4, 1, 2)
+		#print(self.pgCM.getLookupTable(start=0,stop=1,nPts = 100))
+		#self.pgCM.getColors()
 		# print(type(self.pgCM))
-
+		#self.gradient = 
 		# define number of electrodes
 		self.n = 64
 		# initialize newdata
@@ -184,15 +197,17 @@ class EEGmodule_main(QGroupBox):
 					self.data, self.newdata, self.deltaBand, self.dglobalMax
 				)
 				# set colors
-				acolors = self.pgCM.map(temp)
+				acolors = self.pgCM.map(temp*255)
 				self.deltaGraph.update_nodes(colors=acolors)
+				
+				
 
 			if i == 2:
 				temp, self.tglobalMax, self.data = getCmapByFreqVal(
 					self.data, self.newdata, self.thetaBand, self.tglobalMax
 				)
 				# set colors
-				bcolors = self.pgCM.map(temp)
+				bcolors = self.pgCM.map(temp*255)
 				self.thetaGraph.update_nodes(colors=bcolors)
 
 			if i == 3:
@@ -200,7 +215,7 @@ class EEGmodule_main(QGroupBox):
 					self.data, self.newdata, self.alphaBand, self.aglobalMax
 				)
 				# set colors
-				ccolors = self.pgCM.map(temp)
+				ccolors = self.pgCM.map(temp*255)
 				self.alphaGraph.update_nodes(colors=ccolors)
 
 		# elapsed = time.time()-starttime
@@ -223,34 +238,35 @@ class EEGmodule_main(QGroupBox):
 
 		if button.isChecked() == False:
 			if button.text() == "Alpha Band":
-				self.layout.addWidget(fill_1, 1, 4, 1, 2)
+				self.layout.addWidget(fill_1, 2, 4, 1, 2)
 				self.layout.removeWidget(self.alphaG)
 				self.alphaG.setParent(None)
 				
 
 			if button.text() == "Theta Band":
-				self.layout.addWidget(fill_2, 1, 2, 1, 2)
+				self.layout.addWidget(fill_2, 2, 2, 1, 2)
 				self.layout.removeWidget(self.thetaG)
 				self.thetaG.setParent(None)
 				
 
 			if button.text() == "Delta Band":
-				self.layout.addWidget(fill_3, 1, 0, 1, 2)
+				self.layout.addWidget(fill_3, 2, 0, 1, 2)
 				self.layout.removeWidget(self.deltaG)
 				self.deltaG.setParent(None)
 				
 		else:
 			if button.text() == "Alpha Band":
-				self.layout.addWidget(self.alphaG, 1, 4, 1, 2)
+				self.layout.addWidget(self.alphaG, 2, 4, 1, 2)
 				self.layout.removeWidget(fill_1)
 				fill_1.setParent(None)
 				
 			if button.text() == "Theta Band":
-				self.layout.addWidget(self.thetaG, 1, 2, 1, 2)
+				self.layout.addWidget(self.thetaG, 2, 2, 1, 2)
 				self.layout.removeWidget(fill_2)
 				fill_2.setParent(None)
 				
 			if button.text() == "Delta Band":
-				self.layout.addWidget(self.deltaG, 1, 0, 1, 2)
+				self.layout.addWidget(self.deltaG, 2, 0, 1, 2)
 				self.layout.removeWidget(fill_3)
 				fill_3.setParent(None)
+				

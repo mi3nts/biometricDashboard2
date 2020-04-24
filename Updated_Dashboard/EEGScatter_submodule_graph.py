@@ -9,11 +9,13 @@ import random as r
 import numpy as np
 from GetCmapValues import getCmapByFreqVal
 
-
 class EEG_Graph_Submodule():
     # initialize attributes of EEGmodule class
 	#def __init__(self, *args, **kwargs):
 	def __init__(self):
+		pg.setConfigOption("background", "k")  # graph background color
+		pg.setConfigOption("foreground", "w")  # graph foreground color
+		pg.setConfigOption("antialias", True)
 		# have EEGmodule inherit attributes of QGroupBox
 		#super(QGroupBox, self).__init__(*args, **kwargs)
 
@@ -40,7 +42,7 @@ class EEG_Graph_Submodule():
 			self.spots.append({'pos' : (x[i], y[i]), 'size': .35,  'pen':{'width':-1},'brush':pg.mkBrush(0,0,255)})
 			self.value.append(0)
 		self.node_scatter_graph.addPoints(self.spots)
-
+		print(len(x))
 		#hide axis
 		self.plotWidgetMain.getPlotItem().hideAxis('bottom')
 		self.plotWidgetMain.getPlotItem().hideAxis('left')
@@ -51,13 +53,16 @@ class EEG_Graph_Submodule():
 		# set layout for module
 		#self.setLayout(self.layout)
 		
+		
+		
 	def update_nodes(self, colors=None, data=None):
 				
 		# elapsed_time = time.time() - start_time
 		#print(colors)
 		for i in range(len(self.spots)):
 			self.spots[i]['brush'] = pg.mkBrush(colors[i]*255)
-			
+		
+		
 		self.value = data
 		self.node_scatter_graph.clear()
 		self.node_scatter_graph.setData(self.spots)
@@ -71,3 +76,6 @@ class EEG_Graph_Submodule():
 
 	def clicked(self, pts):
 		print("clicked: %s" % pts)
+
+
+		
