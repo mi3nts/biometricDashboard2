@@ -56,7 +56,7 @@ class MainWindow(QMainWindow):
         self.resp_tab = QWidget()
         self.temp_tab = QWidget()
 
-        self.bm_tabs.setStyleSheet("color:black;")
+        self.bm_tabs.setStyleSheet("color:white;")
 
         self.inlet = inlet
 
