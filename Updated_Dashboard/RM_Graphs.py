@@ -9,8 +9,6 @@ pg.setConfigOption("foreground", "w")  # graph foreground color
 pg.setConfigOption("antialias", True)
 class PPG_Graph:
 	def __init__(self, inlet):
-	
-		
 
 		self.PPG_Graph = pg.PlotWidget()  # Create a Plot Widget
 
@@ -23,6 +21,9 @@ class PPG_Graph:
 		self.PPG_Graph.setLabel(
 			"left", '<span style="color:white;font-size:18px">Millivolts (mV)</span>'
 		)
+		self.PPG_Graph.setLabel(
+            		"bottom", '<span style="font-size:20px">Number of samples</span>',
+        	)  # Bottom label
 
 		# Initial Data
 		self.yData = []
@@ -67,6 +68,10 @@ class ECG_Graph:
 		self.ECG_Graph.setLabel(
 			"left", '<span style="color:white;font-size:18px">Millivolts (mV)</span>'
 		)
+		self.ECG_Graph.setLabel(
+            		"bottom", '<span style="font-size:20px">Number of samples</span>',
+        	)  # Bottom label
+		
 		# initial data
 		self.yData = []
 
@@ -104,6 +109,10 @@ class Resp_Graph:
 		self.Resp_Graph.setLabel(
 			"left", '<span style="color:white;font-size:20px">Breaths/min</span>',
 		)
+		self.Resp_Graph.setLabel(
+            		"bottom", '<span style="font-size:20px">Number of samples</span>',
+        	)  # Bottom label
+		
 		# initial data
 		self.yData = []
 
