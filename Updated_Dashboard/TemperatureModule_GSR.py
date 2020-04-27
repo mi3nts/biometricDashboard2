@@ -19,7 +19,7 @@ class TemperatureModule_GSR:
         )  # Left label
         self.graphWidget.setLabel(
             "bottom",
-            '<span style="font-size:20px">"Number of samples"</span>',
+            '<span style="font-size:20px">Number of samples</span>',
         )  # Bottom label
 
         self.graphWidget.showGrid(x=True, y=True, alpha=0.3)  # Create a Grid
