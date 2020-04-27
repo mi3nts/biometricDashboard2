@@ -224,7 +224,7 @@ def biometricWidgets(self):
     layout1.addWidget(self.spo2.SpO2_Widget, 0, 0)
     self.SpO2GroupBox.setLayout(layout1)
 
-    self.SpO2GroupBox2 = QGroupBox("Oxygent Saturation (%)")
+    self.SpO2GroupBox2 = QGroupBox("Oxygen Saturation (%)")
     self.SpO2GroupBox2.setStyleSheet("color: white;")
     layout21 = QGridLayout()  # create a box
     layout21.addWidget(self.spo22.SpO2_Widget, 0, 0, 9, 1)
