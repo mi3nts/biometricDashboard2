@@ -16,8 +16,8 @@ class TemperatureModule_BodyTemp:
         self.graphWidget.setTitle(
             '<span style="font-size: 20px;"> Body Temperature</span>'
         )  # Set Title
-        self.graphWidget.setLabel("left", "Temperature", units="Celsius")  # left label
-        self.graphWidget.setLabel("bottom", "Number of samples")  # Bottom label
+        self.graphWidget.setLabel("left", '<span style="font-size: 20px;">Temperature (Celsius)</span>')  # left label
+        self.graphWidget.setLabel("bottom",'<span style="font-size: 20px;">Number of samples</span>')  # Bottom label
 
         self.text_box = pg.TextItem(html="<span></span>", anchor=(0, 0))
         self.text_box.setPos(0, 41.0)
