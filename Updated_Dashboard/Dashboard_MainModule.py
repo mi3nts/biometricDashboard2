@@ -83,14 +83,14 @@ class MainWindow(QMainWindow):
 
         # Thermometer Box
         self.ThermometerBox = QGroupBox("Body Temperature")  # label
-        self.ThermometerBox.setStyleSheet("color: white;")
+        self.ThermometerBox.setStyleSheet("color: white;font-size:25px")
         layout6 = QVBoxLayout()
         self.thermometer = Thermometer(layout6)
         layout6.addWidget(self.thermometer)
         self.ThermometerBox.setLayout(layout6)
 
         self.ThermometerBox2 = QGroupBox("Body Temperature")  # label
-        self.ThermometerBox.setStyleSheet("color: white;")
+        self.ThermometerBox.setStyleSheet("color: white;font-size:25px")
         layout16 = QVBoxLayout()
         self.thermometer2 = Thermometer(layout16)
         layout16.addWidget(self.thermometer2)
@@ -219,26 +219,26 @@ def tempTabUI(self):
 def biometricWidgets(self):
 
     self.SpO2GroupBox = QGroupBox("Oxygen Saturation (%)")
-    self.SpO2GroupBox.setStyleSheet("color: white;")
+    self.SpO2GroupBox.setStyleSheet("color: white;font-size:25px")
     layout1 = QGridLayout()  # create a box
     layout1.addWidget(self.spo2.SpO2_Widget, 0, 0)
     self.SpO2GroupBox.setLayout(layout1)
 
     self.SpO2GroupBox2 = QGroupBox("Oxygen Saturation (%)")
-    self.SpO2GroupBox2.setStyleSheet("color: white;")
+    self.SpO2GroupBox2.setStyleSheet("color: white;font-size:25px")
     layout21 = QGridLayout()  # create a box
     layout21.addWidget(self.spo22.SpO2_Widget, 0, 0, 9, 1)
     layout21.addWidget(self.spo22.SpO2_Condition_Label, 9, 0, 1, 1)
     self.SpO2GroupBox2.setLayout(layout21)
 
     self.HRGroupBox = QGroupBox("Heart Rate (Beats/min)")
-    self.HRGroupBox.setStyleSheet("color: white;")
+    self.HRGroupBox.setStyleSheet("color: white;font-size:25px")
     layout2 = QGridLayout()  # create a box
     layout2.addWidget(self.hrw.HR_Widget, 0, 0)
     self.HRGroupBox.setLayout(layout2)
 
     self.HRGroupBox2 = QGroupBox("Heart Rate (Beats/min)")
-    self.HRGroupBox2.setStyleSheet("color: white;")
+    self.HRGroupBox2.setStyleSheet("color: white;font-size:25px")
     layout22 = QGridLayout()  # create a box
     layout22.addWidget(self.hrw2.HR_Widget, 0, 0, 9, 1)
     layout22.addWidget(self.hrw2.HR_Condition_Label, 9, 0, 1, 1)
@@ -300,7 +300,7 @@ def biometricWidgets(self):
 
     # Accelerometer 3D Visualization
     self.Accelerometer_3D_Box = QGroupBox("Accelerometer 3D Visualization")
-    self.Accelerometer_3D_Box.setStyleSheet("color: white;")
+    self.Accelerometer_3D_Box.setStyleSheet("color: white;font-size:25px")
     layout10 = QVBoxLayout()
     layout10.addWidget(self.acc.visualization)
     self.Accelerometer_3D_Box.setLayout(layout10)
