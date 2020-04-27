@@ -218,7 +218,7 @@ def tempTabUI(self):
 
 def biometricWidgets(self):
 
-    self.SpO2GroupBox = QGroupBox("Oxygent Saturation (%)")
+    self.SpO2GroupBox = QGroupBox("Oxygen Saturation (%)")
     self.SpO2GroupBox.setStyleSheet("color: white;")
     layout1 = QGridLayout()  # create a box
     layout1.addWidget(self.spo2.SpO2_Widget, 0, 0)
