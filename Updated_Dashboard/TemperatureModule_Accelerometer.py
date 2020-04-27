@@ -99,9 +99,9 @@ class TemperatureModule_Accelerometer:
             self.accel[1].append(yVal)
             self.accel[2].append(zVal)
 
-        self.x_curve.setData(self.accel[0], pen="#FFA500")
-        self.y_curve.setData(self.accel[1], pen="#0ffe1d")
-        self.z_curve.setData(self.accel[2], pen="#03ffff")
+        self.x_curve.setData(self.accel[0], pen=pg.mkPen("#FFA500", width=2))
+        self.y_curve.setData(self.accel[1], pen=pg.mkPen("#0ffe1d",width=2))
+        self.z_curve.setData(self.accel[2], pen=pg.mkPen("#03ffff",width=2))
 
         self.label.setText(
             '<span style="font-size: 23px; font-weight: bold; color: white;">Accelerometer</span>  <br><br> <span style="font-size: 16px; color: white;">x: '
