@@ -63,7 +63,7 @@ class TemperatureModule_GSR:
             self.gsrData.append(data)  # updating GSR signal
 
         self.graphWidget.plot(
-            y=self.gsrData, pen=(255, 165, 0), clear=True
+            y=self.gsrData, pen=pg.mkPen((255, 165, 0),width=2), clear=True
         )  # update plot
 
         self.gsrNumLabel.setText(
