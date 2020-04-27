@@ -9,7 +9,6 @@ class HR_Module(QGroupBox):
 		super(QGroupBox, self).__init__()
 		
 		self.setTitle("Heart Rate Widget")
-		self.setStyleSheet("HR_Module{font-size:25px;}")  # Set Title Font
 
 		self.HR_Widget = QWidget()  # Create hrWidget
 
@@ -35,12 +34,11 @@ class HR_Module(QGroupBox):
 
 		# Create a QLabel for Displaying the HR Value
 		self.HR_Value_Label = QLabel(self.HR_Widget)
-		self.HR_Value_Label.setFont(QtGui.QFont("Times", 50, QtGui.QFont.Bold))
-		self.HR_Value_Label.setStyleSheet("color:red")
+		self.HR_Value_Label.setStyleSheet("color:red;font-size:50px")
 
 		# Dynamically Set the Position & size of the Label
 		self.HR_Value_Label.setGeometry(
-			int(self.HR_Widget.width() / 6), int(self.HR_Widget.height() / 4), 125, 50
+			int(self.HR_Widget.width() / 5.5), int(self.HR_Widget.height() / 4), 125, 50
 		)
 
 		# Heart Rate -- Condition label
@@ -50,13 +48,7 @@ class HR_Module(QGroupBox):
 
 		self.inlet = inlet
 
-	# Update the HR Value every 20 ms
-	# timer = QTimer(self)
-	# timer.timeout.connect(self.update_HR)
-		# timer.start(20)
-
 	def update_HR(self, sample):
-		#sample = self.inlet.pull_sample()
 		num = sample[0][72]  # Get the HR Data and Convert to String
 		data = str(int(num))
 		self.HR_Value_Label.setText(data)  # Display Value
