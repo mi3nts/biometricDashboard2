@@ -79,7 +79,7 @@ class TemperatureModule_BodyTemp:
 
 		else:
 			self.curve.setData(
-				self.temperature, pen="b"
+				self.temperature, pen=pg.mkPen('b', width=2)
 			)  # if temperatre is too low, set line color blue
 			self.label.setText("Too Low")
 			self.label.setStyleSheet("font-weight: bold; font-size:10pt; color: blue;")

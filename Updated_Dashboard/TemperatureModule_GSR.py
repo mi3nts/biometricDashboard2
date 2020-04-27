@@ -85,7 +85,7 @@ class TemperatureModule_GSR:
 			# self.graphWidget.setRange(xRange=(0, 500)) #change the visible x range of the graph
 
 		self.graphWidget.plot(
-			y=self.gsrData, pen=(255, 165, 0), clear=True
+			y=self.gsrData, pen=pg.mkPen((255, 165, 0),width=2), clear=True
 		)  # update plot
 
 		gsrLabel = str(np.round(data, 2))  # Type casting from float to string

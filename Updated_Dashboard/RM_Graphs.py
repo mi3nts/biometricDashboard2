@@ -53,7 +53,7 @@ class PPG_Graph:
 			self.yData.pop(0)
 			self.yData.append(sample)
 
-		self.PPG_Curve.setData(self.yData, pen="r")  # Update Plot
+		self.PPG_Curve.setData(self.yData, pen=pg.mkPen("r", width=2))  # Update Plot
 
 
 class ECG_Graph:
@@ -91,7 +91,7 @@ class ECG_Graph:
 			self.yData.pop(0)
 			self.yData.append(sample[0][68])
 
-		self.ECG_Curve.setData(self.yData, pen="w")  # Update Plot
+		self.ECG_Curve.setData(self.yData,  pen=pg.mkPen("w", width=2))  # Update Plot
 
 
 class HR_Graph:
@@ -127,7 +127,7 @@ class HR_Graph:
 			self.yData.pop(0)
 			self.yData.append(sample[0][72])
 
-		self.HR_Curve.setData(self.yData, pen="b")  # Update Plot
+		self.HR_Curve.setData(self.yData,  pen=pg.mkPen("b", width=2))  # Update Plot
 
 
 class SpO2_Graph:
@@ -202,4 +202,4 @@ class Resp_Graph:
 			self.yData.pop(0)
 			self.yData.append(sample[0][69])
 
-		self.Resp_Curve.setData(self.yData, pen="y")  # Update Plot
+		self.Resp_Curve.setData(self.yData,  pen=pg.mkPen("y", width=2))  # Update Plot

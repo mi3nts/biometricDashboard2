@@ -100,9 +100,9 @@ class TemperatureModule_Accelerometer:
 			self.accel[1].append(yVal)
 			self.accel[2].append(zVal)
 
-		self.x_curve.setData(self.accel[0], pen="r")
-		self.y_curve.setData(self.accel[1], pen="g")
-		self.z_curve.setData(self.accel[2], pen="b")
+		self.x_curve.setData(self.accel[0],  pen=pg.mkPen("r", width=2))
+		self.y_curve.setData(self.accel[1],  pen=pg.mkPen("g", width=2))
+		self.z_curve.setData(self.accel[2],  pen=pg.mkPen("b", width=2))
 
 		# x, y, z value move to amount
 		# It is calulcated by subtracting current value from previous value
