@@ -13,8 +13,12 @@ class TemperatureModule_Accelerometer:
         self.graphWidget.setTitle(
             '<span style="font-size: 20px;"> Accelerometer </span>'
         )  # Set Title
-        self.graphWidget.setLabel("left", "Acceleration")  # left label
-        self.graphWidget.setLabel("bottom", "Number of samples")  # Bottom label
+        self.graphWidget.setLabel(
+            "left", '<span style="font-size: 20px;">Acceleration</span>'
+        )  # left label
+        self.graphWidget.setLabel(
+            "bottom", '<span style="font-size: 20px;">Number of samples</span>'
+        )  # Bottom label
         self.graphWidget.showGrid(x=True, y=True, alpha=0.3)  # Create a Grid
 
         # Get initial data
