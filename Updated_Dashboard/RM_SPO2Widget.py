@@ -10,7 +10,6 @@ class SpO2_Mod(QGroupBox):
 		
 		#self.layout = QHBoxLayout()
 		self.setTitle("Sp02 Module")  # Set Title
-		self.setStyleSheet("SpO2_Module{font-size:25px;color:blue;}")  # Set Title Font
 
 		self.SpO2_Widget = QWidget()  # Create a SpO2 Widget
 
@@ -32,14 +31,11 @@ class SpO2_Mod(QGroupBox):
 		)
 
 		# Initial Value
-		self.rand_text = "000.0"
+		self.rand_text = "000"
 
 		# Create a QLabel for Displaying the Value
 		self.SpO2_Value_Label = QLabel(self.SpO2_Widget)
-		self.SpO2_Value_Label.setFont(
-			QtGui.QFont("Times", 50, QtGui.QFont.Bold)
-		)  # Set Font
-		self.SpO2_Value_Label.setStyleSheet("color:blue")
+		self.SpO2_Value_Label.setStyleSheet("color:blue;font-size:50px;")
 
 		# Dynamically Set the Position & size of the Labelp
 		self.SpO2_Value_Label.setGeometry(
@@ -54,26 +50,16 @@ class SpO2_Mod(QGroupBox):
 		self.SpO2_Condition_Label.setFont(QtGui.QFont("Times", 25, QtGui.QFont.Bold))
 		self.SpO2_Condition_Label.setAlignment(Qt.AlignCenter)
 
-		#self.layout.addWidget(SpO2_Widget)
-		#self.setLayout(self.layout)
-
 		self.inlet = inlet
 
-		# Update the SpO2 Value every 20 ms
-		# timer = QTimer(self)
-		# timer.timeout.connect(self.update_SpO2)
-		# timer.start(20)
-
 	def update_SpO2(self, sample):
-		# print(self.sample2[0][71], "\n")  # For Debugging
-		#sample = self.inlet.pull_sample()
 		num = sample[0][71]
 		data = str(int(num))  # Get the SpO2 Data and Convert to String
 		self.SpO2_Value_Label.setText(data)  # Display Updated Value
 
 		if num >= 95:
 			self.SpO2_Condition_Label.setText("Normal -- Healthy")
-			self.SpO2_Condition_Label.setStyleSheet("color: green")
+			self.SpO2_Condition_Label.setStyleSheet("color: #0ffe1d")
 
 		elif num > 85 and num <= 94:
 			self.SpO2_Condition_Label.setText("Hypoxic")
