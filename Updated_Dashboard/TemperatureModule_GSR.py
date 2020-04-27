@@ -15,11 +15,11 @@ class TemperatureModule_GSR:
         )  # Set Title
 
         self.graphWidget.setLabel(
-            "left", '<span style="font-size:13px">GSR amplitude (uS)</span>',
+            "left", '<span style="font-size:20px">GSR amplitude (uS)</span>',
         )  # Left label
         self.graphWidget.setLabel(
             "bottom",
-            '<span style="color:red;font-size:20px">"Number of samples"</span>',
+            '<span style="font-size:20px">"Number of samples"</span>',
         )  # Bottom label
 
         self.graphWidget.showGrid(x=True, y=True, alpha=0.3)  # Create a Grid
