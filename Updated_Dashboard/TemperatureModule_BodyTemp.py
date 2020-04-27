@@ -60,7 +60,7 @@ class TemperatureModule_BodyTemp:
 
         if temp >= 38.0:
             self.curve.setData(
-                self.temperature, pen="r"
+                self.temperature, pen=pg.mkPen("r",width=2)
             )  # if temperature is high, set line color red
             self.tempNumLabel.setText(
                 "Body Temperature (C°):\n "
@@ -69,7 +69,7 @@ class TemperatureModule_BodyTemp:
             )
         elif 35.0 <= temp and temp < 38.0:
             self.curve.setData(
-                self.temperature, pen="#0ffe1d"
+                self.temperature, pen=pg.mkPen("#0ffe1d", width=2)
             )  # if temperature is normal, set line color green
             self.tempNumLabel.setText(
                 "Body Temperature (C°):\n "
@@ -79,7 +79,7 @@ class TemperatureModule_BodyTemp:
 
         else:
             self.curve.setData(
-                self.temperature, pen="#03ffff"
+                self.temperature, pen=pg.mkPen("#03ffff",width=2)
             )  # if temperatre is too low, set line color blue
             self.tempNumLabel.setText(
                 "<span style='color: white; font-weight: bold; font-size: 23px;'>Body Temperature</span><br><br> <span style='font-size: 16px; color: white;'>"
