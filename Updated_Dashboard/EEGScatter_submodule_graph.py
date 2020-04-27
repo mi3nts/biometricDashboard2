@@ -42,7 +42,7 @@ class EEG_Graph_Submodule():
 			self.spots.append({'pos' : (x[i], y[i]), 'size': .35,  'pen':{'width':-1},'brush':pg.mkBrush(0,0,255)})
 			self.value.append(0)
 		self.node_scatter_graph.addPoints(self.spots)
-		print(len(x))
+		
 		#hide axis
 		self.plotWidgetMain.getPlotItem().hideAxis('bottom')
 		self.plotWidgetMain.getPlotItem().hideAxis('left')
@@ -60,8 +60,9 @@ class EEG_Graph_Submodule():
 		# elapsed_time = time.time() - start_time
 		#print(colors)
 		for i in range(len(self.spots)):
-			self.spots[i]['brush'] = pg.mkBrush(colors[i]*255)
-		
+			#colors[i][3] = 255
+			self.spots[i]['brush'] = pg.mkBrush(colors[i])
+			# print(colors[i]*255)
 		
 		self.value = data
 		self.node_scatter_graph.clear()

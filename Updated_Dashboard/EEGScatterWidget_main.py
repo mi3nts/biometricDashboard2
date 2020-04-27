@@ -10,7 +10,7 @@ from EEGArray import EEGArray
 from GetCmapValues import getCmapByFreqVal
 from pylsl import StreamInlet, resolve_stream
 from pyqtgraph import PlotWidget, plot
-#from gradient import Gradient
+from gradient import Gradient
 # from PyQtAlphaFrequency import AlphaFrequencyPG
 # from PyQtThetaFrequency import ThetaFrequencyPG
 from EEGScatter_submodule_graph import EEG_Graph_Submodule
@@ -141,29 +141,93 @@ class EEGmodule_main(QGroupBox):
 		x, y, nodeList = EEGArray()
 
 		# set cmap
-		#cmap = getattr(matplotlib.cm, "jet")
-		#self.color_list = cmapToColormap(cmap)
-		#print(pg.graphicsItems.GradientEditorItem.Gradients.keys())
+		
 		colormap = cm.get_cmap("jet")
 		colormap._init()
 		lut = (colormap._lut * 255).view(np.ndarray) #convert to numpy array
-		#print(lut)
+		# P = cmapToColormap(getattr(cm, 'jet'))
+		# p = []
+		# c = []
+		# for i in range(len(P)):
+			# p.append(P[i][0])
+			# c.append(P[i][1])
+			# print(p," ",c)
 		ticks = []
 		colors = []
-		for item in range(len(lut)-3):
-			ticks.append(item)
-			colors.append(lut[item])
-			print(item, " ", colors[item])
-		self.pgCM = pg.ColorMap(pos=ticks, color=colors)
-		#print(self.pgCM.getColors())
-		# self.grad = Gradient(colors=colors,ticks=ticks)
-		# self.gradient = self.grad.gradient
-		#self.layout.addWidget(self.gradient, 3, 4, 1, 2)
-		#print(self.pgCM.getLookupTable(start=0,stop=1,nPts = 100))
-		#self.pgCM.getColors()
-		# print(type(self.pgCM))
-		#self.gradient = 
-		# define number of electrodes
+		pos = []
+		mapColors = []
+		self.gradient = pg.GradientWidget(allowAdd=False)	
+		for i in range(len(lut)-3):
+			r=int(lut[i][0])
+			g=int(lut[i][1])
+			b=int(lut[i][2])
+			a=255
+			ticks.append(i/255)
+			colors.append((r,g,b,a))
+			
+			if i % 15 == 0:
+				pos.append(i/255)
+				mapColors.append((r,g,b,a))
+				self.gradient.addTick(x=ticks[i], color=QColor(r,g,b,a), movable=False)
+			
+				if i == 0:
+					self.gradient.setTickColor(0,QColor(r,g,b,a))
+				elif i == 255:
+					self.gradient.addTick(1,QColor(r,g,b,a))
+			
+		
+		
+		self.pgCM = pg.ColorMap(np.array(pos), mapColors)
+		#self.pgCM = pg.ColorMap(p,c)
+		#self.pgCM = self.gradient.colorMap()
+		self.layout.addWidget(self.gradient, 3, 4, 1, 2)
+		##########################################################################
+		self.gradient2 = pg.GradientWidget(allowAdd=False)
+		""" Reverse gradient to match value ends"""
+		"""
+		
+		for i in range(len(ticks)):
+			r=colors[i][0]
+			g=colors[i][1]
+			b=colors[i][2]
+			a=255
+			if i == 0:
+				self.gradient2.addTick(1, QColor(r,g,b,a))
+			if i == 255:
+				self.gradient2.addTick(0,QColor(r,g,b,a))
+			# # else:
+				# #print(i)
+			# self.gradient2.addTick(x=ticks[i],color=QColor(r,g,b,a), movable = False)
+		
+		# for a,b in self.gradient.listTicks():
+			# print(b)
+		###################################################################
+		self.layout.addWidget(self.gradient2, 3, 4, 1, 2)
+		"""
+		##########################################################################
+		
+		#self.layout.addWidget(gradient2, 3, 4, 1, 2)
+		
+		
+		#fIXING BLUE SPECTRUM
+		# for i in range(129):
+			# b = 127
+			# lookup[1] = ((0,0,b+i))
+			# print(i, " ", lookup[i])
+		# #FIXING RED SPECTRUM
+		# for i in range(58):
+			# b=184
+			# index = 941
+			# lookup[index][0] = b-i
+			# index=index+i
+			# print(index, " " ,b-i, " " ,lookup[index][0])
+			
+		# for i in range(len(lookup)-30):
+			# print(i," ",lookup[i])
+		
+				
+		#########################################################################
+		#self.layout.addWidget(self.gradient2, 3, 4, 1, 2)
 		self.n = 64
 		# initialize newdata
 		self.newdata = np.zeros(self.n)
@@ -181,43 +245,47 @@ class EEGmodule_main(QGroupBox):
 		# # self.timer.setInterval(10000)
 		# self.timer.timeout.connect(self.UpdateNodes)
 		# self.timer.start(20)
-
+		output = open('output.txt', 'w')
+		output.close()
 		
 
 	def UpdateNodes(self, sample ):
-
+		output = open('output.txt', 'a')
 		# pull data
 		# sample = self.inlet.pull_sample()
 		self.newdata = np.asarray(sample[0][: self.n])
 		# print(timestamp)
-
+		
 		for i in range(4):
 			if i == 1:
 				temp, self.dglobalMax, self.data = getCmapByFreqVal(
 					self.data, self.newdata, self.deltaBand, self.dglobalMax
 				)
 				# set colors
-				acolors = self.pgCM.map(temp*255)
+				acolors = self.pgCM.map(temp)
+				#print(temp)
 				self.deltaGraph.update_nodes(colors=acolors)
 				
-				
-
 			if i == 2:
 				temp, self.tglobalMax, self.data = getCmapByFreqVal(
 					self.data, self.newdata, self.thetaBand, self.tglobalMax
 				)
 				# set colors
-				bcolors = self.pgCM.map(temp*255)
+				bcolors = self.pgCM.map(temp)
 				self.thetaGraph.update_nodes(colors=bcolors)
+				
 
 			if i == 3:
 				temp, self.aglobalMax, self.data = getCmapByFreqVal(
 					self.data, self.newdata, self.alphaBand, self.aglobalMax
 				)
 				# set colors
-				ccolors = self.pgCM.map(temp*255)
+				ccolors = self.pgCM.map(temp)
 				self.alphaGraph.update_nodes(colors=ccolors)
-
+				print(ccolors[60], " alpha color", file = output)
+				print(temp[60], file = output)
+			#print(acolors[30], " " , bcolors[10], " ", ccolors[60], file = output)
+		output.close()
 		# elapsed = time.time()-starttime
 		# self.timer.setInterval(elapsed*100)
 		# set onlclickhover to show power and node label
@@ -270,3 +338,4 @@ class EEGmodule_main(QGroupBox):
 				self.layout.removeWidget(fill_3)
 				fill_3.setParent(None)
 				
+	

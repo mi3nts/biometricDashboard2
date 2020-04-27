@@ -7,7 +7,7 @@ from PyQt5.QtCore import *
 class HR_Module(QGroupBox):
 	def __init__(self, inlet):
 		super(QGroupBox, self).__init__()
-
+		
 		self.setTitle("Heart Rate Widget")
 		self.setStyleSheet("HR_Module{font-size:25px;}")  # Set Title Font
 
@@ -58,7 +58,7 @@ class HR_Module(QGroupBox):
 	def update_HR(self, sample):
 		#sample = self.inlet.pull_sample()
 		num = sample[0][72]  # Get the HR Data and Convert to String
-		data = str(num)
+		data = str(int(num))
 		self.HR_Value_Label.setText(data)  # Display Value
 		# Change Font
 		if num > 60 and num <= 80:

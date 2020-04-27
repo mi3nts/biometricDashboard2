@@ -7,6 +7,7 @@ from PyQt5.QtCore import *
 class SpO2_Mod(QGroupBox):
 	def __init__(self, inlet):
 		super(QGroupBox, self).__init__()
+		
 		#self.layout = QHBoxLayout()
 		self.setTitle("Sp02 Module")  # Set Title
 		self.setStyleSheet("SpO2_Module{font-size:25px;color:blue;}")  # Set Title Font
@@ -67,7 +68,7 @@ class SpO2_Mod(QGroupBox):
 		# print(self.sample2[0][71], "\n")  # For Debugging
 		#sample = self.inlet.pull_sample()
 		num = sample[0][71]
-		data = str(num)  # Get the SpO2 Data and Convert to String
+		data = str(int(num))  # Get the SpO2 Data and Convert to String
 		self.SpO2_Value_Label.setText(data)  # Display Updated Value
 
 		if num >= 95:
