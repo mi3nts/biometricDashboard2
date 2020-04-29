@@ -7,7 +7,7 @@ from PyQt5.QtWidgets import QApplication, QMainWindow, QLabel, QGridLayout, QWid
 from PyQt5.QtGui import QPixmap
 
 from EEGArray import EEGArray
-from GetCmapValues import getCmapByFreqVal
+from GetCmapValues import getCmapByFreqVal, getCmapForZscores
 from pylsl import StreamInlet, resolve_stream
 from pyqtgraph import PlotWidget, plot
 from gradient import Gradient
@@ -35,12 +35,12 @@ class CmapImage(QWidget):
 		super().__init__()
 
 		self.im = QPixmap("./jet.png")
-		self.rotation = -90
+		self.rotation = 90
 		self.im = self.im.transformed(
 			QTransform().rotate(self.rotation), Qt.SmoothTransformation
 		)
 		self.label = QLabel("Frequencies")
-		self.title = QLabel("Normalized Frequencies")
+		self.title = QLabel("Power (Normalized Frequencies)")
 		self.title.setAlignment(Qt.AlignCenter)
 		self.im = self.im.scaled(300, 350, Qt.KeepAspectRatio, Qt.FastTransformation)
 		self.label.setPixmap(self.im)
@@ -165,21 +165,21 @@ class EEGmodule_main(QGroupBox):
 			ticks.append(i/255)
 			colors.append((r,g,b,a))
 			
-			if i % 15 == 0:
-				pos.append(i/255)
-				mapColors.append((r,g,b,a))
-				self.gradient.addTick(x=ticks[i], color=QColor(r,g,b,a), movable=False)
 			
-				if i == 0:
-					self.gradient.setTickColor(0,QColor(r,g,b,a))
-				elif i == 255:
-					self.gradient.addTick(1,QColor(r,g,b,a))
-			
+			pos.append(i/255)
+			mapColors.append((r,g,b,a))
+			self.gradient.addTick(x=ticks[i], color=QColor(r,g,b,a), movable=False)
+		
+			if i == 0:
+				self.gradient.setTickColor(0,QColor(r,g,b,a))
+			elif i == 255:
+				self.gradient.addTick(1,QColor(r,g,b,a))
 		
 		
-		self.pgCM = pg.ColorMap(np.array(pos), mapColors)
+		
+		#self.pgCM = pg.ColorMap(np.array(pos), mapColors)
 		#self.pgCM = pg.ColorMap(p,c)
-		#self.pgCM = self.gradient.colorMap()
+		self.pgCM = self.gradient.colorMap()
 		self.layout.addWidget(self.gradient, 3, 4, 1, 2)
 		##########################################################################
 		self.gradient2 = pg.GradientWidget(allowAdd=False)
@@ -258,8 +258,8 @@ class EEGmodule_main(QGroupBox):
 		
 		for i in range(4):
 			if i == 1:
-				temp, self.dglobalMax, self.data = getCmapByFreqVal(
-					self.data, self.newdata, self.deltaBand, self.dglobalMax
+				temp, self.data = getCmapForZscores(
+					self.data, self.newdata, self.deltaBand
 				)
 				# set colors
 				acolors = self.pgCM.map(temp)
@@ -267,8 +267,8 @@ class EEGmodule_main(QGroupBox):
 				self.deltaGraph.update_nodes(colors=acolors)
 				
 			if i == 2:
-				temp, self.tglobalMax, self.data = getCmapByFreqVal(
-					self.data, self.newdata, self.thetaBand, self.tglobalMax
+				temp,  self.data = getCmapForZscores(
+					self.data, self.newdata, self.thetaBand
 				)
 				# set colors
 				bcolors = self.pgCM.map(temp)
@@ -276,14 +276,14 @@ class EEGmodule_main(QGroupBox):
 				
 
 			if i == 3:
-				temp, self.aglobalMax, self.data = getCmapByFreqVal(
-					self.data, self.newdata, self.alphaBand, self.aglobalMax
+				temp,  self.data = getCmapForZscores(
+					self.data, self.newdata, self.alphaBand
 				)
 				# set colors
 				ccolors = self.pgCM.map(temp)
 				self.alphaGraph.update_nodes(colors=ccolors)
-				print(ccolors[60], " alpha color", file = output)
-				print(temp[60], file = output)
+				print(ccolors[1], " alpha color", file = output)
+				print(temp[1], file = output)
 			#print(acolors[30], " " , bcolors[10], " ", ccolors[60], file = output)
 		output.close()
 		# elapsed = time.time()-starttime
