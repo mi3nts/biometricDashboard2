@@ -44,8 +44,8 @@ def getCmapByFreqVal(data, newdata, freqValue, globalMax):
                 else:
                     endIndex = i
 
-        print("start ", startIndex, f[startIndex],
-              "end ", endIndex, f[endIndex])
+        #print("start ", startIndex, f[startIndex],
+         #     "end ", endIndex, f[endIndex])
         extractAmplitude = ps[:, startIndex:endIndex]
 
     temp = np.asarray(extractAmplitude)
@@ -70,7 +70,7 @@ def getCmapForZscores(data, newdata, freqValue):
 
     # compute power spectrum of data
     f, ps = sps.welch(data, fs=26)
-    print("ps", ps)
+    #print("ps", ps)
 
     extractAmplitude = []
     # delta freq band
@@ -90,7 +90,7 @@ def getCmapForZscores(data, newdata, freqValue):
     temp = np.asarray(extractAmplitude)
     # temp holds mean of each row in extractAmplitude
     temp = np.mean(temp, axis=1)
-    print("temp", temp)
+    #print("temp", temp)
 
     # square all values to make them 0 <= x <= 1
     temp = np.square(temp)
@@ -100,5 +100,6 @@ def getCmapForZscores(data, newdata, freqValue):
     # next line creates positive and negative zscores, so if the value was between 0 to 0.5, it is
     # scaled to between -1 and 0, and if the value was between 0.5 and 1, it is scaled to between
     # 0 and 1
-    zscoreArray = ((zscoreArray / np.amax(zscoreArray)) / 2) + 0.5
+	
+    zscoreArray = np.power((zscoreArray /np.amax(np.absolute(zscoreArray))),3) / 2 + 0.5
     return [zscoreArray, data]
