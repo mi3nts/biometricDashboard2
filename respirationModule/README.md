@@ -1,6 +1,6 @@
 # Respiration Module
 
-This is a standalone model of the Respiration module -- which can also be found in "Resp Tab" in the main Biometric Dashboard!
+A standalone model of the Respiration module -- which can also be found in "Resp Tab" in the main Biometric Dashboard!
 
 ______________________________________________________________________________________________________________________________
 
