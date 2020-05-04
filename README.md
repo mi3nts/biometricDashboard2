@@ -1,4 +1,4 @@
-# Biometric Project
+# Biometric Project -- UTD Spring20
 
 	Dashboard Folder --> Contains the final integration of the Biometric Dashboard
 
