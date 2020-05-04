@@ -79,7 +79,7 @@ class MainWindow(QMainWindow):
         self.rgraph2 = Resp_Graph(inlet)  # Respiratory Graph
         self.eegModule = EEGmodule_main(inlet)  # EEG module
         self.eegModule2 = EEGmodule_main(inlet)
-        self.cmap = CmapImage()
+        self.cmap = self.eegModule.gradientBox
 
         # Thermometer Box
         self.ThermometerBox = QGroupBox("Body Temperature")  # label
@@ -160,7 +160,8 @@ def mainTabUI(self):
     # print(self.eegModule.alphaG.parentWidget())
     self.eegGroupBox = QGroupBox()
     self.eegGroupBox.setLayout(layout_eeg)
-
+    self.eegGroupBox.setMaximumWidth(600)
+    
     self.layout_numbers = QGridLayout()
     self.layout_numbers.addWidget(self.SpO2GroupBox, 0, 0)
     self.layout_numbers.addWidget(self.HRGroupBox, 0, 1)
@@ -379,6 +380,6 @@ if __name__ == "__main__":
     # create a window from the MainWindow class defined above
     window = MainWindow(inlet)
     # show the window
-    window.show()
+    window.showMaximized()
     # Start the event loop.
     sys.exit(app.exec_())

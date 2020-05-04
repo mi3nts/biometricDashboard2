@@ -10,9 +10,11 @@ from EEGArray import EEGArray
 from GetCmapValues import getCmapByFreqVal, getCmapForZscores
 from pylsl import StreamInlet, resolve_stream
 from pyqtgraph import PlotWidget, plot
+from gradient import Gradient
 # from PyQtAlphaFrequency import AlphaFrequencyPG
 # from PyQtThetaFrequency import ThetaFrequencyPG
 from EEGScatter_submodule_graph import EEG_Graph_Submodule
+from MatPlotLibCmapToPyQtColorMap import cmapToColormap
 from GradientBox import gradientLayout
 
 import pyqtgraph as pg
