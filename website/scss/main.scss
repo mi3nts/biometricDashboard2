@@ -1,0 +1,325 @@
+@import "colors";
+
+//General styles
+* {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: "Dosis", sans-serif;
+  line-height: 1.6;
+  background: $dark-color3;
+  margin-right: 200px;
+}
+a {
+  text-decoration: none;
+}
+
+ul {
+  list-style: none;
+}
+
+//button
+.button {
+  &-light {
+    color: $light-color1;
+    cursor: pointer;
+    background: $dark-color2;
+    width: auto;
+    padding: 1rem;
+    border-bottom: solid $light-color1 3px;
+  }
+
+  &-light:hover {
+    background: $light-color1;
+    color: $dark-color1;
+  }
+
+  &-dark {
+    cursor: pointer;
+    width: fit-content;
+    padding: 1rem;
+    background: $light-color1;
+    color: $dark-color1;
+  }
+
+  &-dark:hover {
+    color: $light-color1;
+    cursor: pointer;
+    background: $dark-color1;
+    a {
+      color: $light-color1;
+    }
+  }
+}
+//----------------------------------NAVBAR--------------------------------------
+#navbar {
+  display: grid;
+  grid-auto-flow: row;
+  height: 100%;
+  min-width: 200px;
+  width: auto;
+  position: fixed;
+  right: 0;
+  overflow-x: hidden;
+  text-align: center;
+
+  a {
+    display: flex;
+    align-items: center;
+    padding-top: auto;
+    padding-bottom: auto;
+    align-items: center;
+    justify-content: center;
+    padding: 14px;
+    text-decoration: none;
+  }
+}
+/* The sticky class is added to the navbar with JS when it reaches its scroll position */
+.sticky {
+  position: fixed;
+  top: 0;
+  width: 100%;
+}
+
+/* Add some top padding to the page content to prevent sudden quick movement (as the navigation bar gets a new position at the top of the page (position:fixed and top:0) */
+.sticky + .content {
+  padding-top: 60px;
+}
+
+//----------------------------------MAIN PAGE--------------------------------------
+
+.home {
+  &-section1 {
+    background: $bg-image no-repeat center right/ cover;
+    height: 100vh;
+
+    &-center {
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    &-header {
+      display: block;
+      margin: auto;
+      padding-top: 30vh;
+
+      text-align: center;
+      color: $light-color1;
+      font-size: 6rem;
+      font-family: "Fjalla One", sans-serif;
+    }
+
+    &-image {
+      margin-top: 3rem;
+      margin-left: auto;
+      margin-right: auto;
+    }
+  }
+}
+
+//--------------------------BACKGROUND----------------------------------------------
+
+#background {
+  height: auto;
+  min-height: 100vh;
+  background: $light-color0;
+
+  &-box {
+    background: $dark-color2;
+    color: white;
+    line-height: 2.4rem;
+    padding: 2rem;
+    // margin-bottom: 20px;
+    margin-left: 4rem;
+    margin-right: 1rem;
+    margin-top: auto;
+    margin-bottom: auto;
+    border-radius: 15%;
+  }
+  &-img {
+    width: 100%;
+    margin: 1rem;
+    max-height: 1000px;
+    min-height: 450px;
+    height: auto;
+  }
+  a {
+    margin-top: 3rem;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+    color: $dark-color2;
+    cursor: pointer;
+    font-size: 1.2rem;
+    padding: 1rem;
+    background: $light-color1;
+  }
+}
+//gif+backgrond content
+.section2 {
+  text-align: center;
+  display: grid;
+  padding: 1rem;
+  margin-top: 3rem;
+  grid-auto-flow: column;
+  grid-template-columns: 1.3fr 1fr;
+}
+
+@media (max-width: 1023px) {
+  .section2 {
+    text-align: center;
+    display: grid;
+    padding: 1rem;
+    margin-top: 3rem;
+    grid-auto-flow: row;
+    grid-template-rows: 1.3fr 1fr;
+  }
+}
+
+//--------------------------------ABSTRACT---------------------------------------
+.title {
+  text-align: center;
+  color: white;
+  padding: 1rem;
+  font-size: 2.5rem;
+
+  &-dark {
+    display: inline-block;
+    color: $dark-color1;
+    border-bottom: solid $light-color1 5px;
+    padding-bottom: 0.4rem;
+  }
+
+  &-light {
+    color: $light-color1;
+  }
+}
+.center-title {
+  text-align: center;
+}
+
+//section 2 boxes
+#abstract {
+  min-height: 100vh;
+  height: auto;
+
+  padding: 1.5rem;
+  color: white;
+
+  .boxes {
+    display: grid;
+    grid-auto-flow: row;
+    grid-template-rows: 1fr 1fr 1fr;
+    padding: 1rem;
+    margin-bottom: 20px;
+    margin-left: 30px;
+    margin-right: 30px;
+    border: solid $light-color1 2px;
+  }
+
+  &-title {
+    color: $light-color1;
+  }
+
+  &-light {
+    background: $light-color2;
+  }
+}
+
+//-----------------------------------------MODULES-------------------------
+
+.module {
+  background: $light-color0;
+  height: 100vh;
+
+  &-container {
+    padding: 3rem;
+    padding-top: 0;
+    display: grid;
+    grid-auto-flow: row;
+    grid-template-rows: 1.5fr 1fr;
+    justify-items: center;
+  }
+
+  &-gif {
+    min-height: 450px;
+    height: auto;
+    max-height: 700px;
+    max-width: 900px;
+    margin-top: 3rem;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+.module-text {
+  color: white;
+  text-align: center;
+  background: $dark-color2;
+  border-radius: 1%;
+  margin-top: 2rem;
+  margin-bottom: auto;
+  padding: 1rem;
+  line-height: 2.3rem;
+  font-size: 1rem;
+}
+
+#ecg {
+  background: $dark-color3;
+  &-text {
+    background: $dark-color3;
+    color: white;
+  }
+
+  &-header {
+    color: $light-color1;
+  }
+}
+
+//-----------------------TEAM-------------------
+
+#team {
+  height: 100vh;
+
+  .team-title {
+    margin-bottom: 2rem;
+    border-bottom: solid $light-color1 1px;
+  }
+
+  .person {
+    color: white;
+    height: 300px;
+    display: grid;
+    grid-auto-flow: column;
+    grid-template-columns: 1fr 1fr;
+    border-bottom: solid $light-color1 1px;
+
+    &-name {
+      font-size: 2rem;
+      padding-bottom: 1rem;
+    }
+    &-image {
+      margin-left: auto;
+      margin-right: auto;
+      margin-top: auto;
+      margin-bottom: auto;
+      max-height: 250px;
+      max-width: 250px;
+      height: auto;
+      width: auto;
+      padding: 1rem;
+    }
+    &-text {
+      text-align: center;
+      margin-top: auto;
+      margin-bottom: auto;
+      margin-left: auto;
+      margin-right: auto;
+      padding: 1rem;
+      font-size: 0.9rem;
+      line-height: 1.5rem;
+    }
+  }
+}
