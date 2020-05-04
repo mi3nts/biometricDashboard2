@@ -238,7 +238,6 @@ def biometricWidgets(self):
     )
     layout1 = QGridLayout()
     layout1.addWidget(self.spo2.SpO2_Widget, 0, 0)
-    self.SpO2GroupBox.setAlignment(Qt.AlignHCenter)
     self.SpO2GroupBox.setLayout(layout1)
 	
 	#spo2 box
