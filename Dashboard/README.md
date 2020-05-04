@@ -1,5 +1,23 @@
-# EEG Module
-To use the EEG module widget, include EEGArray.py, EEGScatter.py, EEGScatterWidget.py, GetCmapValues.py, and SelectFrequency.py
-in the same directory. 
+## Dashboard Module
+# Prerquisites
+Python 3.X
+Cognionics data stream
 
-Run EEGScatterWidget.py
+# Setup
+After installing python, these packages must be installed as well.
+- PyQt5
+- pyqtgraph
+- matplotlib
+- numpy
+- pylsl
+- scipy
+
+to install these packages use:
+- Windows
+```
+python -m pip install "package name"
+```
+- Mac OS
+```
+pip install "package name"
+```
