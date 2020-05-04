@@ -19,10 +19,6 @@ class TemperatureModule_BodyTemp:
         self.graphWidget.setLabel("left", '<span style="font-size: 20px;">Temperature (Celsius)</span>')  # left label
         self.graphWidget.setLabel("bottom",'<span style="font-size: 20px;">Number of samples</span>')  # Bottom label
 
-        self.text_box = pg.TextItem(html="<span></span>", anchor=(0, 0))
-        self.text_box.setPos(0, 41.0)
-        self.graphWidget.addItem(self.text_box)
-
         # Get initial data
         self.seconds = []  # seconds data array, x value
         self.temperature = []  # temperature data array, y value
@@ -37,16 +33,9 @@ class TemperatureModule_BodyTemp:
 
         self.tempNumLabel = QtGui.QLabel()  # Body Temperature Number Display
         self.label = QtGui.QLabel()
-        self.inlet = inlet
-
-        # self.timer = pg.QtCore.QTimer()
-        # self.timer.timeout.connect(self.getBodyTemp)
-        # self.timer.start(20)
 
     def getBodyTemp(self, sample):
-        # sample, timestamp = self.inlet.pull_sample()
         temp = sample[0][74]
-        # print('BODY TEMP: ', temp)
         self.update(temp)
 
     def update(self, temp):
@@ -56,7 +45,6 @@ class TemperatureModule_BodyTemp:
         else:  # after ten seconds
             self.temperature.pop(0)  # Pop one data to shift plot
             self.temperature.append(temp)  # updating the temperature
-            # self.graphWidget.setRange(xRange=(self.seconds[0], self.seconds[99])) #change the visible x range of the graph
 
         if temp >= 38.0:
             self.curve.setData(

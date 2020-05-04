@@ -2,8 +2,6 @@ from PyQt5 import *
 import pyqtgraph as pg
 import pyqtgraph.opengl as gl
 import numpy as np
-
-
 class TemperatureModule_Accelerometer:
     def __init__(self, inlet):
         pg.setConfigOption("background", "k")  # graph background color
@@ -42,51 +40,13 @@ class TemperatureModule_Accelerometer:
         )
         text_box.setPos(0, 5000)
         self.graphWidget.addItem(text_box)
-
-        self.visualization = gl.GLViewWidget()
-        # xgrid = gl.GLGridItem()
-        # xgrid.scale(1, 1, 1)
-        # ygrid = gl.GLGridItem()
-        # ygrid.rotate(90, 1, 0, 0)
-        # ygrid.scale(1, 1, 1)
-        # self.visualization.addItem(xgrid)
-        # self.visualization.addItem(ygrid)
-
-        # create human face-looking object
-        md = gl.MeshData.sphere(rows=10, cols=20)
-        faceCount = md.faceCount()
-        colors = np.ones((faceCount, 4), dtype=float)
-        colors[0:60] = [0, 0, 0, 0]  # hair
-        colors[102] = [0, 0, 1, 0.3]  # left eye
-        colors[104] = [0, 0, 1, 0.3]  # right eye
-        colors[182] = [0, 0, 1, 0.3]  # mouth
-        md.setFaceColors(colors)
-
-        self.head = gl.GLMeshItem(meshdata=md, smooth=False)  # , shader='balloon')
-        self.rotation = 0
-        self.head.rotate(10, 0, 1, 0)
-        self.visualization.addItem(self.head)
-
         self.label = QtGui.QLabel()  # Accelerometer Number Display
 
-        # Previous x, y, z point value, initialized to 0
-        self.preXval = 0
-        self.preYval = 0
-        self.preZval = 0
-        # Timer Setup, every second update the data
-        self.inlet = inlet
-
     def getValues(self, sample):
-        # 78,AccelX
-        # 79,AccelY
-        # 80,AccelZ
-        # sample, timestamp = self.inlet.pull_sample()
+        # 78: AccelX, 79: AccelY. 80: AccelZ
         xVal = sample[0][77]
         yVal = sample[0][78]
         zVal = sample[0][79]
-        # print('ACCEL X: ', xVal)
-        # print('ACCEL Y: ', yVal)
-        # print('ACCEL Z: ', zVal)
         self.update(xVal, yVal, zVal)
 
     def update(self, xVal, yVal, zVal):
@@ -116,19 +76,4 @@ class TemperatureModule_Accelerometer:
             + str(np.round(zVal, 2))
             + "  m/s²</span>"
         )
-
-        # x, y, z value move to amount
-        # It is calulcated by subtracting current value from previous value
-        xMoveTo = (xVal / 1000) - self.preXval
-        yMoveTo = (yVal / 1000) - self.preYval
-        zMoveTo = (zVal / 1000) - self.preZval
-        # print('X: ', xMoveTo)
-        # print('Y: ', yMoveTo)
-        # print('Z: ', zMoveTo)
-        self.head.translate(
-            xMoveTo, yMoveTo, zMoveTo
-        )  # x, y, z moves from previous point to current point
-        self.preXval = xVal / 1000
-        self.preYval = yVal / 1000
-        self.preZval = zVal / 1000
 

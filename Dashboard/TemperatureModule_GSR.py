@@ -36,21 +36,11 @@ class TemperatureModule_GSR:
         self.graphWidget.setAutoVisible(y=True)
         self.graphWidget.setLimits(minYRange=200)
 
-        self.count = 0  # Counter for downsampling
-        self.sum = 0  # Sum for downsampling
-
         self.gsrNumLabel = QtGui.QLabel()  # Body Temperature Number Display
-
-        self.inlet = inlet
-        self.start_time = time.time()
-
-        # self.timer = pg.QtCore.QTimer()
-        # self.timer.timeout.connect(self.getGsrSignal)  # get GSR signal every 20 ms
-        # self.timer.start(20)
+        
 
     def getGsrSignal(self, sample):
         data = sample[0][73]
-        # print('GSR: ', data)
         self.update(data)
 
     def update(self, data):
