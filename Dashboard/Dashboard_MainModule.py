@@ -327,13 +327,6 @@ def biometricWidgets(self):
     layout19.addWidget(self.gsr2.graphWidget)
     self.GSRPlotBox2.setLayout(layout19)
 
-    # Accelerometer 3D Visualization
-    self.Accelerometer_3D_Box = QGroupBox("Accelerometer 3D Visualization")
-    self.Accelerometer_3D_Box.setStyleSheet("color: white;font-size:25px")
-    layout10 = QVBoxLayout()
-    layout10.addWidget(self.acc.visualization)
-    self.Accelerometer_3D_Box.setLayout(layout10)
-
     # Accelerometer Plot
     self.AcceleromterPlotBox = QGroupBox()
     self.AcceleromterPlotBox.setStyleSheet("background-color: black;")
