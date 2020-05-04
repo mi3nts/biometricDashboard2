@@ -39,7 +39,7 @@ class EEG_Graph_Submodule():
 		self.value = []
 		#initialize the spots as blue
 		for i in range(len(x)):
-			self.spots.append({'pos' : (x[i], y[i]), 'size': .40,  'pen':{'width':.3, 'color':'w'},'brush':pg.mkBrush(0,0,255)})
+			self.spots.append({'pos' : (x[i], y[i]), 'size': .40,  'pen':{'width':0.01, 'color':'w'},'brush':pg.mkBrush(0,0,255)})
 			self.value.append(0)
 		self.node_scatter_graph.addPoints(self.spots)
 		
