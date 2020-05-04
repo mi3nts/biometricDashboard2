@@ -1,6 +1,6 @@
 # EEG Module
 The EEG Module uses scatter plots to dipsplay the array of electrodes of the EEG device.  
-##Prerequisites
+## Prerequisites
 Needed packages:
 - PyQt5
 - pyqtgraph
