@@ -10,9 +10,11 @@ from EEGArray import EEGArray
 from GetCmapValues import getCmapByFreqVal, getCmapForZscores
 from pylsl import StreamInlet, resolve_stream
 from pyqtgraph import PlotWidget, plot
+from gradient import Gradient
 # from PyQtAlphaFrequency import AlphaFrequencyPG
 # from PyQtThetaFrequency import ThetaFrequencyPG
 from EEGScatter_submodule_graph import EEG_Graph_Submodule
+from MatPlotLibCmapToPyQtColorMap import cmapToColormap
 from GradientBox import gradientLayout
 
 import pyqtgraph as pg
@@ -56,11 +58,11 @@ class CmapImage(QWidget):
 # create class to contain EEG module
 class EEGmodule_main(QGroupBox):
     # initialize attributes of EEGmodule class
-	def __init__(self, inlet):
+	def __init__(self):
 		# have EEGmodule inherit attributes of QGroupBox
 		pg.setConfigOptions(antialias=True)
 		super(QGroupBox, self).__init__()
-		self.inlet = inlet
+		
 		# set title of EEGmodule
 		# self.setTitle("EEG Module")
 		# create layout for EEG Module
@@ -192,18 +194,18 @@ class EEGmodule_main(QGroupBox):
 		# Open StreamInlet
 		self.setLayout(self.layout)
 		# create timer
-		# self.timer = QTimer(self)
+		self.timer = QTimer(self)
 		# # self.timer.setInterval(10000)
-		# self.timer.timeout.connect(self.UpdateNodes)
-		# self.timer.start(20)
+		self.timer.timeout.connect(self.UpdateNodes)
+		self.timer.start(20)
 		output = open('output.txt', 'w')
 		output.close()
 		
 
 	def UpdateNodes(self, sample ):
-		output = open('output.txt', 'a')
+		
 		# pull data
-		# sample = self.inlet.pull_sample()
+		sample = self.inlet.pull_sample()
 		self.newdata = np.asarray(sample[0][: self.n])
 		# print(timestamp)
 		
@@ -233,8 +235,7 @@ class EEGmodule_main(QGroupBox):
 				# set colors
 				ccolors = self.pgCM.map(temp)
 				self.alphaGraph.update_nodes(colors=ccolors)
-				print(ccolors[1], " alpha color", file = output)
-				print(temp[1], file = output)
+				
 			#print(acolors[30], " " , bcolors[10], " ", ccolors[60], file = output)
 		output.close()
 		# elapsed = time.time()-starttime
