@@ -39,4 +39,4 @@ The EEGModule has 3 primary visualizations which are the scatter plots of a set 
 
 The Respiration Module has five primary visualizations - SPO2, Heart Rate, PPG, ECG and Respiration Graph. The modules display the concentration of the oxygen in the blood, rate of the heartbeat, blood volume changes, electrical activity of the heart and the breaths/minute respectively. Both HR and SpO2 widgets also display a label depicting the body’s current condition based on the their values
 ## Temperature Module
-- fill
+fill
