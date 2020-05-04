@@ -39,13 +39,24 @@ from TemperatureModule_Main import *
 
 
 class MainWindow(QMainWindow):
+
+    def keyPressEvent(self, e):  
+        if e.key() == QtCore.Qt.Key_Escape:
+            self.close()
+        if e.key() == QtCore.Qt.Key_F11:
+            if self.isMaximized():
+                self.showNormal()
+            else:
+                self.showMaximized()
+				
     def __init__(self, inlet):
         super(MainWindow, self).__init__()
 
         # set title of application window
         self.setWindowTitle("Biometric Dashboard")
         # # resize main window
-        self.resize(1600, 1200)
+        #self.resize(1600, 1200)
+        
         # create a window widget for main window
         widget = QWidget()
 
@@ -90,7 +101,7 @@ class MainWindow(QMainWindow):
         self.ThermometerBox.setLayout(layout6)
 
         self.ThermometerBox2 = QGroupBox("Body Temperature")
-        self.ThermometerBox2.setStyleSheet("background-color: black; font-size: 25px;")
+        self.ThermometerBox2.setStyleSheet("background-color: black; font-size: 20px;")
         layout16 = QVBoxLayout()
         self.thermometer2 = Thermometer(layout16)
         self.thermometer2.setStyleSheet("font-size: 10px;")
@@ -220,14 +231,17 @@ def tempTabUI(self):
 
 def biometricWidgets(self):
 
+	#spo2 box
     self.SpO2GroupBox = QGroupBox("Oxygen Saturation (%)")
     self.SpO2GroupBox.setStyleSheet(
-        "color: white; background-color: black;font-size:25px"
+        "color: white; background-color: black;font-size:20px"
     )
     layout1 = QGridLayout()
     layout1.addWidget(self.spo2.SpO2_Widget, 0, 0)
+    self.SpO2GroupBox.setAlignment(Qt.AlignHCenter)
     self.SpO2GroupBox.setLayout(layout1)
-
+	
+	#spo2 box
     self.SpO2GroupBox2 = QGroupBox("Oxygen Saturation (%)")
     self.SpO2GroupBox2.setStyleSheet(
         "color: white;font-size:25px; background-color: black;"
@@ -236,15 +250,18 @@ def biometricWidgets(self):
     layout21.addWidget(self.spo22.SpO2_Widget, 0, 0, 9, 1)
     layout21.addWidget(self.spo22.SpO2_Condition_Label, 9, 0, 1, 1)
     self.SpO2GroupBox2.setLayout(layout21)
+    self.SpO2GroupBox2.setAlignment(Qt.AlignHCenter)
 
+	#hr widget box
     self.HRGroupBox = QGroupBox("Heart Rate (Beats/min)")
     self.HRGroupBox.setStyleSheet(
-        "color: white; background-color: black;font-size:25px"
+        "color: white; background-color: black;font-size:20px"
     )
     layout2 = QGridLayout()
     layout2.addWidget(self.hrw.HR_Widget, 0, 0)
     self.HRGroupBox.setLayout(layout2)
 
+	#hrwidget box
     self.HRGroupBox2 = QGroupBox("Heart Rate (Beats/min)")
     self.HRGroupBox2.setStyleSheet(
         "color: white; font-size:25px; background-color: black;"
@@ -254,42 +271,49 @@ def biometricWidgets(self):
     layout22.addWidget(self.hrw2.HR_Condition_Label, 9, 0, 1, 1)
     self.HRGroupBox2.setLayout(layout22)
 
+	#ecg graph box
     self.EcgGroupBox = QGroupBox()
     self.EcgGroupBox.setStyleSheet("background-color: black;")
     layout3 = QHBoxLayout()
     layout3.addWidget(self.ecgraph.ECG_Graph)
     self.EcgGroupBox.setLayout(layout3)
 
+	#pph graph box
     self.PpgGroupBox = QGroupBox()
     self.PpgGroupBox.setStyleSheet("background-color: black;")
     layout4 = QHBoxLayout()
     layout4.addWidget(self.ppg.PPG_Graph)
     self.PpgGroupBox.setLayout(layout4)
 
+	#resp graph box
     self.RespGroupBox = QGroupBox()
     self.RespGroupBox.setStyleSheet("background-color: black;")
     layout5 = QHBoxLayout()
     layout5.addWidget(self.rgraph.Resp_Graph)
     self.RespGroupBox.setLayout(layout5)
 
+	#ecg graph box
     self.EcgGroupBox2 = QGroupBox()
     self.EcgGroupBox2.setStyleSheet("background-color: black;")
     layout14 = QHBoxLayout()
     layout14.addWidget(self.ecgraph2.ECG_Graph)
     self.EcgGroupBox2.setLayout(layout14)
 
+	#ppgraph box
     self.PpgGroupBox2 = QGroupBox()
     self.PpgGroupBox2.setStyleSheet("background-color: black;")
     layout13 = QHBoxLayout()
     layout13.addWidget(self.ppg2.PPG_Graph)
     self.PpgGroupBox2.setLayout(layout13)
 
+	#respgraph box
     self.RespGroupBox2 = QGroupBox()
     self.RespGroupBox2.setStyleSheet("background-color: black;")
     layout12 = QHBoxLayout()
     layout12.addWidget(self.rgraph2.Resp_Graph)
     self.RespGroupBox2.setLayout(layout12)
 
+	#Bodytemp groupbox
     self.BodyTempBox = QGroupBox()
     self.BodyTempBox.setStyleSheet("background-color: black;")
     layout8 = QVBoxLayout()  # create a box
@@ -308,7 +332,7 @@ def biometricWidgets(self):
     # Body Temperature Label for Main Tab
     self.mainTempBox = QGroupBox("Body Temperature")
     self.mainTempBox.setStyleSheet(
-        "color: white; background-color: black; font-size:25px;"
+        "color: white; background-color: black; font-size:20px;"
     )
     mainTempLayout = QVBoxLayout()
     mainTempLayout.addWidget(self.bt.label)
