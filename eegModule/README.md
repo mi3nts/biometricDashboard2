@@ -18,4 +18,7 @@ getCmapByFreqVal: For a given frequency value, the function calls the fourier tr
 Returns a numpy array of values that correspond to the selected frequency band.
 ## GradientBox.py
 A pyqtgraph GradientWidget is passed to this class, and returns a groupbox that contains 4 text QLabels and a QLabel that has the gradient as a pixmap.
-## 
+
+
+#### On the list
+- Add hover events to display node name and z_score value
