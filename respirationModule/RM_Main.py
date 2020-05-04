@@ -14,59 +14,80 @@ from RM_SPO2Widget import *
 from RM_HRWidget import *
 
 
-class RespiratoryModule:
+class RespiratoryModule(QMainWindow):
     def __init__(self, inlet):
+        super(RespiratoryModule, self).__init__()
         window = QWidget()
         window.setWindowTitle("Respiratory Dashboard")
         window.resize(1600, 1400)
 
-        spo2 = SpO2_Mod(inlet)  # SpO2 Widget
-        ppg = PPG_Graph(inlet)  # PPG Graph
-        hrw = HR_Module(inlet)  # HR Widget
-        ecgraph = ECG_Graph(inlet)  # ECG Graph
-        rgraph = Resp_Graph(inlet)  # Respiratory Graph
+        self.inlet = inlet
 
-        SpO2GroupBox = QGroupBox()
-        layout1 = QGridLayout()  # create a box
-        layout1.addWidget(spo2.SpO2_Widget, 0, 0, 9, 1)
-        layout1.addWidget(spo2.SpO2_Condition_Label, 9, 0, 1, 1)
-        SpO2GroupBox.setLayout(layout1)
+        self.spo2 = SpO2_Mod(inlet)  # SpO2 Widget
+        self.ppg = PPG_Graph(inlet)  # PPG Graph
+        self.hrw = HR_Module(inlet)  # HR Widget
+        self.ecgraph = ECG_Graph(inlet)  # ECG Graph
+        self.rgraph = Resp_Graph(inlet)  # Respiratory Graph
 
-        HRGroupBox = QGroupBox()
-        # HRGroupBox.setStyleSheet("color: Green;")
-        layout2 = QGridLayout()  # create a box
-        layout2.addWidget(hrw.HR_Widget, 0, 0, 9, 1)
-        layout2.addWidget(hrw.HR_Condition_Label, 9, 0, 1, 1)
-        HRGroupBox.setLayout(layout2)
+        self.SpO2GroupBox = QGroupBox("Oxygen Saturation (%)")
+        self.SpO2GroupBox.setStyleSheet(
+            "color: white; background-color: black;font-size:25px"
+        )
+        layout1 = QGridLayout()
+        layout1.addWidget(self.spo2.SpO2_Widget, 0, 0)
+        self.SpO2GroupBox.setLayout(layout1)
 
-        EcgGroupBox = QGroupBox()
-        layout3 = QHBoxLayout()  # create a box
-        layout3.addWidget(ecgraph.ECG_Graph)
-        EcgGroupBox.setLayout(layout3)
+        self.HRGroupBox = QGroupBox("Heart Rate (Beats/min)")
+        self.HRGroupBox.setStyleSheet(
+            "color: white; background-color: black;font-size:25px"
+        )
+        layout2 = QGridLayout()
+        layout2.addWidget(self.hrw.HR_Widget, 0, 0)
+        self.HRGroupBox.setLayout(layout2)
 
-        PpgGroupBox = QGroupBox()
+        self.EcgGroupBox = QGroupBox()
+        self.EcgGroupBox.setStyleSheet("background-color: black;")
+        layout3 = QHBoxLayout()
+        layout3.addWidget(self.ecgraph.ECG_Graph)
+        self.EcgGroupBox.setLayout(layout3)
+
+        self.PpgGroupBox = QGroupBox()
+        self.PpgGroupBox.setStyleSheet("background-color: black;")
         layout4 = QHBoxLayout()
-        layout4.addWidget(ppg.PPG_Graph)
-        PpgGroupBox.setLayout(layout4)
+        layout4.addWidget(self.ppg.PPG_Graph)
+        self.PpgGroupBox.setLayout(layout4)
 
-        RespGroupBox = QGroupBox()
+        self.RespGroupBox = QGroupBox()
+        self.RespGroupBox.setStyleSheet("background-color: black;")
         layout5 = QHBoxLayout()
-        layout5.addWidget(rgraph.Resp_Graph)
-        RespGroupBox.setLayout(layout5)
+        layout5.addWidget(self.rgraph.Resp_Graph)
+        self.RespGroupBox.setLayout(layout5)
 
         mlay = QGridLayout()
-        mlay.addWidget(HRGroupBox, 0, 0, 3, 1)
-        mlay.addWidget(SpO2GroupBox, 3, 0, 3, 1)
-        mlay.addWidget(RespGroupBox, 0, 1, 2, 3)
-        mlay.addWidget(EcgGroupBox, 2, 1, 2, 3)
-        mlay.addWidget(PpgGroupBox, 4, 1, 2, 3)
+        mlay.addWidget(self.HRGroupBox, 0, 0, 3, 1)
+        mlay.addWidget(self.SpO2GroupBox, 3, 0, 3, 1)
+        mlay.addWidget(self.RespGroupBox, 0, 1, 2, 3)
+        mlay.addWidget(self.EcgGroupBox, 2, 1, 2, 3)
+        mlay.addWidget(self.PpgGroupBox, 4, 1, 2, 3)
+        window.setLayout(mlay)
+
+        self.timer = QTimer(self)
+        self.timer.timeout.connect(self.UpdateModules)
+        self.timer.start(20)
+
+        self.setCentralWidget(window)
 
         # Set the central widget of the Window. Widget will expand to take up all the space in the window by default.
         darkMode()
 
-        window.setLayout(mlay)
-        window.show()
-        app.exec_()
+    def UpdateModules(self):
+        sample = self.inlet.pull_sample()
+        # updating all widgets
+        self.ppg.update_ppgData(sample)
+        self.ecgraph.update_ecgData(sample)
+        self.hrw.update_HR(sample)
+        self.spo2.update_SpO2(sample)
+        self.rgraph.update_RespData(sample)
 
 
 # function to change application style to dark mode
@@ -97,6 +118,9 @@ def getStream():
 
 # run application
 if __name__ == "__main__":
-    app = QApplication(sys.argv)
     inlet = getStream()
-    RespiratoryModule(inlet)
+    app = QApplication(sys.argv)
+    app.setStyle("Fusion")
+    window = RespiratoryModule(inlet)
+    window.show()
+    sys.exit(app.exec_())
