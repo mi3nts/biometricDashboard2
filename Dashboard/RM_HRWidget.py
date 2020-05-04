@@ -34,7 +34,7 @@ class HR_Module(QGroupBox):
 
 		# Create a QLabel for Displaying the HR Value
 		self.HR_Value_Label = QLabel(self.HR_Widget)
-		self.HR_Value_Label.setStyleSheet("color:red;font-size:50px")
+		self.HR_Value_Label.setStyleSheet("color:red;background-color: none;font-size:50px")
 
 		# Dynamically Set the Position & size of the Label
 		self.HR_Value_Label.setGeometry(

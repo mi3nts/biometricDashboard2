@@ -35,7 +35,7 @@ class SpO2_Mod(QGroupBox):
 
 		# Create a QLabel for Displaying the Value
 		self.SpO2_Value_Label = QLabel(self.SpO2_Widget)
-		self.SpO2_Value_Label.setStyleSheet("color:blue;font-size:50px;")
+		self.SpO2_Value_Label.setStyleSheet("background-color: none; color:blue;font-size:50px;")
 
 		# Dynamically Set the Position & size of the Labelp
 		self.SpO2_Value_Label.setGeometry(

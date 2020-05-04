@@ -11,7 +11,7 @@ class TemperatureModule_GSR:
         pg.setConfigOption("antialias", True)
         self.graphWidget = pg.PlotWidget()  # pyqtgraph PlotWidget Class
         self.graphWidget.setTitle(
-            '<span style="font-size: 20px;">Galvanic Skin Response</span>'
+            '<span style="font-size: 25px;">Galvanic Skin Response</span>'
         )  # Set Title
 
         self.graphWidget.setLabel(

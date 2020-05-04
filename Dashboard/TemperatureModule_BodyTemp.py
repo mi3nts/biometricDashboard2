@@ -14,7 +14,7 @@ class TemperatureModule_BodyTemp:
 
         self.graphWidget = pg.PlotWidget()  # pyqtgraph PlotWidget Class
         self.graphWidget.setTitle(
-            '<span style="font-size: 20px;"> Body Temperature</span>'
+            '<span style="font-size: 25px;"> Body Temperature</span>'
         )  # Set Title
         self.graphWidget.setLabel("left", '<span style="font-size: 20px;">Temperature (Celsius)</span>')  # left label
         self.graphWidget.setLabel("bottom",'<span style="font-size: 20px;">Number of samples</span>')  # Bottom label
@@ -63,18 +63,29 @@ class TemperatureModule_BodyTemp:
                 self.temperature, pen=pg.mkPen("r",width=2)
             )  # if temperature is high, set line color red
             self.tempNumLabel.setText(
-                "Body Temperature (C°):\n "
+                "<span style='color: white; font-weight: bold; font-size: 23px;'>Body Temperature</span><br><br> <span style='font-size: 16px; color: white;'>"
                 + str(np.round(temp, 2))
-                + "\n High - Hyperthermia"
+                + " C°<br> High - Hyperthermia</span>"
             )
+            self.label.setText(
+               "<span style='color: white; font-weight: bold; font-size: 35px;'>"
+               + str(np.round(temp, 2))
+               + " C°<br> High - Hyperthermia</span>"
+            )
+            
         elif 35.0 <= temp and temp < 38.0:
             self.curve.setData(
                 self.temperature, pen=pg.mkPen("#0ffe1d", width=2)
             )  # if temperature is normal, set line color green
             self.tempNumLabel.setText(
-                "Body Temperature (C°):\n "
+                "<span style='color: white; font-weight: bold; font-size: 23px;'>Body Temperature</span><br><br> <span style='font-size: 16px; color: white;'>"
                 + str(np.round(temp, 2))
-                + "\n Normal - Healthy"
+                + " C°<br> Normal - Healthy</span>"
+            )
+            self.label.setText(
+               "<span style='color: white; font-weight: bold; font-size: 35px;'>"
+               + str(np.round(temp, 2))
+                + " C°<br> Normal - Healthy</span>"
             )
 
         else:
@@ -85,6 +96,11 @@ class TemperatureModule_BodyTemp:
                 "<span style='color: white; font-weight: bold; font-size: 23px;'>Body Temperature</span><br><br> <span style='font-size: 16px; color: white;'>"
                 + str(np.round(temp, 2))
                 + " C°<br>Low - Hypothermia</span>"
+            ) 
+            self.label.setText(
+               "<span style='color: white; font-weight: bold; font-size: 35px;'>"
+               + str(np.round(temp, 2))
+                + " C°<br> Low - Hypothermia </span>"
             )
 
         # Update Thermometer Value

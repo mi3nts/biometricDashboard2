@@ -11,7 +11,7 @@ class TemperatureModule_Accelerometer:
         pg.setConfigOption("antialias", True)
         self.graphWidget = pg.PlotWidget()  # pyqtgraph PlotWidget Class
         self.graphWidget.setTitle(
-            '<span style="font-size: 20px;"> Accelerometer </span>'
+            '<span style="font-size: 25px;"> Accelerometer </span>'
         )  # Set Title
         self.graphWidget.setLabel(
             "left", '<span style="font-size: 20px;">Acceleration</span>'
