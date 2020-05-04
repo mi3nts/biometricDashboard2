@@ -31,10 +31,12 @@ It is important that the Dashboard_MainModule remains in the same directory it w
 
 
 # Submodules
-## EEG Graphs
-- fill
+## EEG Module
+
+The EEGModule has 3 primary visualizations which are the scatter plots of a set of EEG electrodes and a corresponding frequency band, Alpha band, Theta band, and Delta band. The module takes the streamed input from the EEG device over a pyLSL stream and uses a fourier transforms on the data, then is converted into a value that can be mapped in a color map. The color values depicted in the graphs correspond to the nodes' values.
+
 ## Respiratory Module
 
-	The Respiration Module has five primary visualizations - SPO2, Heart Rate, PPG, ECG and Respiration Graph. The modules display the concentration of the oxygen in the blood, rate of the heartbeat, blood volume changes, electrical activity of the heart and the breaths/minute respectively. Both HR and SpO2 widgets also display a label depicting the body’s current condition based on the their values
+The Respiration Module has five primary visualizations - SPO2, Heart Rate, PPG, ECG and Respiration Graph. The modules display the concentration of the oxygen in the blood, rate of the heartbeat, blood volume changes, electrical activity of the heart and the breaths/minute respectively. Both HR and SpO2 widgets also display a label depicting the body’s current condition based on the their values
 ## Temperature Module
 - fill
