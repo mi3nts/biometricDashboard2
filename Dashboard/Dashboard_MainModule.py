@@ -79,7 +79,7 @@ class MainWindow(QMainWindow):
         self.rgraph2 = Resp_Graph(inlet)  # Respiratory Graph
         self.eegModule = EEGmodule_main(inlet)  # EEG module
         self.eegModule2 = EEGmodule_main(inlet)
-        self.cmap = CmapImage()
+        self.cmap = self.eegModule.gradientBox
 
         # Thermometer Box
         self.ThermometerBox = QGroupBox("Body Temperature")  # label
