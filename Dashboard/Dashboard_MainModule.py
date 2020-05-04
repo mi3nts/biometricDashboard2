@@ -380,6 +380,6 @@ if __name__ == "__main__":
     # create a window from the MainWindow class defined above
     window = MainWindow(inlet)
     # show the window
-    window.show()
+    window.showMaximized()
     # Start the event loop.
     sys.exit(app.exec_())
