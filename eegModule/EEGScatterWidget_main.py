@@ -2,26 +2,18 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
 from PyQt5.QtCore import *
 from PyQt5.QtMultimedia import *
-
 from PyQt5.QtWidgets import QApplication, QMainWindow, QLabel, QGridLayout, QWidget
 from PyQt5.QtGui import QPixmap
-
 from EEGArray import EEGArray
 from GetCmapValues import getCmapByFreqVal, getCmapForZscores
 from pylsl import StreamInlet, resolve_stream
 from pyqtgraph import PlotWidget, plot
-from gradient import Gradient
-# from PyQtAlphaFrequency import AlphaFrequencyPG
-# from PyQtThetaFrequency import ThetaFrequencyPG
 from EEGScatter_submodule_graph import EEG_Graph_Submodule
-from MatPlotLibCmapToPyQtColorMap import cmapToColormap
 from GradientBox import gradientLayout
-
 import pyqtgraph as pg
 import pyqtgraph.ptime as ptime
 from matplotlib import cm
 import matplotlib.colors as colors
-
 import random as r
 import numpy as np
 import scipy.signal as sps
@@ -191,18 +183,19 @@ class EEGmodule_main(QGroupBox):
 		self.tglobalMax = -(sys.maxsize) - 1
 		self.dglobalMax = -(sys.maxsize) - 1
 
-		# Open StreamInlet
 		self.setLayout(self.layout)
+		# Open StreamInlet
+		streams = resolve_stream()
+		self.inlet = StreamInlet(streams[0])
 		# create timer
 		self.timer = QTimer(self)
 		# # self.timer.setInterval(10000)
 		self.timer.timeout.connect(self.UpdateNodes)
 		self.timer.start(20)
-		output = open('output.txt', 'w')
-		output.close()
+		
 		
 
-	def UpdateNodes(self, sample ):
+	def UpdateNodes(self):
 		
 		# pull data
 		sample = self.inlet.pull_sample()
@@ -237,7 +230,7 @@ class EEGmodule_main(QGroupBox):
 				self.alphaGraph.update_nodes(colors=ccolors)
 				
 			#print(acolors[30], " " , bcolors[10], " ", ccolors[60], file = output)
-		output.close()
+		
 		# elapsed = time.time()-starttime
 		# self.timer.setInterval(elapsed*100)
 		# set onlclickhover to show power and node label
