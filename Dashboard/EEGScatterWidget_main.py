@@ -15,13 +15,13 @@ from gradient import Gradient
 # from PyQtThetaFrequency import ThetaFrequencyPG
 from EEGScatter_submodule_graph import EEG_Graph_Submodule
 from MatPlotLibCmapToPyQtColorMap import cmapToColormap
+from GradientBox import gradientLayout
 
 import pyqtgraph as pg
 import pyqtgraph.ptime as ptime
 from matplotlib import cm
 import matplotlib.colors as colors
 
-import csv
 import random as r
 import numpy as np
 import scipy.signal as sps
@@ -127,10 +127,11 @@ class EEGmodule_main(QGroupBox):
 		self.layout.addWidget(self.thetaG, 2, 2, 1, 2)
 		self.layout.addWidget(self.alphaG, 2, 4, 1, 2)
 		
-		self.layout.addWidget(CmapImage(), 3, 2, 1, 2)
-		label = QLabel("Normalized Power")
-		label.setStyleSheet("QLabel{color:white; font:20px;}")
-		self.layout.addWidget(label, 3, 1, 1,1)
+		#self.layout.addWidget(CmapImage(), 3, 2, 1, 2)
+		# = QLabel("Normalized Power")
+		#label.setStyleSheet("QLabel{color:white; font:20px;}")
+		#self.layout.addWidget(label, 3, 1, 1,1)
+		
 		fill = pg.PlotWidget()
 		fill.getPlotItem().hideAxis("bottom")
 		fill.getPlotItem().hideAxis("left")
@@ -141,93 +142,45 @@ class EEGmodule_main(QGroupBox):
 		x, y, nodeList = EEGArray()
 
 		# set cmap
-		
-		colormap = cm.get_cmap("jet")
+		colormap = cm.get_cmap("jet") #getting colormap from matplotlib
 		colormap._init()
 		lut = (colormap._lut * 255).view(np.ndarray) #convert to numpy array
-		# P = cmapToColormap(getattr(cm, 'jet'))
-		# p = []
-		# c = []
-		# for i in range(len(P)):
-			# p.append(P[i][0])
-			# c.append(P[i][1])
-			# print(p," ",c)
 		ticks = []
 		colors = []
-		pos = []
-		mapColors = []
+		# pos = []
+		# mapColors = []
 		self.gradient = pg.GradientWidget(allowAdd=False)	
-		for i in range(len(lut)-3):
+		for i in range(len(lut)-3):	#adding colors to a gradient
 			r=int(lut[i][0])
 			g=int(lut[i][1])
 			b=int(lut[i][2])
 			a=255
 			ticks.append(i/255)
 			colors.append((r,g,b,a))
+			# pos.append(i/255)
+			# mapColors.append((r,g,b,a))
+			if i%15 == 0:
+				self.gradient.addTick(x=ticks[i], color=QColor(r,g,b,a), movable=False)
 			
-			
-			pos.append(i/255)
-			mapColors.append((r,g,b,a))
-			self.gradient.addTick(x=ticks[i], color=QColor(r,g,b,a), movable=False)
-		
-			if i == 0:
-				self.gradient.setTickColor(0,QColor(r,g,b,a))
-			elif i == 255:
-				self.gradient.addTick(1,QColor(r,g,b,a))
+				if i == 0:
+					self.gradient.setTickColor(0,QColor(r,g,b,a))
+				elif i == 255:
+					self.gradient.addTick(1,QColor(r,g,b,a))
 		
 		
 		
-		#self.pgCM = pg.ColorMap(np.array(pos), mapColors)
-		#self.pgCM = pg.ColorMap(p,c)
+		#self.pgCM = pg.ColorMap(np.array(ticks), colors)
 		self.pgCM = self.gradient.colorMap()
-		self.layout.addWidget(self.gradient, 3, 4, 1, 2)
+		# self.layout.addWidget(self.gradient, 3, 4, 1, 2)
 		##########################################################################
-		self.gradient2 = pg.GradientWidget(allowAdd=False)
-		""" Reverse gradient to match value ends"""
-		"""
-		
-		for i in range(len(ticks)):
-			r=colors[i][0]
-			g=colors[i][1]
-			b=colors[i][2]
-			a=255
-			if i == 0:
-				self.gradient2.addTick(1, QColor(r,g,b,a))
-			if i == 255:
-				self.gradient2.addTick(0,QColor(r,g,b,a))
-			# # else:
-				# #print(i)
-			# self.gradient2.addTick(x=ticks[i],color=QColor(r,g,b,a), movable = False)
-		
-		# for a,b in self.gradient.listTicks():
-			# print(b)
-		###################################################################
-		self.layout.addWidget(self.gradient2, 3, 4, 1, 2)
-		"""
+		#creating a groupbox for the gradient and labels
+		self.gradientBox = gradientLayout(self.gradient)
+		#####################################
+		self.layout.addWidget(self.gradientBox, 3,0,1,8)
 		##########################################################################
 		
-		#self.layout.addWidget(gradient2, 3, 4, 1, 2)
 		
 		
-		#fIXING BLUE SPECTRUM
-		# for i in range(129):
-			# b = 127
-			# lookup[1] = ((0,0,b+i))
-			# print(i, " ", lookup[i])
-		# #FIXING RED SPECTRUM
-		# for i in range(58):
-			# b=184
-			# index = 941
-			# lookup[index][0] = b-i
-			# index=index+i
-			# print(index, " " ,b-i, " " ,lookup[index][0])
-			
-		# for i in range(len(lookup)-30):
-			# print(i," ",lookup[i])
-		
-				
-		#########################################################################
-		#self.layout.addWidget(self.gradient2, 3, 4, 1, 2)
 		self.n = 64
 		# initialize newdata
 		self.newdata = np.zeros(self.n)
@@ -291,6 +244,7 @@ class EEGmodule_main(QGroupBox):
 		# set onlclickhover to show power and node label
 
 	def hideGraph(self, button=None):
+		#fill widgets
 		fill_1 = pg.PlotWidget()
 		fill_1.setBackground(None)
 		fill_1.getPlotItem().hideAxis("bottom")
@@ -338,4 +292,3 @@ class EEGmodule_main(QGroupBox):
 				self.layout.removeWidget(fill_3)
 				fill_3.setParent(None)
 				
-	
