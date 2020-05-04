@@ -19,25 +19,27 @@ Heart Labels:
 
 Sp02 Labels:
   
-  if more than 95% --> "Normal -- Healthy"
+	if more than 95% --> "Normal -- Healthy"
   
-  if between 85% - 94% --> "Hypoxic"
+  	if between 85% - 94% --> "Hypoxic"
   
-  if less than 85 --> "Severly Hypoxic"
+  	if less than 85 --> "Severly Hypoxic"
 ______________________________________________________________________________________________________________________________
 Need all the files in one folder including the images: 
 
-RM_Main.py --- Contains the main Respiratory Module
+	RM_Main.py --- Contains the main Respiratory Module
 
-RM_Graphs.py -- Contains all the graphs widgtes (HR, SPo2, ECG, Resp, PPG)
+	RM_Graphs.py -- Contains all the graphs widgtes (HR, SPo2, ECG, Resp, PPG)
 
-RM_Spo2Widget.py -- Containts the Spo2 Widget. 
+	RM_Spo2Widget.py -- Containts the Spo2 Widget. 
 
-RM_HRWidget.py -- Contains the HR Widget.
+	RM_HRWidget.py -- Contains the HR Widget.
 
 How to Run:
-  1) Run SendData.py in a terminal
-  2) Run RM_Main.py in a different terminal.
+
+	1) Run SendData.py in a terminal
+
+	2) Run RM_Main.py in a different terminal.
   
   
 
