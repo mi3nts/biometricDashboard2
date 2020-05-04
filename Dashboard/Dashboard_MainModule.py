@@ -89,7 +89,7 @@ class MainWindow(QMainWindow):
         layout6.addWidget(self.thermometer)
         self.ThermometerBox.setLayout(layout6)
 
-        self.ThermometerBox2 = QGroupBox('Body Temperature')  
+        self.ThermometerBox2 = QGroupBox("Body Temperature")
         self.ThermometerBox2.setStyleSheet("background-color: black; font-size: 25px;")
         layout16 = QVBoxLayout()
         self.thermometer2 = Thermometer(layout16)
@@ -220,63 +220,71 @@ def tempTabUI(self):
 def biometricWidgets(self):
 
     self.SpO2GroupBox = QGroupBox("Oxygen Saturation (%)")
-    self.SpO2GroupBox.setStyleSheet("color: white; background-color: black;font-size:25px")
-    layout1 = QGridLayout()  # create a box
+    self.SpO2GroupBox.setStyleSheet(
+        "color: white; background-color: black;font-size:25px"
+    )
+    layout1 = QGridLayout()
     layout1.addWidget(self.spo2.SpO2_Widget, 0, 0)
     self.SpO2GroupBox.setLayout(layout1)
 
     self.SpO2GroupBox2 = QGroupBox("Oxygen Saturation (%)")
-    self.SpO2GroupBox2.setStyleSheet("color: white;font-size:25px; background-color: black;")
-    layout21 = QGridLayout()  # create a box
+    self.SpO2GroupBox2.setStyleSheet(
+        "color: white;font-size:25px; background-color: black;"
+    )
+    layout21 = QGridLayout()
     layout21.addWidget(self.spo22.SpO2_Widget, 0, 0, 9, 1)
     layout21.addWidget(self.spo22.SpO2_Condition_Label, 9, 0, 1, 1)
     self.SpO2GroupBox2.setLayout(layout21)
 
     self.HRGroupBox = QGroupBox("Heart Rate (Beats/min)")
-    self.HRGroupBox.setStyleSheet("color: white; background-color: black;font-size:25px")
-    layout2 = QGridLayout()  # create a box
+    self.HRGroupBox.setStyleSheet(
+        "color: white; background-color: black;font-size:25px"
+    )
+    layout2 = QGridLayout()
     layout2.addWidget(self.hrw.HR_Widget, 0, 0)
     self.HRGroupBox.setLayout(layout2)
 
     self.HRGroupBox2 = QGroupBox("Heart Rate (Beats/min)")
-    self.HRGroupBox2.setStyleSheet("color: white; font-size:25px; background-color: black;")
-    layout22 = QGridLayout()  # create a box
+    self.HRGroupBox2.setStyleSheet(
+        "color: white; font-size:25px; background-color: black;"
+    )
+    layout22 = QGridLayout()
     layout22.addWidget(self.hrw2.HR_Widget, 0, 0, 9, 1)
     layout22.addWidget(self.hrw2.HR_Condition_Label, 9, 0, 1, 1)
     self.HRGroupBox2.setLayout(layout22)
 
     self.EcgGroupBox = QGroupBox()
     self.EcgGroupBox.setStyleSheet("background-color: black;")
-    layout3 = QHBoxLayout()  # create a box
+    layout3 = QHBoxLayout()
     layout3.addWidget(self.ecgraph.ECG_Graph)
     self.EcgGroupBox.setLayout(layout3)
 
     self.PpgGroupBox = QGroupBox()
-    self.PpgGroupBox.setStyleSheet('background-color: black;')
+    self.PpgGroupBox.setStyleSheet("background-color: black;")
     layout4 = QHBoxLayout()
     layout4.addWidget(self.ppg.PPG_Graph)
     self.PpgGroupBox.setLayout(layout4)
 
     self.RespGroupBox = QGroupBox()
-    self.RespGroupBox.setStyleSheet('background-color: black;')
+    self.RespGroupBox.setStyleSheet("background-color: black;")
     layout5 = QHBoxLayout()
     layout5.addWidget(self.rgraph.Resp_Graph)
     self.RespGroupBox.setLayout(layout5)
 
     self.EcgGroupBox2 = QGroupBox()
-    self.EcgGroupBox2.setStyleSheet('background-color: black;')
-    layout14 = QHBoxLayout()  # create a box
+    self.EcgGroupBox2.setStyleSheet("background-color: black;")
+    layout14 = QHBoxLayout()
     layout14.addWidget(self.ecgraph2.ECG_Graph)
     self.EcgGroupBox2.setLayout(layout14)
 
     self.PpgGroupBox2 = QGroupBox()
-    self.PpgGroupBox2.setStyleSheet('background-color: black;')
+    self.PpgGroupBox2.setStyleSheet("background-color: black;")
     layout13 = QHBoxLayout()
     layout13.addWidget(self.ppg2.PPG_Graph)
     self.PpgGroupBox2.setLayout(layout13)
 
     self.RespGroupBox2 = QGroupBox()
-    self.RespGroupBox2.setStyleSheet('background-color: black;')
+    self.RespGroupBox2.setStyleSheet("background-color: black;")
     layout12 = QHBoxLayout()
     layout12.addWidget(self.rgraph2.Resp_Graph)
     self.RespGroupBox2.setLayout(layout12)
@@ -298,20 +306,22 @@ def biometricWidgets(self):
 
     # Body Temperature Label for Main Tab
     self.mainTempBox = QGroupBox("Body Temperature")
-    self.mainTempBox.setStyleSheet("color: white; background-color: black; font-size:25px;")
+    self.mainTempBox.setStyleSheet(
+        "color: white; background-color: black; font-size:25px;"
+    )
     mainTempLayout = QVBoxLayout()
     mainTempLayout.addWidget(self.bt.label)
     self.mainTempBox.setLayout(mainTempLayout)
 
     # GSR Plot Box
     self.GSRPlotBox = QGroupBox()
-    self.GSRPlotBox.setStyleSheet('background-color: black;')
+    self.GSRPlotBox.setStyleSheet("background-color: black;")
     layout9 = QVBoxLayout()
     layout9.addWidget(self.gsr.graphWidget)
     self.GSRPlotBox.setLayout(layout9)
 
     self.GSRPlotBox2 = QGroupBox()
-    self.GSRPlotBox2.setStyleSheet('background-color: black;')
+    self.GSRPlotBox2.setStyleSheet("background-color: black;")
     layout19 = QVBoxLayout()
     layout19.addWidget(self.gsr2.graphWidget)
     self.GSRPlotBox2.setLayout(layout19)
@@ -325,7 +335,7 @@ def biometricWidgets(self):
 
     # Accelerometer Plot
     self.AcceleromterPlotBox = QGroupBox()
-    self.AcceleromterPlotBox.setStyleSheet('background-color: black;')
+    self.AcceleromterPlotBox.setStyleSheet("background-color: black;")
     layout11 = QVBoxLayout()
     layout11.addWidget(self.acc.graphWidget)
     self.AcceleromterPlotBox.setLayout(layout11)
@@ -372,4 +382,3 @@ if __name__ == "__main__":
     window.show()
     # Start the event loop.
     sys.exit(app.exec_())
-
