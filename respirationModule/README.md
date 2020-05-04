@@ -8,13 +8,20 @@ The Respiration Module has five primary visualizations - SPO2, Heart Rate, PPG, 
 
 Heart Labels:
   if between 60 - 80 --> "Condition White! -- Normal HR"
+  
   if between 81 - 114 --> "Condition Yellow! -- Normal but High HR"
+  
   if between 115 - 145 --> "Condition Red! -- Motor Skill Deteriorates"
+  
   if between 145 - 175 --> "Condition Black! -- Irational Flight or Flee"
+  
 
 Sp02 Labels:
+  
   if more than 95% --> "Normal -- Healthy"
+  
   if between 85% - 94% --> "Hypoxic"
+  
   if less than 85 --> "Severly Hypoxic"
 ______________________________________________________________________________________________________________________________
 Need all the files in one folder including the images: 
