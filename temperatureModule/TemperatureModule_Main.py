@@ -14,91 +14,91 @@ from pylsl import StreamInlet, resolve_stream # Data Stream
 import time
 import sys 
 
-
-
-
-class TemperatureModule_Main():
+class TemperatureModule_Main(QMainWindow):
     def __init__(self, inlet):
-        app = QApplication([]) # PyQT application starts
-        window = QWidget() # create a window
-
+        super(TemperatureModule_Main, self).__init__()
+        window = QWidget()
+        window.setWindowTitle("Respiratory Dashboard")
+        self.inlet = inlet
 
         # Thermometer Box
         self.ThermometerBox = QGroupBox('Body Temperature') #label
-        self.ThermometerBox.setStyleSheet("color: white;")
+        self.ThermometerBox.setStyleSheet("color: white; background-color: black; font-size:25px;")
         layout1 = QVBoxLayout()
         thermometer = Thermometer(layout1)
+        thermometer.setStyleSheet('font-size: 10px;')
         layout1.addWidget(thermometer)
         self.ThermometerBox.setLayout(layout1)
 
 
-        # Instantiate BodyTemperature Class
-        bt = TemperatureModule_BodyTemp(thermometer, inlet) 
-        # Instantiate GSR Class
-        gsr = TemperatureModule_GSR(inlet)
-        # Instantiate Accelerometer Class
-        acc = TemperatureModule_Accelerometer(inlet)
+        self.bt = TemperatureModule_BodyTemp(thermometer, inlet) 
+        self.gsr = TemperatureModule_GSR(inlet)
+        self.acc = TemperatureModule_Accelerometer(inlet)
         
         # Body Temperature Plot Box
-        self.BodyTempBox = QGroupBox('Body Temperature Plot')
-        self.BodyTempBox.setStyleSheet("color: white;")
-        layout2 = QVBoxLayout() # create a box
-        #layout2.addWidget(bt.label)
-        layout2.addWidget(bt.graphWidget) # add graphwidget into a box
+        self.BodyTempBox = QGroupBox()
+        self.BodyTempBox.setStyleSheet("color: white; background-color: black;")
+        layout2 = QVBoxLayout() 
+        layout2.addWidget(self.bt.graphWidget)
         self.BodyTempBox.setLayout(layout2)
 
-        # Body Temperature / GSR Numbering Label Box
-        self.NumberingLabelBox = QGroupBox('Body Temperature / GSR') 
-        self.NumberingLabelBox.setStyleSheet("color: white;")
+        # Numbering Label Box
+        self.NumberingLabelBox = QGroupBox() 
+        self.NumberingLabelBox.setStyleSheet("color: white; background-color: black;")
         numLabelBox = QVBoxLayout()
-        numLabelBox.addWidget(bt.tempNumLabel)
-        numLabelBox.addWidget(gsr.gsrNumLabel)
+        numLabelBox.addWidget(self.bt.tempNumLabel)
+        numLabelBox.addWidget(self.gsr.gsrNumLabel)
+        numLabelBox.addWidget(self.acc.label)
         self.NumberingLabelBox.setLayout(numLabelBox)
        
-
         # GSR Plot Box
-        self.GSRPlotBox = QGroupBox('GSR Plot')
-        self.GSRPlotBox.setStyleSheet("color: white;")
-        layout3 = QVBoxLayout()
-        layout3.addWidget(gsr.graphWidget)
+        self.GSRPlotBox = QGroupBox()
+        self.GSRPlotBox.setStyleSheet("color: white; background-color: black;")
+        layout3 = QVBoxLayout() 
+        layout3.addWidget(self.gsr.graphWidget)
         self.GSRPlotBox.setLayout(layout3) 
 
 
-        # Accelerometer 3D Visualization
-        self.Accelerometer_3D_Box = QGroupBox('Accelerometer 3D Visualization')
-        self.Accelerometer_3D_Box.setStyleSheet("color: white;")
-        layout5 = QVBoxLayout()
-        layout5.addWidget(acc.visualization)
-        self.Accelerometer_3D_Box.setLayout(layout5)
-        
-
         # Accelerometer Plot
-        self.AcceleromterPlotBox = QGroupBox('Accelerometer Plot')
-        self.AcceleromterPlotBox.setStyleSheet("color: white;")
+        self.AcceleromterPlotBox = QGroupBox()
+        self.AcceleromterPlotBox.setStyleSheet("color: white; background-color: black;")
         layout6 = QVBoxLayout()
-        layout6.addWidget(acc.graphWidget)
+        layout6.addWidget(self.acc.graphWidget)
         self.AcceleromterPlotBox.setLayout(layout6)
 
         # Grid Layout
         mainLayout = QGridLayout()
 
-        # First Row = Body Temperature Module
-        mainLayout.addWidget(self.ThermometerBox, 0, 0, 1, 2)
-        mainLayout.addWidget(self.BodyTempBox, 0, 2, 1, 2)
+        # First Column = Body Temperature Module row, column, rowSpan, columnSpan
+        mainLayout.addWidget(self.ThermometerBox, 0, 0, 3, 1)
+        mainLayout.addWidget(self.NumberingLabelBox, 3, 0, 3, 1)
 
-        # Second Row = GSR Module
-        mainLayout.addWidget(self.NumberingLabelBox, 1, 0, 1, 2)
-        mainLayout.addWidget(self.GSRPlotBox, 1, 2, 1, 2)
+        # Second Column
+        mainLayout.addWidget(self.BodyTempBox, 0, 1, 2, 4)
+        mainLayout.addWidget(self.GSRPlotBox, 2, 1, 2, 4)
+        mainLayout.addWidget(self.AcceleromterPlotBox, 4, 1, 2, 4)
+        window.setLayout(mainLayout)
 
-        # Accelerometer
-        mainLayout.addWidget(self.Accelerometer_3D_Box, 2, 0, 1, 2)
-        mainLayout.addWidget(self.AcceleromterPlotBox, 2, 2, 1, 2)
-
-        darkMode() # Apply Dark Mode
     
-        window.setLayout(mainLayout) # set layout inside a window
-        window.show() # show window
-        app.exec_() # Run PyQt application
+
+        self.timer = QTimer(self)
+        self.timer.timeout.connect(self.UpdateModules)
+        self.timer.start(20)
+
+        self.setCentralWidget(window)
+
+        # Set the central widget of the Window. Widget will expand to take up all the space in the window by default.
+        darkMode()
+        
+
+    def UpdateModules(self):
+        # pulling data
+        sample = self.inlet.pull_sample()
+        # updating all widgets
+        self.acc.getValues(sample)
+        self.bt.getBodyTemp(sample)
+        self.gsr.getGsrSignal(sample)
+
     
         
 def darkMode():
@@ -129,4 +129,10 @@ def getStream():
 # Main Function
 if __name__ == '__main__':
     inlet = getStream()
-    TemperatureModule_Main(inlet)
+    app = QApplication(sys.argv)
+    app.setStyle("Fusion")
+    window =  TemperatureModule_Main(inlet)
+    # show the window
+    window.show()
+    # Start the event loop.
+    sys.exit(app.exec_())

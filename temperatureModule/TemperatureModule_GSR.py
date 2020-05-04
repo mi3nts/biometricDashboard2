@@ -1,72 +1,69 @@
 from PyQt5 import *
 import pyqtgraph as pg
 import time
-import numpy as np   
+import numpy as np
 
 
-class TemperatureModule_GSR():
+class TemperatureModule_GSR:
     def __init__(self, inlet):
-        pg.setConfigOption('background', 'w') # Graph background color
-        pg.setConfigOption('foreground', 'k') # Graph foreground color
+        pg.setConfigOption("background", "k")  # Graph background color
+        pg.setConfigOption("foreground", "w")  # Graph foreground color
+        pg.setConfigOption("antialias", True)
+        self.graphWidget = pg.PlotWidget()  # pyqtgraph PlotWidget Class
+        self.graphWidget.setTitle(
+            '<span style="font-size: 25px;">Galvanic Skin Response</span>'
+        )  # Set Title
 
-        self.graphWidget = pg.PlotWidget() #pyqtgraph PlotWidget Class
-        self.graphWidget.setTitle('<span style="font-size: 15px;">Galvanic Skin Response</span>') # Set Title
+        self.graphWidget.setLabel(
+            "left", '<span style="font-size:20px">GSR amplitude (uS)</span>',
+        )  # Left label
+        self.graphWidget.setLabel(
+            "bottom",
+            '<span style="font-size:20px">Number of samples</span>',
+        )  # Bottom label
 
-        self.graphWidget.setLabel('left', "GSR amplitude", units='uS') # Left label
-        self.graphWidget.setLabel('bottom', "Number of samples")   # Bottom label
+        self.graphWidget.showGrid(x=True, y=True, alpha=0.3)  # Create a Grid
 
         # Get initial data
-        self.seconds = [] # seconds data array, x value
-        self.gsrData = [] # temperature data array, y value
+        self.seconds = []  # seconds data array, x value
+        self.gsrData = []  # temperature data array, y value
 
-        self.graphWidget.plot(y=self.gsrData, clear=True) # plot initial value
-        self.graphWidget.setRange(yRange=(44400, 56000))                    # change the visible x range of the graph
-        text_box = pg.TextItem(text='TEST', color=(200, 200, 200), html=None, anchor=(0, 0), border=None, fill=None, angle=0, rotateAxis=None)
-        self.graphWidget.addItem(text_box)
-    
+        self.graphWidget.plot(y=self.gsrData, clear=True)  # plot initial value
+        self.graphWidget.setRange(
+            yRange=(44400, 56000)
+        )  # change the visible x range of the graph
+        self.graphWidget.enableAutoRange(axis="y")
+        self.graphWidget.setAutoVisible(y=True)
+        self.graphWidget.setLimits(minYRange=200)
+
         self.count = 0  # Counter for downsampling
-        self.sum = 0    # Sum for downsampling
+        self.sum = 0  # Sum for downsampling
 
-        self.gsrNumLabel = QtGui.QLabel() # Body Temperature Number Display
+        self.gsrNumLabel = QtGui.QLabel()  # Body Temperature Number Display
 
         self.inlet = inlet
         self.start_time = time.time()
 
-        self.timer = pg.QtCore.QTimer()
-        self.timer.timeout.connect(self.getGsrSignal) # get GSR signal every 20 ms
-        self.timer.start(20) 
-    
-    def getGsrSignal(self): # downsample to output every 100ms
-        #elapsed_time = time.time() - self.start_time
-        #print('Elapsed Time: ', elapsed_time)
-        #self.start_time = time.time()
-        sample, timestamp = self.inlet.pull_sample()
-        data = sample[73] 
-        #print('GSR: ', data)
+
+    def getGsrSignal(self, sample):
+        data = sample[0][73]
         self.update(data)
-        
 
     def update(self, data):
-        #print("update")
-    
 
-        if len(self.gsrData) < 500: # first 500 data
+        if len(self.gsrData) < 200:  # first 500 data
             self.gsrData.append(data)
-            
-        else: # after ten seconds
+
+        else:  # after ten seconds
             self.gsrData.pop(0)
-            self.gsrData.append(data) #updating GSR signal
+            self.gsrData.append(data)  # updating GSR signal
 
-            # self.seconds.pop(0)
-            # self.seconds.append(self.seconds[len(self.seconds) - 1] + 0.1)
+        self.graphWidget.plot(
+            y=self.gsrData, pen=pg.mkPen((255, 165, 0),width=2), clear=True
+        )  # update plot
 
-            #self.graphWidget.setRange(xRange=(0, 500)) #change the visible x range of the graph
-
-
-        self.graphWidget.plot(y=self.gsrData, pen=(255,165,0), clear=True) # update plot
-
-
-        gsrLabel = str(np.round(data, 2)) # Type casting from float to string
-
-        self.gsrNumLabel.setText("GSR AMPLITUDE:\n" + gsrLabel) # Update the temperature numbering label
-        self.gsrNumLabel.setStyleSheet('font-weight: bold; font-size:10pt; color: black')
+        self.gsrNumLabel.setText(
+            "<span style='color: white; font-weight: bold; font-size: 23px;'>GSR Amplitude </span> <br><br> <span style='font-size: 16px; color: white;'>"
+            + str(np.round(data, 2))
+            + " µs</span>"
+        )
