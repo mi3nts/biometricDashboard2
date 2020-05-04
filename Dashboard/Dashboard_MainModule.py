@@ -160,7 +160,8 @@ def mainTabUI(self):
     # print(self.eegModule.alphaG.parentWidget())
     self.eegGroupBox = QGroupBox()
     self.eegGroupBox.setLayout(layout_eeg)
-
+    self.eegGroupBox.setMaximumWidth(600)
+    
     self.layout_numbers = QGridLayout()
     self.layout_numbers.addWidget(self.SpO2GroupBox, 0, 0)
     self.layout_numbers.addWidget(self.HRGroupBox, 0, 1)
