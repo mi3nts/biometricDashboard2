@@ -29,10 +29,10 @@ py Dashboard_MainModule.py
 It is important that the Dashboard_MainModule remains in the same directory it was downloaded in, as it must remain in the same folder as the other required python files. It will be easiest to not remove anything from the downloaded directory.
 
 
-## Submodules
-# EEG Graphs
+# Submodules
+## EEG Graphs
 - fill
-# Respiratory Module
+## Respiratory Module
 - fill
-#Temperature Module
+## Temperature Module
 - fill
