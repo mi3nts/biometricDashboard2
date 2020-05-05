@@ -10,7 +10,7 @@ Needed packages:
 ## Execution
 Run this module with
 ```
-py 
+py EEG_Dashboard_Main.py
 ```
 
 ## EEGScatterWidget_Main.py
