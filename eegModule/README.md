@@ -6,6 +6,13 @@ Needed packages:
 - pyqtgraph
 - pylsl
 - numpy
+
+## Execution
+Run this module with
+```
+py 
+```
+
 ## EEGScatterWidget_Main.py
 Within the EEGScatterWidget_main, the 3 graphs for the Alpha, Delta, and Theta bands are created, using EEGScatter_submodule_graph as the base of the graphs. The Main module also creates the colormap and gradient used for the coloring of the nodes. This file sets up the display for the submodule and allows for each graph individually be added or the whole premade layout to be added.
 
