@@ -171,7 +171,7 @@ def mainTabUI(self):
     # print(self.eegModule.alphaG.parentWidget())
     self.eegGroupBox = QGroupBox()
     self.eegGroupBox.setLayout(layout_eeg)
-    self.eegGroupBox.setMaximumWidth(600)
+    self.eegGroupBox.setMaximumWidth(400)
     
     self.layout_numbers = QGridLayout()
     self.layout_numbers.addWidget(self.SpO2GroupBox, 0, 0)
@@ -238,6 +238,7 @@ def biometricWidgets(self):
     )
     layout1 = QGridLayout()
     layout1.addWidget(self.spo2.SpO2_Widget, 0, 0)
+    
     self.SpO2GroupBox.setLayout(layout1)
 	
 	#spo2 box
