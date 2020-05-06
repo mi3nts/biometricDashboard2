@@ -1,6 +1,6 @@
 # Dashboard Module
 ## Prerequisites
-- Python 3.X
+- Python 3.7.X
 - Cognionics data stream
 
 ## Setup
